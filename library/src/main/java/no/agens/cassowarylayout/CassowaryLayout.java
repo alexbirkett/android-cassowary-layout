@@ -118,6 +118,7 @@ public class CassowaryLayout extends ViewGroup  {
         super(context, attrs);
         setupCassowary();
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
+        readConstraintsFromXml(attrs);
     }
 
     public CassowaryLayout(Context context, AttributeSet attrs,
@@ -125,6 +126,7 @@ public class CassowaryLayout extends ViewGroup  {
         super(context, attrs, defStyle);
         setupCassowary();
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
+        readConstraintsFromXml(attrs);
     }
 
     @Override
@@ -336,12 +338,30 @@ public class CassowaryLayout extends ViewGroup  {
         addConstraint(CassowaryConstraintParser.parseConstraint(constraint, cassowaryVariableResolver));
     }
 
-    public void addConstraints(String[] constraints) {
-
-        for (String constraint : constraints) {
-            addConstraint(constraint);
+    public void addConstraints(CharSequence[] constraints) {
+        for (CharSequence constraint : constraints) {
+            addConstraint(constraint.toString());
         }
     }
 
+    public void addConstraints(int id) {
+        String[] constraints = getResources().getStringArray(id);
+        addConstraints(constraints);
+    }
+
+    private void readConstraintsFromXml(AttributeSet attrs) {
+        TypedArray a = getContext().getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.CassowaryLayout,
+                0, 0);
+
+        try {
+            CharSequence[] constraints = a.getTextArray(R.styleable.CassowaryLayout_constraints);
+            addConstraints(constraints);
+        } finally {
+            a.recycle();
+        }
+
+    }
 }
 

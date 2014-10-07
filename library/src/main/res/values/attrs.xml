@@ -6,4 +6,8 @@
         <attr name="layout_y" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="CassowaryLayout">
+        <attr name="constraints" format="reference" />
+    </declare-styleable>
+
 </resources>
