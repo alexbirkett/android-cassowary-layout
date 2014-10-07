@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="red_green_blue_layout">
+        <item>blue.left >= 100dp</item>
+        <item>blue.top >= 10dp</item>
+        <item>blue.width == 120dp</item>
+        <item>blue.height == (blue.width + 200dp) / 2px</item>
+        <item>green.x >= blue.x + blue.width + 10dp</item>
+        <item>green.y >= 10dp</item>
+        <item>green.width == blue.width</item>
+        <item>green.height == blue.height</item>
+        <item>red.width == blue.width * 2px</item>
+        <item>red.height == blue.height * 2px</item>
+        <item>red.x >= 10dp</item>
+        <item>red.y >= green.y + green.height + 10dp</item>
+    </string-array>
+</resources>

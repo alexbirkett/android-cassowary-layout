@@ -2,7 +2,11 @@
 <resources>
 
     <string name="app_name">Cassowary Layout Demo</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="programmatic_demo">Programmatic demo</string>
+    <string name="xml_layout_demo">XML layout demo</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_programmatic_demo">ProgrammaticDemo</string>
+    <string name="title_activity_xml_layout_demo">XmlLayoutDemo</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
