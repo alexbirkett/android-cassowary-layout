@@ -61,6 +61,8 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 20 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="cassowary-1.0.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="java-cup-10k" level="project" />
     <orderEntry type="module" module-name="library" exported="" />
   </component>
 </module>
