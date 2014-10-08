@@ -78,7 +78,7 @@ public class CassowaryConstraintParser {
             if ("+".equals(expression)) {
                 linearExpressionsStack.push(linearExpressionsStack.pop().plus(linearExpressionsStack.pop()));
             } else if ("-".equals(expression)) {
-                linearExpressionsStack.push(linearExpressionsStack.pop().minus(linearExpressionsStack.pop()));
+                linearExpressionsStack.push(linearExpressionsStack.pop().subtractFrom(linearExpressionsStack.pop()));
             } else if ("/".equals(expression)) {
                 ClLinearExpression denominator = linearExpressionsStack.pop();
                 ClLinearExpression numerator = linearExpressionsStack.pop();
