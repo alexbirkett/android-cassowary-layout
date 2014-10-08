@@ -28,9 +28,13 @@ import org.klomp.cassowary.ClLinearExpression;
 import org.klomp.cassowary.ClSimplexSolver;
 import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
+import org.klomp.cassowary.clconstraint.ClLinearEquation;
+import org.klomp.cassowary.clconstraint.ClStayConstraint;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import no.agens.cassowarylayout.util.CassowaryUtil;
 import no.agens.cassowarylayout.util.DimensionParser;
 import no.agens.cassowarylayout.util.TimerUtil;
 
@@ -42,6 +46,11 @@ public class CassowaryLayout extends ViewGroup  {
 
     private ClVariable containerWidth = new ClVariable();
     private ClVariable  containerHeight = new ClVariable();
+
+    private ClLinearEquation containerWidthConstraint;
+    private ClLinearEquation containerHeightConstraint;
+
+
 
     private ClSimplexSolver solver = new ClSimplexSolver();
 
@@ -129,6 +138,41 @@ public class CassowaryLayout extends ViewGroup  {
         readConstraintsFromXml(attrs);
     }
 
+    private ArrayList<ClLinearEquation> wrapContentConstratins = new ArrayList<ClLinearEquation>();
+
+    private ClLinearEquation getUnusedConstraint() {
+        return CassowaryUtil.createConstraint();
+    }
+
+
+    private void removeWrapContentConstraints() {
+        for (ClLinearEquation constraint : wrapContentConstratins) {
+            solver.removeConstraint(constraint);
+        }
+        wrapContentConstratins.clear();
+    }
+
+    private void createWrapContentConstraints() {
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+
+            if (child.getVisibility() != GONE) {
+                ViewModel viewModel = getViewById(child.getId());
+                ClLinearEquation heightConstraint = getUnusedConstraint();
+                CassowaryUtil.updateConstraint(heightConstraint, viewModel.getHeight(), child.getMeasuredHeight());
+                solver.addConstraint(heightConstraint);
+                wrapContentConstratins.add(heightConstraint);
+
+                ClLinearEquation widthConstraint = getUnusedConstraint();
+                CassowaryUtil.updateConstraint(widthConstraint, viewModel.getWidth(), child.getMeasuredWidth());
+                solver.addConstraint(widthConstraint);
+                wrapContentConstratins.add(widthConstraint);
+            }
+
+        }
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int count = getChildCount();
@@ -138,6 +182,9 @@ public class CassowaryLayout extends ViewGroup  {
 
         // Find out how big everyone wants to be
         measureChildren(widthMeasureSpec, heightMeasureSpec);
+
+        removeWrapContentConstraints();
+        createWrapContentConstraints();
 
         // Find rightmost and bottom-most child
         for (int i = 0; i < count; i++) {
@@ -169,12 +216,15 @@ public class CassowaryLayout extends ViewGroup  {
         setMeasuredDimension(resolvedWidth, resolvedHeight);
 
 
-        containerWidth.setValue(resolvedWidth);
-        containerHeight.setValue(resolvedHeight);
+        CassowaryUtil.updateConstraint(containerWidthConstraint, containerWidth, resolvedWidth);
+        solver.removeConstraint(containerWidthConstraint);
+        solver.addConstraint(containerWidthConstraint);
+
+        CassowaryUtil.updateConstraint(containerHeightConstraint, containerHeight, resolvedHeight);
+        solver.removeConstraint(containerHeightConstraint);
+        solver.addConstraint(containerHeightConstraint);
 
         Log.d(LOG_TAG, "onMesaure width " + resolvedWidth + " height " + resolvedHeight);
-
-
     }
 
     /**
@@ -197,6 +247,7 @@ public class CassowaryLayout extends ViewGroup  {
         solver.solve();
 
         Log.d(LOG_TAG, "Resolve took " + TimerUtil.since(timeBeforeSolve));
+        Log.d(LOG_TAG, "container height " + containerHeight.getValue() + " container width " + containerWidth.getValue() );
         int count = getChildCount();
 
         for (int i = 0; i < count; i++) {
@@ -324,9 +375,10 @@ public class CassowaryLayout extends ViewGroup  {
 
     private void setupCassowary() {
         Log.d(LOG_TAG, "setupCassowary");
-        solver.addStay(containerWidth);
-        solver.addStay(containerHeight);
-
+        containerWidthConstraint = new ClLinearEquation(containerWidth, new ClLinearExpression(0));
+        solver.addConstraint(containerWidthConstraint);
+        containerHeightConstraint =  new ClLinearEquation(containerHeight, new ClLinearExpression(0));
+        solver.addConstraint(containerHeightConstraint);
     }
 
     public void addConstraint(ClConstraint constraint) {
