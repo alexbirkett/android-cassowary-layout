@@ -85,7 +85,7 @@ public class ViewModel {
     public ClVariable getCenterY() {
         if (centerY == null) {
             centerY = new ClVariable();
-            solver.addConstraint(new ClLinearEquation(centerY, new ClLinearExpression(getWidth()).divide(2).plus(getY()), ClStrength.required));
+            solver.addConstraint(new ClLinearEquation(centerY, new ClLinearExpression(getHeight()).divide(2).plus(getY()), ClStrength.required));
         }
         return centerY;
     }
