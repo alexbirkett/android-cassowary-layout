@@ -19,6 +19,9 @@
         <item>xml_layout_demo.y >= programmatic_demo.y2</item>
         <item>center_view_relative_to_sibling.y >= xml_layout_demo.y2</item>
         <item>center_in_parent.y >= center_view_relative_to_sibling.y2</item>
+        <item>cassowary_layout_match_parent.y >= center_in_parent.y2</item>
+        <item>cassowary_layout_wrap_content.y >= cassowary_layout_match_parent.y2</item>
+        <item>cassowary_layout_in_linear_layout.y >= cassowary_layout_wrap_content.y2</item>
     </string-array>
 
     <string-array name="center_view_relative_to_sibling">
@@ -37,6 +40,21 @@
         <item>red.centerY == parent.centerY</item>
     </string-array>
 
+    <string-array name="stairs">
+        <item>blue.x == 0</item>
+        <item>blue.y == 0</item>
+        <item>blue.width == 100dp</item>
+        <item>blue.height == blue.width</item>
 
+        <item>green.width == blue.width</item>
+        <item>green.height == blue.height</item>
+        <item>green.x >= blue.y2</item>
+        <item>green.y >= blue.y2</item>
+
+        <item>red.width == green.width</item>
+        <item>red.height == green.height</item>
+        <item>red.x >= green.x2</item>
+        <item>red.y >= green.y2</item>
+    </string-array>
 
 </resources>

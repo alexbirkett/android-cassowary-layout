@@ -31,7 +31,22 @@
         <activity
             android:name=".CenterInParent"
             android:label="@string/title_activity_center_in_parent" >
+            android:name=".CassowaryLayoutInLinearLayout"
+            android:label="@string/title_activity_cassowary_layout_in_linear_layout" >
         </activity>
+        <activity
+            android:name=".CassowaryLayoutMatchParent"
+            android:label="@string/title_activity_cassowary_layout_match_parent" >
+        </activity>
+        <activity
+            android:name=".CassowaryLayoutWrapContent"
+            android:label="@string/title_activity_cassowary_layout_wrap_content" >
+        </activity>
+        <activity
+            android:name=".CassowaryLayoutInLinearLayout"
+            android:label="@string/title_activity_cassowary_layout_in_linear_layout" >
+        </activity>
+
     </application>
 
 </manifest>

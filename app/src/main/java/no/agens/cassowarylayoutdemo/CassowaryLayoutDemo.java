@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import no.agens.cassowarylayout.CassowaryLayout;
+
 public class CassowaryLayoutDemo extends Activity {
 
     @Override
@@ -39,6 +41,28 @@ public class CassowaryLayoutDemo extends Activity {
                 startActivity(new Intent(CassowaryLayoutDemo.this, CenterInParent.class));
             }
         });
+
+        findViewById(R.id.cassowary_layout_match_parent).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CassowaryLayoutDemo.this, CassowaryLayoutMatchParent.class));
+            }
+        });
+
+        findViewById(R.id.cassowary_layout_wrap_content).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CassowaryLayoutDemo.this, CassowaryLayoutWrapContent.class));
+            }
+        });
+
+        findViewById(R.id.cassowary_layout_in_linear_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CassowaryLayoutDemo.this, CassowaryLayoutInLinearLayout.class));
+            }
+        });
+
 
     }
 
