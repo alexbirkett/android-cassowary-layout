@@ -93,10 +93,20 @@ public class CassowaryLayout extends ViewGroup  {
 
         @Override
         public ClLinearExpression resolveConstant(String name) {
-            Integer dimension = DimensionParser.getDimension(name, getContext());
-            if (dimension != null) {
-                return new ClLinearExpression(dimension);
+
+            Double value;
+
+            try {
+                value = new Double(Double.parseDouble(name));
+            } catch (NumberFormatException e) {
+                value = DimensionParser.getDimension(name, getContext());
+
             }
+
+            if (value != null) {
+                return new ClLinearExpression(value);
+            }
+
             return null;
         }
     };

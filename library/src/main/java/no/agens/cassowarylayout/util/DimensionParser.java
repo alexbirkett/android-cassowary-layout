@@ -31,9 +31,9 @@ public class DimensionParser {
 
     private static Pattern pattern = Pattern.compile("^(wrapContent|matchParent)|(\\d+)(px|dp|sp|pt|in|mm)");
 
-    public static Integer getDimension(String widthHeightString, Context context) {
+    public static Double getDimension(String widthHeightString, Context context) {
 
-        Integer widthHeight = null;
+        Double widthHeight = null;
 
         Matcher matcher = pattern.matcher(widthHeightString);
 
@@ -41,15 +41,15 @@ public class DimensionParser {
 
         if (matcher.matches()) {
             if  (matcher.group(2) == null) {
-                widthHeight = RelativeLayout.LayoutParams.MATCH_PARENT;
+                widthHeight = (double)RelativeLayout.LayoutParams.MATCH_PARENT;
                 if ("wrapContent".equals(matcher.group(1))) {
-                    widthHeight = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                    widthHeight = (double)RelativeLayout.LayoutParams.WRAP_CONTENT;
                 }
             } else {
                 String value = matcher.group(2);
                 String unit = matcher.group(3);
                 try {
-                    widthHeight = (int)TypedValue.applyDimension(getUnitFromString(unit), Integer.parseInt(value), context.getResources().getDisplayMetrics());
+                    widthHeight = (double)TypedValue.applyDimension(getUnitFromString(unit), Integer.parseInt(value), context.getResources().getDisplayMetrics());
                     //widthHeight = Integer.parseInt(widthHeightString.substring(0, widthHeightString.));
                 } catch (NumberFormatException e) {
                     // ignore

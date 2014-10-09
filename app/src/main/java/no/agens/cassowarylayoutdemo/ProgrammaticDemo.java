@@ -15,7 +15,7 @@ public class ProgrammaticDemo extends Activity {
             "blue.left >= 100dp",
             "blue.top >= 10dp",
             "blue.width == 120dp",
-            "blue.height == (blue.width + 200dp) / 2px",
+            "blue.height == (blue.width + 200dp) / 2",
             "green.x >= blue.x + blue.width + 10dp",
             "green.y >= 10dp",
             "green.width == blue.width",
