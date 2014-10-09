@@ -16,7 +16,6 @@
     </string-array>
 
     <string-array name="cassowary_layout_demo">
-        <item>programmatic_demo.y == 0dp</item>
         <item>xml_layout_demo.y >= programmatic_demo.y + programmatic_demo.height</item>
     </string-array>
 

@@ -24,12 +24,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.klomp.cassowary.CL;
 import org.klomp.cassowary.ClLinearExpression;
 import org.klomp.cassowary.ClSimplexSolver;
 import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
 import org.klomp.cassowary.clconstraint.ClLinearEquation;
-import org.klomp.cassowary.clconstraint.ClStayConstraint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,18 +138,17 @@ public class CassowaryLayout extends ViewGroup  {
         readConstraintsFromXml(attrs);
     }
 
-    private ArrayList<ClLinearEquation> wrapContentConstratins = new ArrayList<ClLinearEquation>();
+    private ArrayList<ClConstraint> dynamicConstraints = new ArrayList<ClConstraint>();
 
-    private ClLinearEquation getUnusedConstraint() {
-        return CassowaryUtil.createConstraint();
+    private ClLinearEquation getUnusedWeakEqualityConstraint() {
+        return CassowaryUtil.createWeakEqualityConstraint();
     }
 
-
-    private void removeWrapContentConstraints() {
-        for (ClLinearEquation constraint : wrapContentConstratins) {
+    private void removeDynamicConstraints() {
+        for (ClConstraint constraint : dynamicConstraints) {
             solver.removeConstraint(constraint);
         }
-        wrapContentConstratins.clear();
+        dynamicConstraints.clear();
     }
 
     private void createWrapContentConstraints() {
@@ -159,32 +158,59 @@ public class CassowaryLayout extends ViewGroup  {
 
             if (child.getVisibility() != GONE) {
                 ViewModel viewModel = getViewById(child.getId());
-                ClLinearEquation heightConstraint = getUnusedConstraint();
+                ClLinearEquation heightConstraint = getUnusedWeakEqualityConstraint();
                 CassowaryUtil.updateConstraint(heightConstraint, viewModel.getHeight(), child.getMeasuredHeight());
                 solver.addConstraint(heightConstraint);
-                wrapContentConstratins.add(heightConstraint);
+                dynamicConstraints.add(heightConstraint);
 
-                ClLinearEquation widthConstraint = getUnusedConstraint();
+                ClLinearEquation widthConstraint = getUnusedWeakEqualityConstraint();
                 CassowaryUtil.updateConstraint(widthConstraint, viewModel.getWidth(), child.getMeasuredWidth());
                 solver.addConstraint(widthConstraint);
-                wrapContentConstratins.add(widthConstraint);
+                dynamicConstraints.add(widthConstraint);
             }
 
         }
     }
 
+    private void createPaddingConstraints() {
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+
+            if (child.getVisibility() != GONE) {
+                ViewModel viewModel = getViewById(child.getId());
+                int leftPadding = getPaddingLeft();
+                int topPadding = getPaddingTop();
+                Log.d(LOG_TAG, "child id " + child.getId() + " left padding " + leftPadding + " top padding " + topPadding);
+                ClConstraint paddingLeft = CassowaryUtil.createWeakInequalityConstraint(viewModel.getX(), CL.GEQ, leftPadding);
+                solver.addConstraint(paddingLeft);
+                dynamicConstraints.add(paddingLeft);
+
+                ClConstraint paddingRight = CassowaryUtil.createWeakInequalityConstraint(viewModel.getY(), CL.GEQ, topPadding);
+                solver.addConstraint(paddingRight);
+                dynamicConstraints.add(paddingRight);
+            }
+
+
+        }
+    }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        Log.d(LOG_TAG, "onMesaure");
+
+
         int count = getChildCount();
 
         int maxHeight = 0;
         int maxWidth = 0;
 
+
         // Find out how big everyone wants to be
         measureChildren(widthMeasureSpec, heightMeasureSpec);
 
-        removeWrapContentConstraints();
+        removeDynamicConstraints();
         createWrapContentConstraints();
+        createPaddingConstraints();
 
         // Find rightmost and bottom-most child
         for (int i = 0; i < count; i++) {
@@ -246,7 +272,7 @@ public class CassowaryLayout extends ViewGroup  {
 
         solver.solve();
 
-        Log.d(LOG_TAG, "Resolve took " + TimerUtil.since(timeBeforeSolve));
+        Log.d(LOG_TAG, "onLayout - Resolve took " + TimerUtil.since(timeBeforeSolve));
         Log.d(LOG_TAG, "container height " + containerHeight.getValue() + " container width " + containerWidth.getValue() );
         int count = getChildCount();
 
