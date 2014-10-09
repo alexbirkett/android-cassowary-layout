@@ -28,6 +28,10 @@
             android:name=".CenterViewRelativeToSibling"
             android:label="@string/title_activity_center_view_relative_to_sibling" >
         </activity>
+        <activity
+            android:name=".CenterInParent"
+            android:label="@string/title_activity_center_in_parent" >
+        </activity>
     </application>
 
 </manifest>

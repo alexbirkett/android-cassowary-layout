@@ -30,4 +30,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:id="@+id/center_in_parent"
+        android:text="@string/center_in_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
 </no.agens.cassowarylayout.CassowaryLayout>

@@ -10,5 +10,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_center_view_relative_to_sibling">CenterViewRelativeToSibling</string>
     <string name="center_view_relative_to_sibling">Center view relative to sibling</string>
+    <string name="title_activity_center_in_parent">CenterInParent</string>
+    <string name="center_in_parent">Center In Parent</string>
+
 
 </resources>

@@ -33,6 +33,13 @@ public class CassowaryLayoutDemo extends Activity {
             }
         });
 
+        findViewById(R.id.center_in_parent).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CassowaryLayoutDemo.this, CenterInParent.class));
+            }
+        });
+
     }
 
 

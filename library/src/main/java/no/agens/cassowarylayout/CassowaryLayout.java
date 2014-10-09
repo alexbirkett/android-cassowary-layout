@@ -44,15 +44,12 @@ public class CassowaryLayout extends ViewGroup  {
 
     private HashMap<Integer, ViewModel> viewModels = new HashMap<Integer, ViewModel>();
 
-    private ClVariable containerWidth = new ClVariable();
-    private ClVariable  containerHeight = new ClVariable();
-
     private ClLinearEquation containerWidthConstraint;
     private ClLinearEquation containerHeightConstraint;
 
-
-
     private ClSimplexSolver solver = new ClSimplexSolver();
+
+    private ViewModel containerViewModel = new ViewModel(solver);
 
     private ViewIdResolver viewIdResolver;
 
@@ -61,39 +58,39 @@ public class CassowaryLayout extends ViewGroup  {
         public ClVariable resolveVariable(String variableName) {
             ClVariable variable = null;
 
-            if ("container.width".equals(variableName)) {
-                return containerWidth;
-            } else if ("container.height".equals(variableName)) {
-                return containerHeight;
-            } else {
-                String[] stringArray = variableName.split("\\.");
-                ViewModel viewModel = null;
-                String viewName = stringArray[0];
-                if (viewName != null) {
+            String[] stringArray = variableName.split("\\.");
+            ViewModel viewModel = null;
+            String viewName = stringArray[0];
+
+            if (viewName != null) {
+                if ("container".equals(viewName) || "parent".equals(viewName)) {
+                    viewModel = containerViewModel;
+                } else {
                     viewModel = getViewById(viewIdResolver.getViewId(viewName));
                 }
-                String propertyName = stringArray[1];
-                if (viewModel != null) {
-                    if ("left".equals(propertyName) || "x".equals(propertyName)) {
-                        variable = viewModel.getX();
-                    } else if ("top".equals(propertyName) || "y".equals(propertyName)) {
-                        variable = viewModel.getY();
-                    } else if ("bottom".equals(propertyName) || "y2".equals(propertyName)) {
-                        variable = viewModel.getY2();
-                    } else if ("right".equals(propertyName) || "x2".equals(propertyName)) {
-                        variable = viewModel.getX2();
-                    } else if ("height".equals(propertyName)) {
-                        variable = viewModel.getHeight();
-                    } else if ("width".equals(propertyName)) {
-                        variable = viewModel.getWidth();
-                    } else if ("centerX".equals(propertyName)) {
-                        variable = viewModel.getCenterX();
-                    } else if ("centerY".equals(propertyName)) {
-                        variable = viewModel.getCenterY();
-                    }
-
-                }
             }
+            String propertyName = stringArray[1];
+            if (viewModel != null) {
+                if ("left".equals(propertyName) || "x".equals(propertyName)) {
+                    variable = viewModel.getX();
+                } else if ("top".equals(propertyName) || "y".equals(propertyName)) {
+                    variable = viewModel.getY();
+                } else if ("bottom".equals(propertyName) || "y2".equals(propertyName)) {
+                    variable = viewModel.getY2();
+                } else if ("right".equals(propertyName) || "x2".equals(propertyName)) {
+                    variable = viewModel.getX2();
+                } else if ("height".equals(propertyName)) {
+                    variable = viewModel.getHeight();
+                } else if ("width".equals(propertyName)) {
+                    variable = viewModel.getWidth();
+                } else if ("centerX".equals(propertyName)) {
+                    variable = viewModel.getCenterX();
+                } else if ("centerY".equals(propertyName)) {
+                    variable = viewModel.getCenterY();
+                }
+
+            }
+
             if (variable == null) {
                 throw new RuntimeException("unknown variable " + variableName);
             }
@@ -261,11 +258,11 @@ public class CassowaryLayout extends ViewGroup  {
         setMeasuredDimension(resolvedWidth, resolvedHeight);
 
 
-        CassowaryUtil.updateConstraint(containerWidthConstraint, containerWidth, resolvedWidth);
+        CassowaryUtil.updateConstraint(containerWidthConstraint, containerViewModel.getWidth(), resolvedWidth);
         solver.removeConstraint(containerWidthConstraint);
         solver.addConstraint(containerWidthConstraint);
 
-        CassowaryUtil.updateConstraint(containerHeightConstraint, containerHeight, resolvedHeight);
+        CassowaryUtil.updateConstraint(containerHeightConstraint, containerViewModel.getHeight(), resolvedHeight);
         solver.removeConstraint(containerHeightConstraint);
         solver.addConstraint(containerHeightConstraint);
 
@@ -292,7 +289,14 @@ public class CassowaryLayout extends ViewGroup  {
         solver.solve();
 
         Log.d(LOG_TAG, "onLayout - Resolve took " + TimerUtil.since(timeBeforeSolve));
-        Log.d(LOG_TAG, "container height " + containerHeight.getValue() + " container width " + containerWidth.getValue() );
+        Log.d(LOG_TAG,
+                       "container x " + containerViewModel.getX().getValue() +
+                       " container y " + containerViewModel.getY().getValue() +
+                       " container height " + containerViewModel.getHeight().getValue() +
+                       " container width " + containerViewModel.getWidth().getValue() +
+                       " container center x " + containerViewModel.getCenterX().getValue() +
+                       " container center y " + containerViewModel.getCenterY().getValue()
+                );
         int count = getChildCount();
 
         for (int i = 0; i < count; i++) {
@@ -420,10 +424,13 @@ public class CassowaryLayout extends ViewGroup  {
 
     private void setupCassowary() {
         Log.d(LOG_TAG, "setupCassowary");
-        containerWidthConstraint = new ClLinearEquation(containerWidth, new ClLinearExpression(0));
+        containerWidthConstraint = new ClLinearEquation(containerViewModel.getWidth(), new ClLinearExpression(0));
         solver.addConstraint(containerWidthConstraint);
-        containerHeightConstraint =  new ClLinearEquation(containerHeight, new ClLinearExpression(0));
+        containerHeightConstraint =  new ClLinearEquation(containerViewModel.getHeight(), new ClLinearExpression(0));
         solver.addConstraint(containerHeightConstraint);
+
+        solver.addConstraint(new ClLinearEquation(containerViewModel.getX(), new ClLinearExpression(0)));
+        solver.addConstraint(new ClLinearEquation(containerViewModel.getY(), new ClLinearExpression(0)));
     }
 
     public void addConstraint(ClConstraint constraint) {
