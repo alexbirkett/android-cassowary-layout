@@ -25,6 +25,14 @@ public class CassowaryLayoutDemo extends Activity {
                 startActivity(new Intent(CassowaryLayoutDemo.this, XmlLayoutDemo.class));
             }
         });
+
+        findViewById(R.id.center_view_relative_to_sibling).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CassowaryLayoutDemo.this, CenterViewRelativeToSibling.class));
+            }
+        });
+
     }
 
 

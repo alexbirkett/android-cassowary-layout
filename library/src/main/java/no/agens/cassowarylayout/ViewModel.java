@@ -39,7 +39,8 @@ public class ViewModel {
     private ClVariable height = new ClVariable();
     private ClVariable y2;
     private ClVariable x2;
-    private ClVariable xCenter;
+    private ClVariable centerX;
+    private ClVariable centerY;
 
     public ClVariable getX() {
         return x;
@@ -73,4 +74,19 @@ public class ViewModel {
         return x2;
     }
 
+    public ClVariable getCenterX() {
+        if (centerX == null) {
+            centerX = new ClVariable();
+            solver.addConstraint(new ClLinearEquation(centerX, new ClLinearExpression(getWidth()).divide(2).plus(getX()), ClStrength.required));
+        }
+        return centerX;
+    }
+
+    public ClVariable getCenterY() {
+        if (centerY == null) {
+            centerY = new ClVariable();
+            solver.addConstraint(new ClLinearEquation(centerY, new ClLinearExpression(getWidth()).divide(2).plus(getY()), ClStrength.required));
+        }
+        return centerY;
+    }
 }

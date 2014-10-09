@@ -24,6 +24,10 @@
             android:name=".XmlLayoutDemo"
             android:label="@string/title_activity_xml_layout_demo" >
         </activity>
+        <activity
+            android:name=".CenterViewRelativeToSibling"
+            android:label="@string/title_activity_center_view_relative_to_sibling" >
+        </activity>
     </application>
 
 </manifest>

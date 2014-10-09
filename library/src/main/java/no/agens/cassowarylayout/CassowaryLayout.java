@@ -86,7 +86,12 @@ public class CassowaryLayout extends ViewGroup  {
                         variable = viewModel.getHeight();
                     } else if ("width".equals(propertyName)) {
                         variable = viewModel.getWidth();
+                    } else if ("centerX".equals(propertyName)) {
+                        variable = viewModel.getCenterX();
+                    } else if ("centerY".equals(propertyName)) {
+                        variable = viewModel.getCenterY();
                     }
+
                 }
             }
             if (variable == null) {

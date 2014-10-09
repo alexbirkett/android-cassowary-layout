@@ -17,6 +17,16 @@
 
     <string-array name="cassowary_layout_demo">
         <item>xml_layout_demo.y >= programmatic_demo.y2</item>
+        <item>center_view_relative_to_sibling.y >= xml_layout_demo.y2</item>
+    </string-array>
+
+    <string-array name="center_view_relative_to_sibling">
+        <item>red.width == 200dp</item>
+        <item>red.height == 200dp</item>
+        <item>green.width == 50dp</item>
+        <item>green.height == 50dp</item>
+        <item>green.centerX == red.centerX</item>
+        <item>green.centerY == red.centerY</item>
     </string-array>
 
 

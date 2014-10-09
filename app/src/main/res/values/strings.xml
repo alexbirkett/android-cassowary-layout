@@ -8,5 +8,7 @@
     <string name="title_activity_programmatic_demo">ProgrammaticDemo</string>
     <string name="title_activity_xml_layout_demo">XmlLayoutDemo</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_center_view_relative_to_sibling">CenterViewRelativeToSibling</string>
+    <string name="center_view_relative_to_sibling">Center view relative to sibling</string>
 
 </resources>
