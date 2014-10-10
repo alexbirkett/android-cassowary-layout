@@ -51,7 +51,7 @@ public class CassowaryLayout extends ViewGroup  {
 
     private ClSimplexSolver solver = new ClSimplexSolver();
 
-    private ViewModel containerViewModel = new ViewModel(solver);
+    private ContainerModel containerViewModel = new ContainerModel(solver);
 
     private ViewIdResolver viewIdResolver;
 
@@ -61,37 +61,47 @@ public class CassowaryLayout extends ViewGroup  {
             ClVariable variable = null;
 
             String[] stringArray = variableName.split("\\.");
-            ViewModel viewModel = null;
             String viewName = stringArray[0];
+
+            String propertyName = stringArray[1];
 
             if (viewName != null) {
                 if ("container".equals(viewName) || "parent".equals(viewName)) {
-                    viewModel = containerViewModel;
+                    if ("height".equals(propertyName)) {
+                        variable = containerViewModel.getHeight();
+                    } else if ("width".equals(propertyName)) {
+                        variable = containerViewModel.getWidth();
+                    } else if ("centerX".equals(propertyName)) {
+                        variable = containerViewModel.getCenterX();
+                    } else if ("centerY".equals(propertyName)) {
+                        variable = containerViewModel.getCenterY();
+                    }
                 } else {
-                    viewModel = getViewModelById(viewIdResolver.getViewId(viewName));
-                }
-            }
-            String propertyName = stringArray[1];
-            if (viewModel != null) {
-                if ("left".equals(propertyName) || "x".equals(propertyName)) {
-                    variable = viewModel.getX();
-                } else if ("top".equals(propertyName) || "y".equals(propertyName)) {
-                    variable = viewModel.getY();
-                } else if ("bottom".equals(propertyName) || "y2".equals(propertyName)) {
-                    variable = viewModel.getY2();
-                } else if ("right".equals(propertyName) || "x2".equals(propertyName)) {
-                    variable = viewModel.getX2();
-                } else if ("height".equals(propertyName)) {
-                    variable = viewModel.getHeight();
-                } else if ("width".equals(propertyName)) {
-                    variable = viewModel.getWidth();
-                } else if ("centerX".equals(propertyName)) {
-                    variable = viewModel.getCenterX();
-                } else if ("centerY".equals(propertyName)) {
-                    variable = viewModel.getCenterY();
-                }
+                    ViewModel viewModel = getViewModelById(viewIdResolver.getViewId(viewName));
+                    if (viewModel != null) {
+                        if ("left".equals(propertyName) || "x".equals(propertyName)) {
+                            variable = viewModel.getX();
+                        } else if ("top".equals(propertyName) || "y".equals(propertyName)) {
+                            variable = viewModel.getY();
+                        } else if ("bottom".equals(propertyName) || "y2".equals(propertyName)) {
+                            variable = viewModel.getY2();
+                        } else if ("right".equals(propertyName) || "x2".equals(propertyName)) {
+                            variable = viewModel.getX2();
+                        } else if ("height".equals(propertyName)) {
+                            variable = viewModel.getHeight();
+                        } else if ("width".equals(propertyName)) {
+                            variable = viewModel.getWidth();
+                        } else if ("centerX".equals(propertyName)) {
+                            variable = viewModel.getCenterX();
+                        } else if ("centerY".equals(propertyName)) {
+                            variable = viewModel.getCenterY();
+                        }
 
+                    }
+                }
             }
+
+
 
             if (variable == null) {
                 throw new RuntimeException("unknown variable " + variableName);
@@ -327,8 +337,6 @@ public class CassowaryLayout extends ViewGroup  {
 
         Log.d(LOG_TAG, "onLayout - Resolve took " + TimerUtil.since(timeBeforeSolve));
         Log.d(LOG_TAG,
-                       "container x " + containerViewModel.getX().getValue() +
-                       " container y " + containerViewModel.getY().getValue() +
                        " container height " + containerViewModel.getHeight().getValue() +
                        " container width " + containerViewModel.getWidth().getValue() +
                        " container center x " + containerViewModel.getCenterX().getValue() +
@@ -461,8 +469,6 @@ public class CassowaryLayout extends ViewGroup  {
 
     private void setupCassowary() {
         Log.d(LOG_TAG, "setupCassowary");
-        solver.addConstraint(new ClLinearEquation(containerViewModel.getX(), new ClLinearExpression(0)));
-        solver.addConstraint(new ClLinearEquation(containerViewModel.getY(), new ClLinearExpression(0)));
         solver.setAutosolve(false);
     }
 
