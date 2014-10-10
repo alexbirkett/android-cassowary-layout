@@ -42,6 +42,13 @@ public class CassowaryLayoutDemo extends Activity {
             }
         });
 
+        findViewById(R.id.dynamic_width).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CassowaryLayoutDemo.this, DynamicWidth.class));
+            }
+        });
+
         findViewById(R.id.cassowary_layout_match_parent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -68,7 +68,7 @@ public class CassowaryLayout extends ViewGroup  {
                 if ("container".equals(viewName) || "parent".equals(viewName)) {
                     viewModel = containerViewModel;
                 } else {
-                    viewModel = getViewById(viewIdResolver.getViewId(viewName));
+                    viewModel = getViewModelById(viewIdResolver.getViewId(viewName));
                 }
             }
             String propertyName = stringArray[1];
@@ -120,7 +120,7 @@ public class CassowaryLayout extends ViewGroup  {
     };
 
 
-    public ViewModel getViewById(int id) {
+    public ViewModel getViewModelById(int id) {
         ViewModel viewModel = viewModels.get(id);
         if (viewModel == null) {
             viewModel = new ViewModel(solver);
@@ -175,7 +175,7 @@ public class CassowaryLayout extends ViewGroup  {
             View child = getChildAt(i);
 
             if (child.getVisibility() != GONE) {
-                ViewModel viewModel = getViewById(child.getId());
+                ViewModel viewModel = getViewModelById(child.getId());
                 ClLinearEquation heightConstraint = getUnusedWeakEqualityConstraint();
                 CassowaryUtil.updateConstraint(heightConstraint, viewModel.getHeight(), child.getMeasuredHeight());
                 solver.addConstraint(heightConstraint);
@@ -196,7 +196,7 @@ public class CassowaryLayout extends ViewGroup  {
             View child = getChildAt(i);
 
             if (child.getVisibility() != GONE) {
-                ViewModel viewModel = getViewById(child.getId());
+                ViewModel viewModel = getViewModelById(child.getId());
                 int leftPadding = getPaddingLeft();
                 int topPadding = getPaddingTop();
                 Log.d(LOG_TAG, "child id " + child.getId() + " left padding " + leftPadding + " top padding " + topPadding);
@@ -241,6 +241,12 @@ public class CassowaryLayout extends ViewGroup  {
         int widthSpec = MeasureSpec.getMode(widthMeasureSpec);
         if (widthSpec == MeasureSpec.EXACTLY) {
             resolvedWidth = resolveSizeAndState(0, widthMeasureSpec, 0);
+            for (ViewModel viewModel : viewModels.values()) {
+                ClConstraint constraint = new ClLinearInequality(containerViewModel.getWidth(), CL.GEQ, viewModel.getX2());
+                solver.addConstraint(constraint);
+                dynamicConstraints.add(constraint);
+            }
+
             containerWidthConstraint = new ClLinearEquation(containerViewModel.getWidth(), new ClLinearExpression(resolvedWidth));
             solver.addConstraint(containerWidthConstraint);
         } else if (widthSpec == MeasureSpec.AT_MOST) {
@@ -267,6 +273,12 @@ public class CassowaryLayout extends ViewGroup  {
 
         if (heightSpec == MeasureSpec.EXACTLY) {
             resolvedHeight = resolveSizeAndState(0, heightMeasureSpec, 0);
+
+            for (ViewModel viewModel : viewModels.values()) {
+                ClConstraint constraint = new ClLinearInequality(viewModel.getY2(), CL.LEQ, containerViewModel.getHeight());
+                solver.addConstraint(constraint);
+                dynamicConstraints.add(constraint);
+            }
 
             containerHeightConstraint = new ClLinearEquation(containerViewModel.getHeight(), new ClLinearExpression(resolvedHeight));
             solver.addConstraint(containerHeightConstraint);
@@ -332,7 +344,7 @@ public class CassowaryLayout extends ViewGroup  {
                         (CassowaryLayout.LayoutParams) child.getLayoutParams();
 
                 int childId = child.getId();
-                ViewModel viewModel = getViewById(childId);
+                ViewModel viewModel = getViewModelById(childId);
 
                 int x = (int)viewModel.getX().getValue();
                 int y = (int)viewModel.getY().getValue();
@@ -451,15 +463,22 @@ public class CassowaryLayout extends ViewGroup  {
         Log.d(LOG_TAG, "setupCassowary");
         solver.addConstraint(new ClLinearEquation(containerViewModel.getX(), new ClLinearExpression(0)));
         solver.addConstraint(new ClLinearEquation(containerViewModel.getY(), new ClLinearExpression(0)));
+        solver.setAutosolve(false);
     }
 
     public void addConstraint(ClConstraint constraint) {
             solver.addConstraint(constraint);
     }
 
-    public void addConstraint(String constraint) {
-        Log.d(LOG_TAG, "adding constraint " + constraint);
-        addConstraint(CassowaryConstraintParser.parseConstraint(constraint, cassowaryVariableResolver));
+    public ClConstraint addConstraint(String constraintString) {
+        Log.d(LOG_TAG, "adding constraint " + constraintString);
+        ClConstraint constraint = CassowaryConstraintParser.parseConstraint(constraintString, cassowaryVariableResolver);
+        addConstraint(constraint);
+        return constraint;
+    }
+
+    public void removeConstraint(ClConstraint constraint) {
+        solver.removeConstraint(constraint);
     }
 
     public void addConstraints(CharSequence[] constraints) {

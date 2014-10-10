@@ -20,7 +20,7 @@ public class CassowaryUtil {
 
     public static ClLinearInequality createWeakInequalityConstraint(ClVariable variable, byte op, double value) {
         ClLinearExpression expression = new ClLinearExpression(value);
-        return new ClLinearInequality(variable, op, expression, ClStrength.weak);
+        return new ClLinearInequality(variable, op, expression, ClStrength.strong);
     }
 
     public static void updateConstraint(ClLinearConstraint constraint, ClVariable variable, double value) {

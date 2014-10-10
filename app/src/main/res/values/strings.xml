@@ -12,6 +12,7 @@
     <string name="center_view_relative_to_sibling">Center view relative to sibling</string>
     <string name="title_activity_center_in_parent">CenterInParent</string>
     <string name="center_in_parent">Center In Parent</string>
+    <string name="dynamic_width">Dynamic width</string>
     <string name="title_activity_cassowary_layout_in_linear_layout">CassowaryLayoutInLinearLayout</string>
     <string name="cassowary_layout_in_linear_layout">CassowaryLayout In LinearLayout</string>
     <string name="title_activity_cassowary_layout_wrap_content">CassowaryLayoutWrapContent</string>
@@ -19,8 +20,6 @@
     <string name="text_view_in_linear_layout">Text view in linear layout</string>
     <string name="cassowary_layout_match_parent">Cassowary Layout Match Parent</string>
     <string name="cassowary_layout_wrap_content">Cassowary Layout Wrap Content</string>
-
-
-
-
+    <string name="title_activity_dynamic_width">DynamicWidth</string>
+    <string name="drag_me">Drag me</string>
 </resources>

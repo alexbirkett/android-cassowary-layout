@@ -46,7 +46,10 @@
             android:name=".CassowaryLayoutInLinearLayout"
             android:label="@string/title_activity_cassowary_layout_in_linear_layout" >
         </activity>
-
+        <activity
+            android:name=".DynamicWidth"
+            android:label="@string/title_activity_dynamic_width" >
+        </activity>
     </application>
 
 </manifest>
