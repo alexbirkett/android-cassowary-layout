@@ -24,14 +24,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.klomp.cassowary.CL;
 import org.klomp.cassowary.ClLinearExpression;
 import org.klomp.cassowary.ClSimplexSolver;
-import org.klomp.cassowary.ClStrength;
 import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
 import org.klomp.cassowary.clconstraint.ClLinearEquation;
-import org.klomp.cassowary.clconstraint.ClLinearInequality;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,16 +43,11 @@ public class CassowaryLayout extends ViewGroup  {
 
     private HashMap<Integer, ViewModel> viewModels = new HashMap<Integer, ViewModel>();
 
-    private ClConstraint containerWidthConstraint;
-    private ClConstraint containerHeightConstraint;
-
     private ClSimplexSolver solver = new ClSimplexSolver();
 
     private ContainerModel containerViewModel = new ContainerModel(solver);
 
     private ViewIdResolver viewIdResolver;
-
-    private static final String INTRINSIC = "intrinsic";
 
     private CassowaryVariableResolver cassowaryVariableResolver = new CassowaryVariableResolver() {
         @Override
@@ -206,19 +198,8 @@ public class CassowaryLayout extends ViewGroup  {
         Log.d(LOG_TAG, "onMesaure");
 
         long timeBeforeSolve = System.currentTimeMillis();
-
-        if (containerWidthConstraint != null) {
-            solver.removeConstraint(containerWidthConstraint);
-            containerWidthConstraint = null;
-        }
-
-        if (containerHeightConstraint != null) {
-            solver.removeConstraint(containerHeightConstraint);
-            containerHeightConstraint = null;
-        }
-
+        
         removeDynamicConstraints();
-        updateIntrinsicHeightConstraints();
 
         int resolvedWidth = 0;
         int resolvedHeight = 0;
@@ -227,15 +208,15 @@ public class CassowaryLayout extends ViewGroup  {
         // Find out how big everyone wants to be
         measureChildren(widthMeasureSpec, heightMeasureSpec);
 
+        updateIntrinsicHeightConstraints();
+
         int widthSpec = MeasureSpec.getMode(widthMeasureSpec);
         if (widthSpec == MeasureSpec.EXACTLY) {
             resolvedWidth = resolveSizeAndState(0, widthMeasureSpec, 0);
-            containerWidthConstraint = new ClLinearEquation(containerViewModel.getWidth(), new ClLinearExpression(resolvedWidth));
-            solver.addConstraint(containerWidthConstraint);
+            containerViewModel.setContainerWidth(resolvedWidth);
         } else if (widthSpec == MeasureSpec.AT_MOST) {
-            int maxWidth =  MeasureSpec.getSize(widthMeasureSpec); // resolveSizeAndState(0, widthMeasureSpec, 0);
-            containerWidthConstraint = new ClLinearInequality(containerViewModel.getWidth(), CL.LEQ, maxWidth, ClStrength.required);
-            solver.addConstraint(containerWidthConstraint);
+            int maxWidth =  MeasureSpec.getSize(widthMeasureSpec);
+            containerViewModel.setContainerWidthToAtMost(maxWidth);
             solver.solve();
             resolvedWidth = (int)containerViewModel.getWidth().getValue();
 
@@ -247,14 +228,11 @@ public class CassowaryLayout extends ViewGroup  {
 
         if (heightSpec == MeasureSpec.EXACTLY) {
             resolvedHeight = resolveSizeAndState(0, heightMeasureSpec, 0);
-            containerHeightConstraint = new ClLinearEquation(containerViewModel.getHeight(), new ClLinearExpression(resolvedHeight), ClStrength.strong);
-            solver.addConstraint(containerHeightConstraint);
+            containerViewModel.setContainerHeight(resolvedHeight);
 
         } else if (heightSpec == MeasureSpec.AT_MOST) {
             int maxHeight =  MeasureSpec.getSize(heightMeasureSpec);
-            containerHeightConstraint = new ClLinearInequality(containerViewModel.getHeight(), CL.LEQ, maxHeight, ClStrength.strong);
-            solver.addConstraint(containerHeightConstraint);
-
+            containerViewModel.setContainerHeightToAtMost(maxHeight);
             solver.solve();
             resolvedHeight = (int)containerViewModel.getHeight().getValue();
         } else if (heightSpec == MeasureSpec.UNSPECIFIED) {
