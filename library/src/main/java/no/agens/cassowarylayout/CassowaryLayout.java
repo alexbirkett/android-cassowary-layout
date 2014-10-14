@@ -32,6 +32,7 @@ import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
 import org.klomp.cassowary.clconstraint.ClLinearEquation;
 import org.klomp.cassowary.clconstraint.ClLinearInequality;
+import org.klomp.cassowary.clconstraint.ClStayConstraint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,14 +56,45 @@ public class CassowaryLayout extends ViewGroup  {
 
     private ViewIdResolver viewIdResolver;
 
+    private static final String INTRINSIC = "intrinsic";
+
     private CassowaryVariableResolver cassowaryVariableResolver = new CassowaryVariableResolver() {
         @Override
         public ClVariable resolveVariable(String variableName) {
-            ClVariable variable = null;
+            return CassowaryLayout.this.resolveVariable(variableName);
+        }
 
-            String[] stringArray = variableName.split("\\.");
+        @Override
+        public ClLinearExpression resolveConstant(String constantName) {
+
+            ClLinearExpression expression = null;
+            Double value;
+
+            try {
+                value = new Double(Double.parseDouble(constantName));
+            } catch (NumberFormatException e) {
+                value = DimensionParser.getDimension(constantName, getContext());
+
+            }
+
+            if (value != null) {
+                expression = new ClLinearExpression(value);
+            }
+
+            return expression;
+        }
+
+
+    };
+
+
+    private ClVariable resolveVariable(String variableName) {
+        ClVariable variable = null;
+
+        String[] stringArray = variableName.split("\\.");
+
+        if (stringArray.length > 1) {
             String viewName = stringArray[0];
-
             String propertyName = stringArray[1];
 
             if (viewName != null) {
@@ -79,56 +111,18 @@ public class CassowaryLayout extends ViewGroup  {
                 } else {
                     ViewModel viewModel = getViewModelById(viewIdResolver.getViewId(viewName));
                     if (viewModel != null) {
-                        if ("left".equals(propertyName) || "x".equals(propertyName)) {
-                            variable = viewModel.getX();
-                        } else if ("top".equals(propertyName) || "y".equals(propertyName)) {
-                            variable = viewModel.getY();
-                        } else if ("bottom".equals(propertyName) || "y2".equals(propertyName)) {
-                            variable = viewModel.getY2();
-                        } else if ("right".equals(propertyName) || "x2".equals(propertyName)) {
-                            variable = viewModel.getX2();
-                        } else if ("height".equals(propertyName)) {
-                            variable = viewModel.getHeight();
-                        } else if ("width".equals(propertyName)) {
-                            variable = viewModel.getWidth();
-                        } else if ("centerX".equals(propertyName)) {
-                            variable = viewModel.getCenterX();
-                        } else if ("centerY".equals(propertyName)) {
-                            variable = viewModel.getCenterY();
-                        }
-
+                        variable = viewModel.getVariableByName(propertyName);
                     }
+
                 }
             }
 
-
-
-            if (variable == null) {
-                throw new RuntimeException("unknown variable " + variableName);
-            }
-            return variable;
         }
-
-        @Override
-        public ClLinearExpression resolveConstant(String name) {
-
-            Double value;
-
-            try {
-                value = new Double(Double.parseDouble(name));
-            } catch (NumberFormatException e) {
-                value = DimensionParser.getDimension(name, getContext());
-
-            }
-
-            if (value != null) {
-                return new ClLinearExpression(value);
-            }
-
-            return null;
+        if (variable == null) {
+            throw new RuntimeException("unknown variable " + variableName);
         }
-    };
-
+        return variable;
+    }
 
     public ViewModel getViewModelById(int id) {
         ViewModel viewModel = viewModels.get(id);
@@ -179,22 +173,36 @@ public class CassowaryLayout extends ViewGroup  {
         dynamicConstraints.clear();
     }
 
-    private void createChildIntrinsicHeightConstrains() {
-        int count = getChildCount();
+    private void updateIntrinsicHeightConstraints() {
+
+       int count = getChildCount();
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
 
             if (child.getVisibility() != GONE) {
                 ViewModel viewModel = getViewModelById(child.getId());
-                ClLinearEquation heightConstraint = getUnusedWeakEqualityConstraint();
-                CassowaryUtil.updateConstraint(heightConstraint, viewModel.getHeight(), child.getMeasuredHeight());
-                solver.addConstraint(heightConstraint);
-                dynamicConstraints.add(heightConstraint);
+                ClVariable intrinsicHeight = viewModel.getIntrinsicHeight();
+                if (intrinsicHeight != null) {
+                    int childHeight = child.getMeasuredHeight();
+                    if ((int)intrinsicHeight.getValue() != childHeight) {
+                        solver.beginEdit();
+                        Log.d(LOG_TAG, "child id " + child.getId() + " suggesting height " + childHeight);
+                        solver.suggestValue(intrinsicHeight, childHeight);
+                        solver.endEdit();
+                    }
+                }
 
-                ClLinearEquation widthConstraint = getUnusedWeakEqualityConstraint();
-                CassowaryUtil.updateConstraint(widthConstraint, viewModel.getWidth(), child.getMeasuredWidth());
-                solver.addConstraint(widthConstraint);
-                dynamicConstraints.add(widthConstraint);
+                ClVariable intrinsicWidth = viewModel.getIntrinsicWidth();
+                if (intrinsicWidth != null) {
+                    int childWidth = child.getMeasuredWidth();
+                    if ((int)intrinsicWidth.getValue() != childWidth) {
+                        solver.beginEdit();
+                        Log.d(LOG_TAG, "child id " + child.getId() + " suggesting width " + childWidth);
+                        solver.suggestValue(intrinsicWidth, childWidth);
+                        solver.endEdit();
+                    }
+
+                }
             }
 
         }
@@ -237,7 +245,7 @@ public class CassowaryLayout extends ViewGroup  {
         }
 
         removeDynamicConstraints();
-        createChildIntrinsicHeightConstrains();
+        updateIntrinsicHeightConstraints();
         createPaddingConstraints();
 
 
@@ -478,9 +486,31 @@ public class CassowaryLayout extends ViewGroup  {
 
     public ClConstraint addConstraint(String constraintString) {
         Log.d(LOG_TAG, "adding constraint " + constraintString);
-        ClConstraint constraint = CassowaryConstraintParser.parseConstraint(constraintString, cassowaryVariableResolver);
-        addConstraint(constraint);
-        return constraint;
+
+        if (!addStayConstraint(constraintString)) {
+            ClConstraint constraint = CassowaryConstraintParser.parseConstraint(constraintString, cassowaryVariableResolver);
+            addConstraint(constraint);
+            return constraint;
+        }
+        return null;
+    }
+
+    private boolean addStayConstraint(String constraintString) {
+        boolean isStayConstraint = false;
+        if (constraintString.endsWith(INTRINSIC)) {
+            String variableName = constraintString.substring(0, constraintString.length() -  INTRINSIC.length()).trim();
+            String[] stringArray = variableName.split("\\.");
+            String viewName = stringArray[0];
+            String propertyName = stringArray[1];
+            ViewModel viewModel = getViewModelById(viewIdResolver.getViewId(viewName));
+            if ("height".equals(propertyName)) {
+                viewModel.createIntrinsicHeightConstraint();
+            } else if ("width".equals(propertyName)) {
+                viewModel.createIntrinsicWidthConstraint();
+            }
+            isStayConstraint = true;
+        }
+        return isStayConstraint;
     }
 
     public void removeConstraint(ClConstraint constraint) {
