@@ -181,27 +181,26 @@ public class CassowaryLayout extends ViewGroup  {
 
             if (child.getVisibility() != GONE) {
                 ViewModel viewModel = getViewModelById(child.getId());
-                if (viewModel.isIntrinsicHeight()) {
+                ClVariable intrinsicHeight = viewModel.getIntrinsicHeight();
+                if (intrinsicHeight != null) {
                     int childHeight = child.getMeasuredHeight();
-                    ClVariable height = viewModel.getHeight();
-                    if ((int)height.getValue() != childHeight) {
-                        solver.addEditVar(height);
+                    if ((int)intrinsicHeight.getValue() != childHeight) {
+                        solver.addEditVar(intrinsicHeight);
                         solver.beginEdit();
                         Log.d(LOG_TAG, "child id " + child.getId() + " suggesting height " + childHeight);
-                        solver.suggestValue(height, childHeight);
+                        solver.suggestValue(intrinsicHeight, childHeight);
                         solver.endEdit();
                     }
                 }
 
-
-                if (viewModel.isIntrinsicWidth()) {
+                ClVariable intrinsicWidth = viewModel.getIntrinsicWidth();
+                if (intrinsicWidth != null) {
                     int childWidth = child.getMeasuredWidth();
-                    ClVariable width = viewModel.getWidth();
-                    if ((int)width.getValue() != childWidth) {
-                        solver.addEditVar(width);
+                    if ((int)intrinsicWidth.getValue() != childWidth) {
+                        solver.addEditVar(intrinsicWidth);
                         solver.beginEdit();
                         Log.d(LOG_TAG, "child id " + child.getId() + " suggesting width " + childWidth);
-                        solver.suggestValue(width, childWidth);
+                        solver.suggestValue(intrinsicWidth, childWidth);
                         solver.endEdit();
                     }
 
