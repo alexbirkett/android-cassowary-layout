@@ -50,6 +50,8 @@ public class ViewModel {
     private ClVariable centerY;
     private ClVariable intrinsicWidth;
     private ClVariable intrinsicHeight;
+    private ClConstraint intrinsicWidthConstraint;
+    private ClConstraint intrinsicHeightConstraint;
 
     public ClVariable getX() {
         return x;
@@ -139,6 +141,30 @@ public class ViewModel {
             solver.addStay(intrinsicHeight);
         }
         return intrinsicHeight;
+    }
+
+    public void setIntrinsicWidth(int intrinsicWidth) {
+        if (intrinsicWidthConstraint != null) {
+            solver.removeConstraint(intrinsicWidthConstraint);
+        }
+
+        if (intrinsicWidthConstraint == null) {
+            intrinsicWidthConstraint = new ClLinearEquation(getIntrinsicWidth(), new ClLinearExpression(intrinsicWidth), ClStrength.required);
+        }
+
+        solver.addConstraint(intrinsicWidthConstraint);
+    }
+
+    public void setIntrinsicHeight(int intrinsicHeight) {
+        if (intrinsicHeightConstraint != null) {
+            solver.removeConstraint(intrinsicHeightConstraint);
+        }
+
+        if (intrinsicHeightConstraint == null) {
+            intrinsicHeightConstraint = new ClLinearEquation(getIntrinsicHeight(), new ClLinearExpression(intrinsicHeight), ClStrength.required);
+        }
+
+        solver.addConstraint(intrinsicHeightConstraint);
     }
 
     public ClVariable getIntrinsicHeight() {

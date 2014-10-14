@@ -184,14 +184,7 @@ public class CassowaryLayout extends ViewGroup  {
                 if (intrinsicHeight != null) {
                     int childHeight = child.getMeasuredHeight();
                     if ((int)intrinsicHeight.getValue() != childHeight) {
-                        solver.beginEdit();
-                        solver.addEditVar(intrinsicHeight);
-
-                        Log.d(LOG_TAG, "child id " + child.getId() +  " height is currently " + intrinsicHeight.getValue() + " suggesting height " + childHeight);
-                        solver.suggestValue(intrinsicHeight, childHeight);
-                        solver.endEdit();
-                        Log.d(LOG_TAG, "child id " + child.getId() +  " height is now " + intrinsicHeight.getValue());
-
+                        viewModel.setIntrinsicHeight(childHeight);
                     }
                 }
 
@@ -199,12 +192,7 @@ public class CassowaryLayout extends ViewGroup  {
                 if (intrinsicWidth != null) {
                     int childWidth = child.getMeasuredWidth();
                     if ((int)intrinsicWidth.getValue() != childWidth) {
-                        solver.beginEdit();
-                        solver.addEditVar(intrinsicWidth, ClStrength.strong);
-
-                        Log.d(LOG_TAG, "child id " + child.getId() + " width is currently " + intrinsicWidth.getValue() + " suggesting width " + childWidth);
-                        solver.suggestValue(intrinsicWidth, childWidth).resolve();
-                        solver.endEdit();
+                        viewModel.setIntrinsicWidth(childWidth);
                     }
 
                 }
