@@ -7,7 +7,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
+import org.klomp.cassowary.ClLinearExpression;
+import org.klomp.cassowary.ClStrength;
 import org.klomp.cassowary.clconstraint.ClConstraint;
+import org.klomp.cassowary.clconstraint.ClLinearEquation;
 
 import no.agens.cassowarylayout.CassowaryLayout;
 import no.agens.cassowarylayout.ViewModel;
@@ -32,9 +35,10 @@ public class DynamicWidth extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 final int X = (int) event.getRawX();
 
+                ViewModel viewModel = layout.getViewModelById(v.getId());
+
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
-                        ViewModel viewModel = layout.getViewModelById(v.getId());
                         delta = X - viewModel.getX().getValue();
                         break;
                     case MotionEvent.ACTION_UP:
@@ -47,7 +51,9 @@ public class DynamicWidth extends Activity {
                         if (constraint != null) {
                             layout.removeConstraint(constraint);
                         }
-                        constraint = layout.addConstraint("dragger.x == " + (X - delta));
+
+                        constraint = new ClLinearEquation(viewModel.getX(), new ClLinearExpression(X - delta), ClStrength.strong);
+                        layout.addConstraint(constraint);
                         layout.requestLayout();
                         break;
                 }
