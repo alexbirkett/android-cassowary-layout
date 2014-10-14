@@ -185,6 +185,7 @@ public class CassowaryLayout extends ViewGroup  {
                 if (intrinsicHeight != null) {
                     int childHeight = child.getMeasuredHeight();
                     if ((int)intrinsicHeight.getValue() != childHeight) {
+                        solver.addEditVar(intrinsicHeight);
                         solver.beginEdit();
                         Log.d(LOG_TAG, "child id " + child.getId() + " suggesting height " + childHeight);
                         solver.suggestValue(intrinsicHeight, childHeight);
@@ -196,6 +197,7 @@ public class CassowaryLayout extends ViewGroup  {
                 if (intrinsicWidth != null) {
                     int childWidth = child.getMeasuredWidth();
                     if ((int)intrinsicWidth.getValue() != childWidth) {
+                        solver.addEditVar(intrinsicWidth);
                         solver.beginEdit();
                         Log.d(LOG_TAG, "child id " + child.getId() + " suggesting width " + childWidth);
                         solver.suggestValue(intrinsicWidth, childWidth);
