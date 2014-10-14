@@ -247,7 +247,7 @@ public class CassowaryLayout extends ViewGroup  {
 
         if (heightSpec == MeasureSpec.EXACTLY) {
             resolvedHeight = resolveSizeAndState(0, heightMeasureSpec, 0);
-            containerHeightConstraint = new ClLinearEquation(containerViewModel.getHeight(), new ClLinearExpression(resolvedHeight));
+            containerHeightConstraint = new ClLinearEquation(containerViewModel.getHeight(), new ClLinearExpression(resolvedHeight), ClStrength.strong);
             solver.addConstraint(containerHeightConstraint);
 
         } else if (heightSpec == MeasureSpec.AT_MOST) {
