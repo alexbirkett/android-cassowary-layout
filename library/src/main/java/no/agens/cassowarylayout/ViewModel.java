@@ -23,10 +23,8 @@ import org.klomp.cassowary.ClSimplexSolver;
 import org.klomp.cassowary.ClStrength;
 import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
-import org.klomp.cassowary.clconstraint.ClEditConstraint;
 import org.klomp.cassowary.clconstraint.ClLinearEquation;
 import org.klomp.cassowary.clconstraint.ClLinearInequality;
-import org.klomp.cassowary.clconstraint.ClStayConstraint;
 
 /**
  * Created by alex on 25/09/2014.
@@ -104,44 +102,51 @@ public class ViewModel {
     public ClVariable getVariableByName(String name) {
         ClVariable variable = null;
         if ("left".equals(name) || "x".equals(name)) {
-                variable = getX();
-            } else if ("top".equals(name) || "y".equals(name)) {
-                variable = getY();
-            } else if ("bottom".equals(name) || "y2".equals(name)) {
-                variable = getY2();
-            } else if ("right".equals(name) || "x2".equals(name)) {
-                variable = getX2();
-            } else if ("height".equals(name)) {
-                variable = getHeight();
-            } else if ("width".equals(name)) {
-                variable = getWidth();
-            } else if ("centerX".equals(name)) {
-                variable = getCenterX();
-            } else if ("centerY".equals(name)) {
-                variable = getCenterY();
-            }
+            variable = getX();
+        } else if ("top".equals(name) || "y".equals(name)) {
+            variable = getY();
+        } else if ("bottom".equals(name) || "y2".equals(name)) {
+            variable = getY2();
+        } else if ("right".equals(name) || "x2".equals(name)) {
+            variable = getX2();
+        } else if ("height".equals(name)) {
+            variable = getHeight();
+        } else if ("width".equals(name)) {
+            variable = getWidth();
+        } else if ("centerX".equals(name)) {
+            variable = getCenterX();
+        } else if ("centerY".equals(name)) {
+            variable = getCenterY();
+        } else if ("intrinsicHeight".equals(name)) {
+            variable = createIntrinsicHeightIfRequired();
+        } else if ("intrinsicWidth".equals(name)) {
+            variable = createIntrinsicWidthIfRequired();
+        }
         return variable;
     }
 
-    public void createIntrinsicHeightConstraint() {
-        intrinsicHeight = new ClVariable();
-        solver.addStay(intrinsicHeight);
-        solver.addConstraint(new ClLinearEquation(getHeight(), new ClLinearExpression(intrinsicHeight), ClStrength.required));
-
-    }
-
-    public void createIntrinsicWidthConstraint() {
-        intrinsicWidth = new ClVariable();
-        solver.addStay(intrinsicWidth);
-        solver.addConstraint(new ClLinearEquation(getWidth(), new ClLinearExpression(intrinsicWidth), ClStrength.required));
-    }
-
-    public ClVariable getIntrinsicWidth() {
+    public ClVariable createIntrinsicWidthIfRequired() {
+        if (intrinsicWidth == null) {
+            intrinsicWidth = new ClVariable();
+            solver.addStay(intrinsicWidth);
+        }
         return intrinsicWidth;
+    }
+
+    public ClVariable createIntrinsicHeightIfRequired() {
+        if (intrinsicHeight == null) {
+            intrinsicHeight = new ClVariable();
+            solver.addStay(intrinsicHeight);
+        }
+        return intrinsicHeight;
     }
 
     public ClVariable getIntrinsicHeight() {
         return intrinsicHeight;
+    }
+
+    public ClVariable getIntrinsicWidth() {
+        return intrinsicWidth;
     }
 
     private void createDefaultConstraints() {

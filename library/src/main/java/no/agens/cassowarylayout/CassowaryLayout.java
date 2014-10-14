@@ -32,7 +32,6 @@ import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
 import org.klomp.cassowary.clconstraint.ClLinearEquation;
 import org.klomp.cassowary.clconstraint.ClLinearInequality;
-import org.klomp.cassowary.clconstraint.ClStayConstraint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -440,31 +439,9 @@ public class CassowaryLayout extends ViewGroup  {
 
     public ClConstraint addConstraint(String constraintString) {
         Log.d(LOG_TAG, "adding constraint " + constraintString);
-
-        if (!addStayConstraint(constraintString)) {
-            ClConstraint constraint = CassowaryConstraintParser.parseConstraint(constraintString, cassowaryVariableResolver);
-            addConstraint(constraint);
-            return constraint;
-        }
-        return null;
-    }
-
-    private boolean addStayConstraint(String constraintString) {
-        boolean isStayConstraint = false;
-        if (constraintString.endsWith(INTRINSIC)) {
-            String variableName = constraintString.substring(0, constraintString.length() -  INTRINSIC.length()).trim();
-            String[] stringArray = variableName.split("\\.");
-            String viewName = stringArray[0];
-            String propertyName = stringArray[1];
-            ViewModel viewModel = getViewModelById(viewIdResolver.getViewId(viewName));
-            if ("height".equals(propertyName)) {
-                viewModel.createIntrinsicHeightConstraint();
-            } else if ("width".equals(propertyName)) {
-                viewModel.createIntrinsicWidthConstraint();
-            }
-            isStayConstraint = true;
-        }
-        return isStayConstraint;
+        ClConstraint constraint = CassowaryConstraintParser.parseConstraint(constraintString, cassowaryVariableResolver);
+        addConstraint(constraint);
+        return constraint;
     }
 
     public void removeConstraint(ClConstraint constraint) {
