@@ -214,26 +214,6 @@ public class CassowaryLayout extends ViewGroup  {
         }
     }
 
-    private void createPaddingConstraints() {
-        int count = getChildCount();
-        for (int i = 0; i < count; i++) {
-            View child = getChildAt(i);
-
-            if (child.getVisibility() != GONE) {
-                ViewModel viewModel = getViewModelById(child.getId());
-                int leftPadding = getPaddingLeft();
-                int topPadding = getPaddingTop();
-                Log.d(LOG_TAG, "child id " + child.getId() + " left padding " + leftPadding + " top padding " + topPadding);
-                ClConstraint paddingLeft = CassowaryUtil.createWeakInequalityConstraint(viewModel.getX(), CL.GEQ, leftPadding);
-                solver.addConstraint(paddingLeft);
-                dynamicConstraints.add(paddingLeft);
-
-                ClConstraint paddingRight = CassowaryUtil.createWeakInequalityConstraint(viewModel.getY(), CL.GEQ, topPadding);
-                solver.addConstraint(paddingRight);
-                dynamicConstraints.add(paddingRight);
-            }
-        }
-    }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Log.d(LOG_TAG, "onMesaure");
@@ -252,8 +232,6 @@ public class CassowaryLayout extends ViewGroup  {
 
         removeDynamicConstraints();
         updateIntrinsicHeightConstraints();
-        createPaddingConstraints();
-
 
         int resolvedWidth = 0;
         int resolvedHeight = 0;
