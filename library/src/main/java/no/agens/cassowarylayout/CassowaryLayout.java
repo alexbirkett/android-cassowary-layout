@@ -127,7 +127,7 @@ public class CassowaryLayout extends ViewGroup  {
     public ViewModel getViewModelById(int id) {
         ViewModel viewModel = viewModels.get(id);
         if (viewModel == null) {
-            viewModel = new ViewModel(solver);
+            viewModel = new ViewModel(solver, containerViewModel);
             viewModels.put(id, viewModel);
         }
         return viewModel;
@@ -185,11 +185,14 @@ public class CassowaryLayout extends ViewGroup  {
                 if (intrinsicHeight != null) {
                     int childHeight = child.getMeasuredHeight();
                     if ((int)intrinsicHeight.getValue() != childHeight) {
-                        solver.addEditVar(intrinsicHeight);
                         solver.beginEdit();
-                        Log.d(LOG_TAG, "child id " + child.getId() + " suggesting height " + childHeight);
+                        solver.addEditVar(intrinsicHeight);
+
+                        Log.d(LOG_TAG, "child id " + child.getId() +  " height is currently " + intrinsicHeight.getValue() + " suggesting height " + childHeight);
                         solver.suggestValue(intrinsicHeight, childHeight);
                         solver.endEdit();
+                        Log.d(LOG_TAG, "child id " + child.getId() +  " height is now " + intrinsicHeight.getValue());
+
                     }
                 }
 
@@ -197,10 +200,11 @@ public class CassowaryLayout extends ViewGroup  {
                 if (intrinsicWidth != null) {
                     int childWidth = child.getMeasuredWidth();
                     if ((int)intrinsicWidth.getValue() != childWidth) {
-                        solver.addEditVar(intrinsicWidth);
                         solver.beginEdit();
-                        Log.d(LOG_TAG, "child id " + child.getId() + " suggesting width " + childWidth);
-                        solver.suggestValue(intrinsicWidth, childWidth);
+                        solver.addEditVar(intrinsicWidth, ClStrength.strong);
+
+                        Log.d(LOG_TAG, "child id " + child.getId() + " width is currently " + intrinsicWidth.getValue() + " suggesting width " + childWidth);
+                        solver.suggestValue(intrinsicWidth, childWidth).resolve();
                         solver.endEdit();
                     }
 
@@ -261,27 +265,12 @@ public class CassowaryLayout extends ViewGroup  {
         int widthSpec = MeasureSpec.getMode(widthMeasureSpec);
         if (widthSpec == MeasureSpec.EXACTLY) {
             resolvedWidth = resolveSizeAndState(0, widthMeasureSpec, 0);
-            for (ViewModel viewModel : viewModels.values()) {
-                ClConstraint constraint = new ClLinearInequality(containerViewModel.getWidth(), CL.GEQ, viewModel.getX2());
-                solver.addConstraint(constraint);
-                dynamicConstraints.add(constraint);
-            }
-
             containerWidthConstraint = new ClLinearEquation(containerViewModel.getWidth(), new ClLinearExpression(resolvedWidth));
             solver.addConstraint(containerWidthConstraint);
         } else if (widthSpec == MeasureSpec.AT_MOST) {
             int maxWidth =  MeasureSpec.getSize(widthMeasureSpec); // resolveSizeAndState(0, widthMeasureSpec, 0);
-
-
-            for (ViewModel viewModel : viewModels.values()) {
-                ClConstraint constraint = new ClLinearInequality(containerViewModel.getWidth(), CL.GEQ, viewModel.getX2());
-                solver.addConstraint(constraint);
-                dynamicConstraints.add(constraint);
-            }
-
             containerWidthConstraint = new ClLinearInequality(containerViewModel.getWidth(), CL.LEQ, maxWidth, ClStrength.required);
             solver.addConstraint(containerWidthConstraint);
-
             solver.solve();
             resolvedWidth = (int)containerViewModel.getWidth().getValue();
 
@@ -293,26 +282,11 @@ public class CassowaryLayout extends ViewGroup  {
 
         if (heightSpec == MeasureSpec.EXACTLY) {
             resolvedHeight = resolveSizeAndState(0, heightMeasureSpec, 0);
-
-            for (ViewModel viewModel : viewModels.values()) {
-                ClConstraint constraint = new ClLinearInequality(viewModel.getY2(), CL.LEQ, containerViewModel.getHeight());
-                solver.addConstraint(constraint);
-                dynamicConstraints.add(constraint);
-            }
-
             containerHeightConstraint = new ClLinearEquation(containerViewModel.getHeight(), new ClLinearExpression(resolvedHeight));
             solver.addConstraint(containerHeightConstraint);
 
         } else if (heightSpec == MeasureSpec.AT_MOST) {
             int maxHeight =  MeasureSpec.getSize(heightMeasureSpec);
-
-
-            for (ViewModel viewModel : viewModels.values()) {
-                ClConstraint constraint = new ClLinearInequality(containerViewModel.getHeight(), CL.GEQ, viewModel.getY2());
-                solver.addConstraint(constraint);
-                dynamicConstraints.add(constraint);
-            }
-
             containerHeightConstraint = new ClLinearInequality(containerViewModel.getHeight(), CL.LEQ, maxHeight, ClStrength.strong);
             solver.addConstraint(containerHeightConstraint);
 

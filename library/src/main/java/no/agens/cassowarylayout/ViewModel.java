@@ -17,6 +17,7 @@
 package no.agens.cassowarylayout;
 
 
+import org.klomp.cassowary.CL;
 import org.klomp.cassowary.ClLinearExpression;
 import org.klomp.cassowary.ClSimplexSolver;
 import org.klomp.cassowary.ClStrength;
@@ -24,6 +25,7 @@ import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
 import org.klomp.cassowary.clconstraint.ClEditConstraint;
 import org.klomp.cassowary.clconstraint.ClLinearEquation;
+import org.klomp.cassowary.clconstraint.ClLinearInequality;
 import org.klomp.cassowary.clconstraint.ClStayConstraint;
 
 /**
@@ -32,10 +34,14 @@ import org.klomp.cassowary.clconstraint.ClStayConstraint;
 public class ViewModel {
 
     private ClSimplexSolver solver;
+    private ContainerModel containerModel;
 
-    public ViewModel(ClSimplexSolver solver) {
+    public ViewModel(ClSimplexSolver solver, ContainerModel containerModel) {
         this.solver = solver;
+        this.containerModel = containerModel;
+        createDefaultConstraints();
     }
+
     private ClVariable x = new ClVariable();
     private ClVariable y = new ClVariable();
     private ClVariable width = new ClVariable();
@@ -120,7 +126,6 @@ public class ViewModel {
     public void createIntrinsicHeightConstraint() {
         intrinsicHeight = new ClVariable();
         solver.addStay(intrinsicHeight);
-        solver.addEditVar(intrinsicHeight);
         solver.addConstraint(new ClLinearEquation(getHeight(), new ClLinearExpression(intrinsicHeight), ClStrength.required));
 
     }
@@ -128,7 +133,6 @@ public class ViewModel {
     public void createIntrinsicWidthConstraint() {
         intrinsicWidth = new ClVariable();
         solver.addStay(intrinsicWidth);
-        solver.addEditVar(intrinsicWidth);
         solver.addConstraint(new ClLinearEquation(getWidth(), new ClLinearExpression(intrinsicWidth), ClStrength.required));
     }
 
@@ -138,5 +142,20 @@ public class ViewModel {
 
     public ClVariable getIntrinsicHeight() {
         return intrinsicHeight;
+    }
+
+    private void createDefaultConstraints() {
+        createWidthConstraint();
+        createHeightConstraint();
+    }
+
+    private void createWidthConstraint() {
+        ClConstraint constraint = new ClLinearInequality(getX2(), CL.LEQ, containerModel.getWidth());
+        solver.addConstraint(constraint);
+    }
+
+    private void createHeightConstraint() {
+        ClConstraint constraint = new ClLinearInequality(getY2(), CL.LEQ, containerModel.getHeight());
+        solver.addConstraint(constraint);
     }
 }
