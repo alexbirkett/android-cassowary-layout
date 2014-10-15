@@ -16,26 +16,38 @@
     </string-array>
 
     <string-array name="cassowary_layout_demo">
+
+        <item>programmatic_demo.y == 0</item>
+        <item>programmatic_demo.x == 0</item>
+        <item>programmatic_demo.height == programmatic_demo.intrinsicHeight</item>
+
         <item>xml_layout_demo.x == 0</item>
         <item>xml_layout_demo.y == programmatic_demo.y2</item>
+        <item>xml_layout_demo.height == programmatic_demo.intrinsicHeight</item>
 
         <item>center_view_relative_to_sibling.x == 0</item>
         <item>center_view_relative_to_sibling.y == xml_layout_demo.y2</item>
+        <item>center_view_relative_to_sibling.height == programmatic_demo.intrinsicHeight</item>
 
         <item>center_in_parent.x == 0</item>
         <item>center_in_parent.y == center_view_relative_to_sibling.y2</item>
+        <item>center_in_parent.height == programmatic_demo.intrinsicHeight</item>
 
         <item>dynamic_width.x == 0</item>
         <item>dynamic_width.y == center_in_parent.y2</item>
+        <item>dynamic_width.height == programmatic_demo.intrinsicHeight</item>
 
         <item>cassowary_layout_match_parent.x == 0</item>
         <item>cassowary_layout_match_parent.y == dynamic_width.y2</item>
+        <item>cassowary_layout_match_parent.height == programmatic_demo.intrinsicHeight</item>
 
         <item>cassowary_layout_wrap_content.x == 0</item>
         <item>cassowary_layout_wrap_content.y == cassowary_layout_match_parent.y2</item>
+        <item>cassowary_layout_wrap_content.height == programmatic_demo.intrinsicHeight</item>
 
         <item>cassowary_layout_in_linear_layout.x == 0</item>
         <item>cassowary_layout_in_linear_layout.y == cassowary_layout_wrap_content.y2</item>
+        <item>cassowary_layout_in_linear_layout.height == programmatic_demo.intrinsicHeight</item>
     </string-array>
 
     <string-array name="center_view_relative_to_sibling">
