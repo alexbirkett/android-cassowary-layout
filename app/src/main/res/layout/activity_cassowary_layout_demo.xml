@@ -8,49 +8,57 @@
     tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
     app:constraints="@array/cassowary_layout_demo">
 
-    <Button
+    <TextView
+        style="@style/button_style"
         android:id="@+id/programmatic_demo"
         android:text="@string/programmatic_demo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
+    <TextView
+        style="@style/button_style"
         android:id="@+id/xml_layout_demo"
         android:text="@string/xml_layout_demo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
+    <TextView
+        style="@style/button_style"
         android:id="@+id/center_view_relative_to_sibling"
         android:text="@string/center_view_relative_to_sibling"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
+    <TextView
+        style="@style/button_style"
         android:id="@+id/center_in_parent"
         android:text="@string/center_in_parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
+    <TextView
+        style="@style/button_style"
         android:id="@+id/dynamic_width"
         android:text="@string/dynamic_width"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
+    <TextView
+        style="@style/button_style"
         android:id="@+id/cassowary_layout_in_linear_layout"
         android:text="@string/cassowary_layout_in_linear_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
+    <TextView
+        style="@style/button_style"
         android:id="@+id/cassowary_layout_match_parent"
         android:text="@string/cassowary_layout_match_parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
+    <TextView
+        style="@style/button_style"
         android:id="@+id/cassowary_layout_wrap_content"
         android:text="@string/cassowary_layout_wrap_content"
         android:layout_width="wrap_content"
