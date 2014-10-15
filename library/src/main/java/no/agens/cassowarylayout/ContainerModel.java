@@ -9,6 +9,8 @@ import org.klomp.cassowary.clconstraint.ClConstraint;
 import org.klomp.cassowary.clconstraint.ClLinearEquation;
 import org.klomp.cassowary.clconstraint.ClLinearInequality;
 
+import no.agens.cassowarylayout.util.CassowaryUtil;
+
 /**
  * Created by alex on 10/10/2014.
  */
@@ -54,35 +56,20 @@ public class ContainerModel {
     }
 
     public void setContainerHeight(int height) {
-        if (containerHeightConstraint != null) {
-            solver.removeConstraint(containerHeightConstraint);
-        }
-        containerHeightConstraint = new ClLinearEquation(getHeight(), new ClLinearExpression(height), ClStrength.strong);
-        solver.addConstraint(containerHeightConstraint);
+        containerHeightConstraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getHeight(), containerHeightConstraint, height, solver);
     }
 
     public void setContainerHeightToAtMost(int height) {
-        if (containerHeightConstraint != null) {
-            solver.removeConstraint(containerHeightConstraint);
-        }
-        containerHeightConstraint = new ClLinearInequality(getHeight(), CL.LEQ, height, ClStrength.strong);
-        solver.addConstraint(containerHeightConstraint);
+        containerHeightConstraint = CassowaryUtil.createOrUpdateLeqInequalityConstraint(getHeight(), containerHeightConstraint, height, solver);
     }
 
     public void setContainerWidth(int width) {
-        if (containerWidthConstraint != null) {
-            solver.removeConstraint(containerWidthConstraint);
-        }
-        containerWidthConstraint = new ClLinearEquation(getWidth(), new ClLinearExpression(width));
-        solver.addConstraint(containerWidthConstraint);
+        containerWidthConstraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getWidth(), containerWidthConstraint, width, solver);
     }
 
     public void setContainerWidthToAtMost(int width) {
-        if (containerWidthConstraint != null) {
-            solver.removeConstraint(containerWidthConstraint);
-        }
-        containerWidthConstraint = new ClLinearInequality(getWidth(), CL.LEQ, width, ClStrength.required);
-        solver.addConstraint(containerWidthConstraint);
+        containerWidthConstraint = CassowaryUtil.createOrUpdateLeqInequalityConstraint(getWidth(), containerWidthConstraint, width, solver);
     }
+
 
 }

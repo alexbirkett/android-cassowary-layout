@@ -2,6 +2,7 @@ package no.agens.cassowarylayout.util;
 
 import org.klomp.cassowary.CL;
 import org.klomp.cassowary.ClLinearExpression;
+import org.klomp.cassowary.ClSimplexSolver;
 import org.klomp.cassowary.ClStrength;
 import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
@@ -27,5 +28,42 @@ public class CassowaryUtil {
         ClLinearExpression expression = constraint.expression();
         expression.setConstant(value);
         expression.setVariable(variable, -1);
+    }
+
+
+    public static ClConstraint createOrUpdateLeqInequalityConstraint(ClVariable variable, ClConstraint constraint, double value, ClSimplexSolver solver) {
+        if (constraint != null) {
+            double currentValue = constraint.expression().getConstant();
+            // This will not detect if the variable or strength has changed.
+            if (!(constraint instanceof ClLinearInequality) || currentValue != value) {
+                solver.removeConstraint(constraint);
+                constraint = null;
+            }
+        }
+
+        if (constraint == null) {
+            constraint = new ClLinearInequality(variable, CL.LEQ, value, ClStrength.strong);
+            solver.addConstraint(constraint);
+        }
+
+        return constraint;
+    }
+
+    public static ClConstraint createOrUpdateLinearEquationConstraint(ClVariable variable, ClConstraint constraint, double value, ClSimplexSolver solver) {
+        if (constraint != null) {
+            double currentValue = constraint.expression().getConstant();
+            // This will not detect if the variable, strength or operation has changed
+            if (!(constraint instanceof ClLinearEquation) || currentValue != value) {
+                solver.removeConstraint(constraint);
+                constraint = null;
+            }
+        }
+
+        if (constraint == null) {
+            constraint = new ClLinearEquation(variable, value, ClStrength.strong);
+            solver.addConstraint(constraint);
+        }
+
+        return constraint;
     }
 }
