@@ -17,9 +17,11 @@
 package no.agens.cassowarylayout;
 
 
+import android.util.Log;
 
 import org.klomp.cassowary.CL;
 import org.klomp.cassowary.ClLinearExpression;
+import org.klomp.cassowary.ClStrength;
 import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
 import org.klomp.cassowary.clconstraint.ClLinearEquation;
@@ -36,36 +38,44 @@ import no.agens.cassowarylayout.util.InfixToPostfix;
  */
 public class CassowaryConstraintParser {
 
+
+    private static final String LOG_TAG = "CassowaryConstraintParser";
+
+
     public static ClConstraint parseConstraint(String constraintString, CassowaryVariableResolver variableResolver) {
-        ClConstraint constraint = null;
 
-        Byte op = null;
-        int index = constraintString.indexOf("<=");
-        if (index > 0) {
-            op = CL.LEQ;
-        } else {
-            index = constraintString.indexOf(">=");
-            if (index > 0) {
-                op = CL.GEQ;
-            } else {
-                index = constraintString.indexOf("==");
-            }
+        Log.d(LOG_TAG, "CassowaryConstraintParser.parseConstraint " + constraintString);
+
+
+        ConstraintParser.Constraint constraint = ConstraintParser.parseConstraint(constraintString);
+
+        ClLinearExpression expression = resolveExpression(constraint.getExpression(), variableResolver);
+        ClVariable variable = variableResolver.resolveVariable(constraint.getVariable());
+
+        switch(constraint.getOperator()) {
+            case EQ:
+                return new ClLinearEquation(variable, expression, getStrength(constraint.getStrength()));
+            case GEQ:
+                return new ClLinearInequality(variable, CL.GEQ, expression, getStrength(constraint.getStrength()));
+            case LEQ:
+                return new ClLinearInequality(variable, CL.LEQ, expression, getStrength(constraint.getStrength()));
+
         }
+        return null;
+    }
 
-        if (index > 0) {
-            String variableName = constraintString.substring(0, index).trim();
-            ClVariable variable = variableResolver.resolveVariable(variableName);
-            String expressionString = constraintString.substring(index + 2).trim();
-            ClLinearExpression expression = null;
-            expression = resolveExpression(expressionString, variableResolver);
-             if (op == null) {
-                constraint = new ClLinearEquation(variable,expression);
-            } else {
-                constraint = new ClLinearInequality(variable, op, expression);
-            }
+    private static ClStrength getStrength(ConstraintParser.Constraint.Strength strength) {
+        switch (strength) {
+            case WEAK:
+                return ClStrength.weak;
+            case MEDIUM:
+                return ClStrength.medium;
+            case STRONG:
+                return ClStrength.strong;
+            case REQUIRED:
+                return ClStrength.required;
         }
-
-        return constraint;
+        return ClStrength.required;
     }
 
     public static ClLinearExpression resolveExpression(String expressionString, CassowaryVariableResolver variableResolver) {
