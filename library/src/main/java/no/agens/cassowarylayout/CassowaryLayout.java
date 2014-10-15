@@ -198,11 +198,10 @@ public class CassowaryLayout extends ViewGroup  {
         Log.d(LOG_TAG, "onMesaure");
 
         long timeBeforeSolve = System.currentTimeMillis();
-        
         removeDynamicConstraints();
 
-        int resolvedWidth = 0;
-        int resolvedHeight = 0;
+        int resolvedWidth = -1;
+        int resolvedHeight = -1;
 
 
         // Find out how big everyone wants to be
@@ -221,6 +220,8 @@ public class CassowaryLayout extends ViewGroup  {
             resolvedWidth = (int)containerViewModel.getWidth().getValue();
 
         } else if (widthSpec == MeasureSpec.UNSPECIFIED) {
+            solver.solve();
+            resolvedWidth = (int)containerViewModel.getWidth().getValue();
         }
 
         int heightSpec = MeasureSpec.getMode(heightMeasureSpec);
@@ -229,14 +230,14 @@ public class CassowaryLayout extends ViewGroup  {
         if (heightSpec == MeasureSpec.EXACTLY) {
             resolvedHeight = resolveSizeAndState(0, heightMeasureSpec, 0);
             containerViewModel.setContainerHeight(resolvedHeight);
-
         } else if (heightSpec == MeasureSpec.AT_MOST) {
             int maxHeight =  MeasureSpec.getSize(heightMeasureSpec);
             containerViewModel.setContainerHeightToAtMost(maxHeight);
             solver.solve();
             resolvedHeight = (int)containerViewModel.getHeight().getValue();
         } else if (heightSpec == MeasureSpec.UNSPECIFIED) {
-
+            solver.solve();
+            resolvedHeight = (int)containerViewModel.getHeight().getValue();
         }
 
         setMeasuredDimension(resolvedWidth, resolvedHeight);

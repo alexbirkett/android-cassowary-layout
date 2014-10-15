@@ -56,6 +56,9 @@
         <item>cassowary_layout_in_linear_layout.x2 == container.width - 8dp</item>
         <item>cassowary_layout_in_linear_layout.y == cassowary_layout_wrap_content.y2 + 8dp</item>
         <item>cassowary_layout_in_linear_layout.height == programmatic_demo.intrinsicHeight</item>
+
+
+        <item>cassowary_layout_in_linear_layout.y2 == container.height - 8dp</item>
     </string-array>
 
     <string-array name="center_view_relative_to_sibling">
