@@ -164,7 +164,31 @@ public class CassowaryLayout extends ViewGroup  {
         dynamicConstraints.clear();
     }
 
+    private void updateIntrinsicWidthConstraints() {
+        long timeBeforeSolve = System.currentTimeMillis();
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+
+            if (child.getVisibility() != GONE) {
+                ViewModel viewModel = getViewModelById(child.getId());
+                ClVariable intrinsicWidth = viewModel.getIntrinsicWidth();
+                if (intrinsicWidth != null) {
+                    int childWidth = child.getMeasuredWidth();
+                    Log.d(LOG_TAG, "child id " + child.getId() + " intrinsic width " + childWidth);
+                    if ((int)intrinsicWidth.getValue() != childWidth) {
+                        viewModel.setIntrinsicWidth(childWidth);
+                    }
+
+                }
+            }
+        }
+        Log.d(LOG_TAG, "updateIntrinsicWidthConstraints took " +  TimerUtil.since(timeBeforeSolve));
+    }
+
     private void updateIntrinsicHeightConstraints() {
+
+       long timeBeforeSolve = System.currentTimeMillis();
 
        int count = getChildCount();
         for (int i = 0; i < count; i++) {
@@ -175,22 +199,49 @@ public class CassowaryLayout extends ViewGroup  {
                 ClVariable intrinsicHeight = viewModel.getIntrinsicHeight();
                 if (intrinsicHeight != null) {
                     int childHeight = child.getMeasuredHeight();
+
+
+                    Log.d(LOG_TAG, "child id " + child.getId() + " intrinsic height " + childHeight);
                     if ((int)intrinsicHeight.getValue() != childHeight) {
+                        long timeBeforeGetMeasuredHeight = System.currentTimeMillis();
+
                         viewModel.setIntrinsicHeight(childHeight);
+                        Log.d(LOG_TAG, "viewModel.setIntrinsicHeight took " +  TimerUtil.since(timeBeforeGetMeasuredHeight));
                     }
                 }
 
-                ClVariable intrinsicWidth = viewModel.getIntrinsicWidth();
-                if (intrinsicWidth != null) {
-                    int childWidth = child.getMeasuredWidth();
-                    if ((int)intrinsicWidth.getValue() != childWidth) {
-                        viewModel.setIntrinsicWidth(childWidth);
-                    }
-
-                }
             }
 
         }
+        Log.d(LOG_TAG, "updateIntrinsicHeightConstraints took " +  TimerUtil.since(timeBeforeSolve));
+    }
+
+    protected void measureHeightBasedOnWidth(int widthMeasureSpec, int heightMeasureSpec) {
+        long timeBeforeSolve = System.currentTimeMillis();
+
+        final int size = getChildCount();
+
+        for (int i = 0; i < size; ++i) {
+            final View child = getChildAt(i);
+            if (child.getVisibility() != GONE) {
+
+
+                ViewModel viewModel = getViewModelById(child.getId());
+
+                if (viewModel.getIntrinsicHeight() != null) {
+                    int childHeightSpec = MeasureSpec.makeMeasureSpec(heightMeasureSpec, MeasureSpec.getMode(heightMeasureSpec));
+                    int childWidthSpec = MeasureSpec.makeMeasureSpec((int)viewModel.getWidth().getValue(), MeasureSpec.getMode(widthMeasureSpec));
+
+                    measureChild(child, childWidthSpec, childHeightSpec);
+
+                    Log.d(LOG_TAG, "child id " + child.getId() +
+                            " measureChildren view height " + viewModel.getHeight().getValue() +
+                            " view width " + viewModel.getWidth().getValue());
+
+                }
+             }
+        }
+        Log.d(LOG_TAG, "measureHeightBasedOnWidth took " +  TimerUtil.since(timeBeforeSolve));
     }
 
     @Override
@@ -203,11 +254,16 @@ public class CassowaryLayout extends ViewGroup  {
         int resolvedWidth = -1;
         int resolvedHeight = -1;
 
-
-        // Find out how big everyone wants to be
         measureChildren(widthMeasureSpec, heightMeasureSpec);
 
+        updateIntrinsicWidthConstraints();
+
+        solve();
+
+        measureHeightBasedOnWidth(widthMeasureSpec, heightMeasureSpec);
+
         updateIntrinsicHeightConstraints();
+
 
         int widthSpec = MeasureSpec.getMode(widthMeasureSpec);
         if (widthSpec == MeasureSpec.EXACTLY) {
@@ -216,11 +272,11 @@ public class CassowaryLayout extends ViewGroup  {
         } else if (widthSpec == MeasureSpec.AT_MOST) {
             int maxWidth =  MeasureSpec.getSize(widthMeasureSpec);
             containerViewModel.setContainerWidthToAtMost(maxWidth);
-            solver.solve();
+            solve();
             resolvedWidth = (int)containerViewModel.getWidth().getValue();
 
         } else if (widthSpec == MeasureSpec.UNSPECIFIED) {
-            solver.solve();
+            solve();
             resolvedWidth = (int)containerViewModel.getWidth().getValue();
         }
 
@@ -233,10 +289,10 @@ public class CassowaryLayout extends ViewGroup  {
         } else if (heightSpec == MeasureSpec.AT_MOST) {
             int maxHeight =  MeasureSpec.getSize(heightMeasureSpec);
             containerViewModel.setContainerHeightToAtMost(maxHeight);
-            solver.solve();
+            solve();
             resolvedHeight = (int)containerViewModel.getHeight().getValue();
         } else if (heightSpec == MeasureSpec.UNSPECIFIED) {
-            solver.solve();
+            solve();
             resolvedHeight = (int)containerViewModel.getHeight().getValue();
         }
 
@@ -261,9 +317,8 @@ public class CassowaryLayout extends ViewGroup  {
 
         long timeBeforeSolve = System.currentTimeMillis();
 
-        solver.solve();
+        solve();
 
-        Log.d(LOG_TAG, "onLayout - Resolve took " + TimerUtil.since(timeBeforeSolve));
         Log.d(LOG_TAG,
                        " container height " + containerViewModel.getHeight().getValue() +
                        " container width " + containerViewModel.getWidth().getValue() +
@@ -296,6 +351,7 @@ public class CassowaryLayout extends ViewGroup  {
 
             }
         }
+        Log.d(LOG_TAG, "onLayout - took " + TimerUtil.since(timeBeforeSolve));
     }
 
     @Override
@@ -439,6 +495,14 @@ public class CassowaryLayout extends ViewGroup  {
             a.recycle();
         }
 
+    }
+
+    private void solve() {
+        long timeBeforeSolve = System.currentTimeMillis();
+
+        solver.solve();
+
+        Log.d(LOG_TAG, "solve took " + TimerUtil.since(timeBeforeSolve));
     }
 }
 
