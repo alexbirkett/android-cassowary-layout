@@ -1,10 +1,15 @@
-<no.agens.cassowarylayout.CassowaryLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_view"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<no.agens.cassowarylayout.CassowaryLayout
     android:id="@+id/layout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/light_gray"
     tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
     app:constraints="@array/dynamic_width">
 
@@ -18,23 +23,75 @@
         android:textColor="@color/white"/>
 
     <View
-        android:id="@+id/blue"
+        android:id="@+id/image"
         android:background="@color/darkblue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <View
-        android:id="@+id/green"
+        android:id="@+id/play_icon"
         android:background="@color/green"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="21. August 2014"
+        android:background="@color/dark_gray"/>
 
 
+    <TextView
+        android:id="@+id/new_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New"
+        android:textColor="@color/darkred"/>
+
+    <TextView
+        android:id="@+id/headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/headline"
+        android:textSize="22sp"
+        android:singleLine="false"
+        android:background="@color/dark_gray"
+        android:layout_toLeftOf="@+id/space"
+        />
+
+
+    <TextView
+        android:id="@+id/long_paragraph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/long_paragraph"
+        android:textSize="14sp"
+        android:singleLine="false"
+        android:background="@color/dark_gray"
+        android:layout_toLeftOf="@+id/space"
+        />
+
+
+    <View
+        android:id="@+id/image2"
+        android:background="@color/darkorange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <TextView
+        android:id="@+id/short_paragraph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/long_paragraph"
+        android:textSize="14sp"
+        android:singleLine="false"
+        android:background="@color/dark_gray"
+        android:layout_toLeftOf="@+id/space"
+        />
 
 
 </no.agens.cassowarylayout.CassowaryLayout>
 
-
-
-
+</ScrollView>
