@@ -50,6 +50,10 @@
             android:name=".DynamicWidth"
             android:label="@string/title_activity_dynamic_width" >
         </activity>
+        <activity
+            android:name=".LinearLayoutInCassowaryLayout"
+            android:label="@string/title_activity_linear_layout_in_cassowary_layout" >
+        </activity>
     </application>
 
 </manifest>
