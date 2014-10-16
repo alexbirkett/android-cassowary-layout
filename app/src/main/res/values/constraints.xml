@@ -57,8 +57,21 @@
         <item>cassowary_layout_in_linear_layout.y == cassowary_layout_wrap_content.y2 + 8dp</item>
         <item>cassowary_layout_in_linear_layout.height == programmatic_demo.intrinsicHeight</item>
 
+        <item>cassowary_layout_in_linear_layout.x == 8dp</item>
+        <item>cassowary_layout_in_linear_layout.x2 == container.width - 8dp</item>
+        <item>cassowary_layout_in_linear_layout.y == cassowary_layout_wrap_content.y2 + 8dp</item>
+        <item>cassowary_layout_in_linear_layout.height == programmatic_demo.intrinsicHeight</item>
+        <item>cassowary_layout_in_linear_layout.x == 8dp</item>
 
-        <item>cassowary_layout_in_linear_layout.y2 == container.height - 8dp</item>
+        <item>linear_layout_in_cassowary_layout.x == 8dp</item>
+        <item>linear_layout_in_cassowary_layout.x2 == container.width - 8dp</item>
+        <item>linear_layout_in_cassowary_layout.y == cassowary_layout_in_linear_layout.y2 + 8dp</item>
+        <item>linear_layout_in_cassowary_layout.height == programmatic_demo.intrinsicHeight</item>
+        <item>linear_layout_in_cassowary_layout.x == 8dp</item>
+
+
+
+        <item>linear_layout_in_cassowary_layout.y2 == container.height - 8dp</item>
     </string-array>
 
     <string-array name="center_view_relative_to_sibling">
@@ -99,22 +112,69 @@
 
     <string-array name="dynamic_width">
 
+        <item>dragger.y == 0</item>
         <item>dragger.width == 60dp</item>
         <item>dragger.height == dragger.width</item>
 
-        <item>blue.x == 0</item>
-        <item>blue.y == 0</item>
-        <item>blue.x2 == dragger.x</item>
-        <item>blue.height == 100dp</item>
+        <item>image.x == 0</item>
+        <item>image.y == 0</item>
+        <item>image.x2 == dragger.x</item>
+        <item>image.height == 100dp</item>
 
-        <item>green.centerX == blue.centerX</item>
-        <item>green.centerY == blue.centerY</item>
-        <item>green.height == 20dp</item>
-        <item>green.width == green.height</item>
+        <item>play_icon.centerX == image.centerX</item>
+        <item>play_icon.centerY == image.centerY</item>
+        <item>play_icon.height == 20dp</item>
+        <item>play_icon.width == play_icon.height</item>
 
+        <item>date.x == 8dp</item>
+        <item>date.y == image.y2 + 8dp</item>
+        <item>date.height == date.intrinsicHeight !strong</item>
+        <item>date.width LEQ date.intrinsicWidth !strong</item>
+        <item>date.x2 LEQ dragger.x !strong</item>
 
+        <item>new_label.x == date.x2 + 8dp</item>
+        <item>new_label.y == date.y</item>
+        <item>new_label.height == date.height</item>
 
+        <item>headline.x == 8dp</item>
+        <item>headline.y == date.y2 + 8dp</item>
+        <item>headline.height == headline.intrinsicHeight !strong</item>
+        <item>headline.x2 LEQ dragger.x - 8dp</item>
+
+        <item>long_paragraph.x == 8dp</item>
+        <item>long_paragraph.y == headline.y2 + 8dp</item>
+        <item>long_paragraph.height == long_paragraph.intrinsicHeight !strong</item>
+        <item>long_paragraph.x2 == headline.x2</item>
+
+        <item>image2.x == 0</item>
+        <item>image2.y == long_paragraph.y2 + 8dp</item>
+        <item>image2.x2 == image.x2</item>
+        <item>image2.height == 100dp</item>
+
+        <item>short_paragraph.x == 8dp</item>
+        <item>short_paragraph.y == image2.y2 + 8dp</item>
+        <item>short_paragraph.height == short_paragraph.intrinsicHeight !strong</item>
+        <item>short_paragraph.x2 == headline.x2</item>
 
     </string-array>
 
+    <string-array name="linear_layout_in_cassowary_layout">
+
+        <item>text_view_above_cassowary_layout.y == 8dp</item>
+        <item>text_view_above_cassowary_layout.x == 8dp</item>
+        <item>text_view_above_cassowary_layout.x2 == container.width - 8dp</item>
+        <item>text_view_above_cassowary_layout.height == text_view_above_cassowary_layout.intrinsicHeight</item>
+
+        <item>linear_layout.y == text_view_above_cassowary_layout.y2 + 8dp</item>
+        <item>linear_layout.centerX == parent.centerX</item>
+        <item>linear_layout.height == linear_layout.intrinsicHeight</item>
+        <item>linear_layout.width == linear_layout.intrinsicWidth</item>
+
+        <item>text_below_view_above_cassowary_layout.y == linear_layout.y2 + 8dp</item>
+        <item>text_below_view_above_cassowary_layout.x == 8dp</item>
+        <item>text_below_view_above_cassowary_layout.x2 == container.width - 8dp</item>
+        <item>text_below_view_above_cassowary_layout.height == text_view_above_cassowary_layout.intrinsicHeight</item>
+
+        <item>linear_layout_in_cassowary_layout.y2 == container.height - 8dp</item>
+    </string-array>
 </resources>

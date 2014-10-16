@@ -1,0 +1,51 @@
+<no.agens.cassowarylayout.CassowaryLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:constraints="@array/linear_layout_in_cassowary_layout"
+    tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo">
+
+    <TextView
+        android:id="@+id/text_view_above_cassowary_layout"
+        style="@style/button_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_in_cassowary_layout" />
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_in_linear_layout" />
+        <TextView
+
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_in_linear_layout" />
+
+        <TextView
+
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_in_linear_layout" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_below_view_above_cassowary_layout"
+        style="@style/button_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_in_cassowary_layout" />
+
+</no.agens.cassowarylayout.CassowaryLayout>

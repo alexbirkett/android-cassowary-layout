@@ -70,6 +70,16 @@ public class CassowaryLayoutDemo extends Activity {
             }
         });
 
+        findViewById(R.id.linear_layout_in_cassowary_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CassowaryLayoutDemo.this, LinearLayoutInCassowaryLayout.class));
+            }
+        });
+
+
+
+
 
     }
 
