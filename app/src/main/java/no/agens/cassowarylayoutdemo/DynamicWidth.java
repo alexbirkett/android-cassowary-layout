@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ScrollView;
 
 import org.klomp.cassowary.ClLinearExpression;
 import org.klomp.cassowary.ClStrength;
@@ -22,6 +23,8 @@ public class DynamicWidth extends Activity {
 
     private CassowaryLayout layout;
     private ClConstraint constraint;
+    private ScrollView scrollView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class DynamicWidth extends Activity {
         setContentView(R.layout.activity_dynamic_width);
 
         layout = (CassowaryLayout)findViewById(R.id.layout);
+        scrollView = (ScrollView)findViewById(R.id.scroll_view);
 
         findViewById(R.id.dragger).setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -39,9 +43,11 @@ public class DynamicWidth extends Activity {
 
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
+                        scrollView.requestDisallowInterceptTouchEvent(true);
                         delta = X - viewModel.getX().getValue();
                         break;
                     case MotionEvent.ACTION_UP:
+                        scrollView.requestDisallowInterceptTouchEvent(false);
                         break;
                     case MotionEvent.ACTION_POINTER_DOWN:
                         break;
