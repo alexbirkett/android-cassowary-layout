@@ -132,7 +132,6 @@ public class ViewModel {
     public ClVariable createIntrinsicWidthIfRequired() {
         if (intrinsicWidth == null) {
             intrinsicWidth = new ClVariable();
-            solver.addStay(intrinsicWidth);
         }
         return intrinsicWidth;
     }
@@ -140,7 +139,6 @@ public class ViewModel {
     public ClVariable createIntrinsicHeightIfRequired() {
         if (intrinsicHeight == null) {
             intrinsicHeight = new ClVariable();
-            solver.addStay(intrinsicHeight);
         }
         return intrinsicHeight;
     }
