@@ -33,7 +33,7 @@ dependencies {
 uploadArchives {
     repositories {
         mavenDeployer {
-            snapshotRepository(url: project.hasProperty('mavenUrl') ? mavenUrl : null) {
+            snapshotRepository(url: project.hasProperty('mavenSnapshotsUrl') ? mavenSnapshotsUrl : null) {
                 authentication(userName: project.hasProperty('mavenUsername') ? mavenUsername : null,
                                password:  project.hasProperty('mavenPassword') ? mavenPassword : null)
             }
