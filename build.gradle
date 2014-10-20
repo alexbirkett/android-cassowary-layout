@@ -16,9 +16,18 @@ buildscript {
     }
 }
 
+
+
 allprojects {
     repositories {
         jcenter()
         mavenLocal()
+        maven {
+            url project.hasProperty('mavenGroupsPublicUrl') ? mavenGroupsPublicUrl : ""
+            credentials {
+                username project.hasProperty('agensMavenUser') ? agensMavenUser : ""
+                password project.hasProperty('agensMavenPassword') ? agensMavenPassword : ""
+            }
+        }
     }
 }
