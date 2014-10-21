@@ -15,7 +15,8 @@
         android:layout_height="match_parent"
         tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
         app:constraints="@array/stairs"
-        android:background="@color/dark_gray">
+        android:background="@color/dark_gray"
+        android:padding="@dimen/default_padding">
 
         <View
             android:id="@+id/red"

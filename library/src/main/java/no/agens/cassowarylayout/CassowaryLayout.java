@@ -268,12 +268,12 @@ public class CassowaryLayout extends ViewGroup  {
         int widthSpec = MeasureSpec.getMode(widthMeasureSpec);
         if (widthSpec == MeasureSpec.EXACTLY) {
             resolvedWidth = resolveSizeAndState(0, widthMeasureSpec, 0);
-            containerViewModel.setContainerWidth(resolvedWidth);
+            containerViewModel.setContainerWidth(resolvedWidth - getPaddingLeft() - getPaddingRight());
         } else if (widthSpec == MeasureSpec.AT_MOST) {
             int maxWidth =  MeasureSpec.getSize(widthMeasureSpec);
-            containerViewModel.setContainerWidthToAtMost(maxWidth);
+            containerViewModel.setContainerWidthToAtMost(maxWidth - getPaddingLeft() - getPaddingRight());
             solve();
-            resolvedWidth = (int)containerViewModel.getWidth().getValue();
+            resolvedWidth = (int)containerViewModel.getWidth().getValue() + getPaddingLeft() + getPaddingRight();
 
         } else if (widthSpec == MeasureSpec.UNSPECIFIED) {
             solve();
@@ -285,15 +285,15 @@ public class CassowaryLayout extends ViewGroup  {
 
         if (heightSpec == MeasureSpec.EXACTLY) {
             resolvedHeight = resolveSizeAndState(0, heightMeasureSpec, 0);
-            containerViewModel.setContainerHeight(resolvedHeight);
+            containerViewModel.setContainerHeight(resolvedHeight - getPaddingTop() - getPaddingBottom());
         } else if (heightSpec == MeasureSpec.AT_MOST) {
             int maxHeight =  MeasureSpec.getSize(heightMeasureSpec);
-            containerViewModel.setContainerHeightToAtMost(maxHeight);
+            containerViewModel.setContainerHeightToAtMost(maxHeight - getPaddingTop() - getPaddingBottom());
             solve();
-            resolvedHeight = (int)containerViewModel.getHeight().getValue();
+            resolvedHeight = (int)containerViewModel.getHeight().getValue() + getPaddingTop() + getPaddingBottom();
         } else if (heightSpec == MeasureSpec.UNSPECIFIED) {
             solve();
-            resolvedHeight = (int)containerViewModel.getHeight().getValue();
+            resolvedHeight = (int)containerViewModel.getHeight().getValue() + getPaddingTop() + getPaddingBottom();
         }
 
         setMeasuredDimension(resolvedWidth, resolvedHeight);
@@ -337,8 +337,8 @@ public class CassowaryLayout extends ViewGroup  {
                 int childId = child.getId();
                 ViewModel viewModel = getViewModelById(childId);
 
-                int x = (int)viewModel.getX().getValue();
-                int y = (int)viewModel.getY().getValue();
+                int x = (int)viewModel.getX().getValue() + getPaddingLeft();
+                int y = (int)viewModel.getY().getValue() + getPaddingTop();
 
                 int width = (int)viewModel.getWidth().getValue();
                 int height = (int)viewModel.getHeight().getValue();

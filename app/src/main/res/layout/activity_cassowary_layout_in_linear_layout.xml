@@ -19,7 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
-        app:constraints="@array/stairs">
+        app:constraints="@array/stairs"
+        android:padding="@dimen/default_padding">
 
         <View
             android:id="@+id/green"

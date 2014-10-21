@@ -8,7 +8,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraints="@array/cassowary_layout_demo"
-        tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo">
+        tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
+        android:padding="@dimen/default_padding">
 
         <TextView
             android:id="@+id/programmatic_demo"

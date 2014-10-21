@@ -10,7 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
-    app:constraints="@array/center_in_parent">
+    app:constraints="@array/center_in_parent"
+    android:padding="@dimen/default_padding">
 
     <View
         android:id="@+id/red"
