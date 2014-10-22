@@ -11,6 +11,12 @@ Cassowary Layout for Android
 You can reach me on twitter as [@alexbirkett](https://twitter.com/alexbirkett). 
 
 
+## Dependencies
+
+###Cassowary
+This project currenly depends on [my cassowary fork](https://github.com/alexbirkett/cassowary-java).
+
+
 ## Who's behind this?
 
 Agens.no a company situated in Oslo, Norway.
