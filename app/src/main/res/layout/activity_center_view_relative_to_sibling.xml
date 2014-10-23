@@ -1,12 +1,12 @@
 <no.agens.cassowarylayout.CassowaryLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cassowary="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
-    app:constraints="@array/center_view_relative_to_sibling"
+    cassowary:constraints="@array/center_view_relative_to_sibling"
     android:padding="@dimen/default_padding">
 
     <View

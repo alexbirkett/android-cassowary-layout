@@ -1,10 +1,10 @@
 <no.agens.cassowarylayout.CassowaryLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cassowary="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:constraints="@array/linear_layout_in_cassowary_layout"
+    cassowary:constraints="@array/linear_layout_in_cassowary_layout"
     tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
     android:padding="@dimen/default_padding">
 
