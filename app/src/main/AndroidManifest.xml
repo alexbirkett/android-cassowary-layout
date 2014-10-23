@@ -54,6 +54,10 @@
             android:name=".LinearLayoutInCassowaryLayout"
             android:label="@string/title_activity_linear_layout_in_cassowary_layout" >
         </activity>
+        <activity
+            android:name=".IntrinsicHeightTextInWrapContentContainer"
+            android:label="@string/title_activity_intrinsic_height_text_in_wrap_content_container" >
+        </activity>
     </application>
 
 </manifest>

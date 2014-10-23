@@ -24,10 +24,11 @@
     <string name="drag_me">Drag me</string>
     <string name="title_activity_linear_layout_in_cassowary_layout">LinearLayoutInCassowaryLayout</string>
     <string name="linear_layout_in_cassowary_layout">Linear Layout In Cassowary Layout</string>
+    <string name="intrinsic_height_text_in_wrap_content_container">Intrinsic height text in wrap content container</string>
     <string name="long_paragraph">This is a paragraph of text. This is a paragraph of text. This is a paragraph of text. This is a paragraph of text. This is a paragraph of text.</string>
     <string name="headline">This is a headline with seven words</string>
-
     <string name="text_in_cassowary_layout">Text in Cassowary Layout</string>
     <string name="text_in_linear_layout">Text in Linear Layout</string>
+    <string name="title_activity_intrinsic_height_text_in_wrap_content_container">IntrinsicHeightTextInWrapContentContainer</string>
 
 </resources>

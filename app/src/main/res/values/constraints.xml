@@ -69,9 +69,13 @@
         <item>linear_layout_in_cassowary_layout.height == programmatic_demo.intrinsicHeight</item>
         <item>linear_layout_in_cassowary_layout.x == 8dp</item>
 
+        <item>intrinsic_height_text_in_wrap_content_container.x == 8dp</item>
+        <item>intrinsic_height_text_in_wrap_content_container.x2 == container.width - 8dp</item>
+        <item>intrinsic_height_text_in_wrap_content_container.y == linear_layout_in_cassowary_layout.y2 + 8dp</item>
+        <item>intrinsic_height_text_in_wrap_content_container.height == programmatic_demo.intrinsicHeight</item>
+        <item>intrinsic_height_text_in_wrap_content_container.x == 8dp</item>
 
-
-        <item>linear_layout_in_cassowary_layout.y2 == container.height - 8dp</item>
+        <item>intrinsic_height_text_in_wrap_content_container.y2 == container.height - 8dp</item>
     </string-array>
 
     <string-array name="center_view_relative_to_sibling">
@@ -177,4 +181,18 @@
 
         <item>linear_layout_in_cassowary_layout.y2 == container.height - 8dp</item>
     </string-array>
+
+
+    <string-array name="intrinsic_height_text_in_wrap_content_container">
+        <item>text.x == 8dp</item>
+        <item>text.y == 8dp</item>
+        <item>text.width == container.width - 16dp</item>
+        <item>text.height == text.intrinsicHeight</item>
+
+        <item>text2.x == 8dp</item>
+        <item>text2.y == text.y2 + 16dp</item>
+        <item>text2.width == container.width - 16dp</item>
+        <item>text2.height == text2.intrinsicHeight</item>
+    </string-array>
+
 </resources>

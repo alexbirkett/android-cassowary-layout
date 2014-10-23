@@ -74,5 +74,13 @@
             android:layout_height="wrap_content"
             android:text="@string/linear_layout_in_cassowary_layout" />
 
+
+        <TextView
+            android:id="@+id/intrinsic_height_text_in_wrap_content_container"
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intrinsic_height_text_in_wrap_content_container" />
+
     </no.agens.cassowarylayout.CassowaryLayout>
 </ScrollView>

@@ -92,9 +92,12 @@ public class CassowaryLayoutDemo extends Activity {
             }
         });
 
-
-
-
+        findViewById(R.id.intrinsic_height_text_in_wrap_content_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CassowaryLayoutDemo.this, IntrinsicHeightTextInWrapContentContainer.class));
+            }
+        });
 
     }
 
