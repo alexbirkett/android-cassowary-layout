@@ -490,6 +490,11 @@ public class CassowaryLayout extends ViewGroup  {
 
         try {
             CharSequence[] constraints = a.getTextArray(R.styleable.CassowaryLayout_constraints);
+
+            if (constraints == null) {
+                throw new RuntimeException("missing cassowary:constraints attribute in XML");
+            }
+
             addConstraints(constraints);
         } finally {
             a.recycle();
