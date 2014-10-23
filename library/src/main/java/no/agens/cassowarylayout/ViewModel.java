@@ -26,6 +26,7 @@ import org.klomp.cassowary.clconstraint.ClConstraint;
 import org.klomp.cassowary.clconstraint.ClLinearEquation;
 import org.klomp.cassowary.clconstraint.ClLinearInequality;
 
+import no.agens.cassowarylayout.util.CassowaryUtil;
 
 /**
  * Created by alex on 25/09/2014.
@@ -51,6 +52,8 @@ public class ViewModel {
     private ClVariable centerY;
     private ClVariable intrinsicWidth;
     private ClVariable intrinsicHeight;
+    private ClConstraint intrinsicWidthConstraint;
+    private ClConstraint intrinsicHeightConstraint;
 
     public ClVariable getX() {
         return x;
@@ -129,7 +132,6 @@ public class ViewModel {
     public ClVariable createIntrinsicWidthIfRequired() {
         if (intrinsicWidth == null) {
             intrinsicWidth = new ClVariable();
-            solver.addStay(intrinsicWidth);
         }
         return intrinsicWidth;
     }
@@ -137,27 +139,16 @@ public class ViewModel {
     public ClVariable createIntrinsicHeightIfRequired() {
         if (intrinsicHeight == null) {
             intrinsicHeight = new ClVariable();
-            solver.addStay(intrinsicHeight);
         }
         return intrinsicHeight;
     }
 
     public void setIntrinsicWidth(int intrinsicWidth) {
-        if (intrinsicWidth != this.intrinsicWidth.getValue()) {
-            solver.addEditVar(this.intrinsicWidth, ClStrength.required);
-            solver.beginEdit();
-            solver.suggestValue(this.intrinsicWidth, intrinsicWidth);
-            solver.endEdit();
-        }
+        intrinsicWidthConstraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getIntrinsicWidth(), intrinsicWidthConstraint, intrinsicWidth, solver);
     }
 
     public void setIntrinsicHeight(int intrinsicHeight) {
-        if (intrinsicHeight != this.intrinsicHeight.getValue()) {
-            solver.addEditVar(this.intrinsicHeight, ClStrength.required);
-            solver.beginEdit();
-            solver.suggestValue(this.intrinsicHeight, intrinsicHeight);
-            solver.endEdit();
-        }
+        intrinsicHeightConstraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getIntrinsicHeight(), intrinsicHeightConstraint, intrinsicHeight, solver);
     }
 
     public ClVariable getIntrinsicHeight() {
