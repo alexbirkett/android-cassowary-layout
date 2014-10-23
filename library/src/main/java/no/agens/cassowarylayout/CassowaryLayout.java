@@ -251,8 +251,28 @@ public class CassowaryLayout extends ViewGroup  {
         long timeBeforeSolve = System.currentTimeMillis();
         removeDynamicConstraints();
 
+
         int resolvedWidth = -1;
         int resolvedHeight = -1;
+
+        int heightSpec = MeasureSpec.getMode(heightMeasureSpec);
+        if (heightSpec == MeasureSpec.EXACTLY) {
+            resolvedHeight = resolveSizeAndState(0, heightMeasureSpec, 0);
+            containerViewModel.setContainerHeight(resolvedHeight - getPaddingTop() - getPaddingBottom());
+        } else if (heightSpec == MeasureSpec.AT_MOST) {
+            int maxHeight =  MeasureSpec.getSize(heightMeasureSpec);
+            containerViewModel.setContainerHeightToAtMost(maxHeight - getPaddingTop() - getPaddingBottom());
+        }
+
+        int widthSpec = MeasureSpec.getMode(widthMeasureSpec);
+        if (widthSpec == MeasureSpec.EXACTLY) {
+            resolvedWidth = resolveSizeAndState(0, widthMeasureSpec, 0);
+            containerViewModel.setContainerWidth(resolvedWidth - getPaddingLeft() - getPaddingRight());
+        } else if (widthSpec == MeasureSpec.AT_MOST) {
+            int maxWidth =  MeasureSpec.getSize(widthMeasureSpec);
+            containerViewModel.setContainerWidthToAtMost(maxWidth - getPaddingLeft() - getPaddingRight());
+        }
+
 
         measureChildren(widthMeasureSpec, heightMeasureSpec);
 
@@ -265,33 +285,12 @@ public class CassowaryLayout extends ViewGroup  {
         updateIntrinsicHeightConstraints();
 
 
-        int widthSpec = MeasureSpec.getMode(widthMeasureSpec);
-        if (widthSpec == MeasureSpec.EXACTLY) {
-            resolvedWidth = resolveSizeAndState(0, widthMeasureSpec, 0);
-            containerViewModel.setContainerWidth(resolvedWidth - getPaddingLeft() - getPaddingRight());
-        } else if (widthSpec == MeasureSpec.AT_MOST) {
-            int maxWidth =  MeasureSpec.getSize(widthMeasureSpec);
-            containerViewModel.setContainerWidthToAtMost(maxWidth - getPaddingLeft() - getPaddingRight());
+        if (widthSpec == MeasureSpec.AT_MOST || widthSpec == MeasureSpec.UNSPECIFIED) {
             solve();
             resolvedWidth = (int)containerViewModel.getWidth().getValue() + getPaddingLeft() + getPaddingRight();
-
-        } else if (widthSpec == MeasureSpec.UNSPECIFIED) {
-            solve();
-            resolvedWidth = (int)containerViewModel.getWidth().getValue();
         }
 
-        int heightSpec = MeasureSpec.getMode(heightMeasureSpec);
-
-
-        if (heightSpec == MeasureSpec.EXACTLY) {
-            resolvedHeight = resolveSizeAndState(0, heightMeasureSpec, 0);
-            containerViewModel.setContainerHeight(resolvedHeight - getPaddingTop() - getPaddingBottom());
-        } else if (heightSpec == MeasureSpec.AT_MOST) {
-            int maxHeight =  MeasureSpec.getSize(heightMeasureSpec);
-            containerViewModel.setContainerHeightToAtMost(maxHeight - getPaddingTop() - getPaddingBottom());
-            solve();
-            resolvedHeight = (int)containerViewModel.getHeight().getValue() + getPaddingTop() + getPaddingBottom();
-        } else if (heightSpec == MeasureSpec.UNSPECIFIED) {
+        if (heightSpec == MeasureSpec.AT_MOST || heightSpec == MeasureSpec.UNSPECIFIED) {
             solve();
             resolvedHeight = (int)containerViewModel.getHeight().getValue() + getPaddingTop() + getPaddingBottom();
         }
