@@ -235,7 +235,7 @@ public class CassowaryLayout extends ViewGroup  {
 
                     int childHeightSpec = MeasureSpec.makeMeasureSpec(heightMeasureSpec, MeasureSpec.getMode(heightMeasureSpec));
 
-                    int childWidthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.getMode(widthMeasureSpec));
+                    int childWidthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST);
 
                     Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId()) + " parent measured width " +  MeasureSpec.getSize(childWidthSpec) + " mode " + MeasureSpec.getMode(childWidthSpec) );
 
