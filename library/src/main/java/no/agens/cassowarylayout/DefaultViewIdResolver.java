@@ -28,7 +28,12 @@ public class DefaultViewIdResolver implements ViewIdResolver{
     }
 
     @Override
-    public int getViewId(String viewName) {
+    public int getViewIdByName(String viewName) {
         return context.getResources().getIdentifier(viewName, "id", context.getPackageName());
+    }
+
+    @Override
+    public String getViewNameById(int id) {
+        return context.getResources().getResourceEntryName(id);
     }
 }

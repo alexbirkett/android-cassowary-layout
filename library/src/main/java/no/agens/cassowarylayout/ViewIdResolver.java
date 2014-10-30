@@ -20,5 +20,6 @@ package no.agens.cassowarylayout;
  * Created by alex on 06/10/2014.
  */
 public interface ViewIdResolver {
-    int getViewId(String viewName);
+    public int getViewIdByName(String viewName);
+    public String getViewNameById(int id);
 }
