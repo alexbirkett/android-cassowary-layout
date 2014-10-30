@@ -28,18 +28,18 @@ import no.agens.cassowarylayout.ViewIdResolver;
 public class ProgrammaticDemo extends Activity {
 
     private static String[] CONSTRAINTS = {
-            "blue.left >= 100dp",
-            "blue.top >= 10dp",
-            "blue.width == 120dp",
-            "blue.height == (blue.width + 200dp) / 2",
-            "green.x >= blue.x + blue.width + 10dp",
-            "green.y >= 10dp",
+            "blue.x == 0",
+            "blue.y == 0",
+            "blue.width == 100dp",
+            "blue.height == blue.width",
             "green.width == blue.width",
             "green.height == blue.height",
-            "red.width == blue.width * 2px",
-            "red.height == blue.height * 2px",
-            "red.x >= 10dp",
-            "red.y >= green.y + green.height + 10dp"
+            "green.x == blue.y2",
+            "green.y == blue.y2",
+            "red.width == green.width",
+            "red.height == green.height",
+            "red.x == green.x2",
+            "red.y == green.y2"
     };
 
     private CassowaryLayout cassowaryLayout;
