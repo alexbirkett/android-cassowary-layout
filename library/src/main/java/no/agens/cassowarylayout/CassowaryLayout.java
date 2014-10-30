@@ -289,14 +289,13 @@ public class CassowaryLayout extends ViewGroup  {
 
         updateIntrinsicHeightConstraints();
 
+        solve();
 
         if (widthSpec == MeasureSpec.AT_MOST || widthSpec == MeasureSpec.UNSPECIFIED) {
-            solve();
             resolvedWidth = (int)containerViewModel.getWidth().getValue() + getPaddingLeft() + getPaddingRight();
         }
 
         if (heightSpec == MeasureSpec.AT_MOST || heightSpec == MeasureSpec.UNSPECIFIED) {
-            solve();
             resolvedHeight = (int)containerViewModel.getHeight().getValue() + getPaddingTop() + getPaddingBottom();
         }
 
