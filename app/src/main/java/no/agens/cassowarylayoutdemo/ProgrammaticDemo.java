@@ -51,8 +51,9 @@ public class ProgrammaticDemo extends Activity {
     private int nextId = 1000;
 
     private ViewIdResolver viewIdResolver = new ViewIdResolver() {
+
         @Override
-        public int getViewId(String viewName) {
+        public int getViewIdByName(String viewName) {
             if ("red".equals(viewName)) {
                 return red.getId();
             } else if ("blue".equals(viewName)) {
@@ -61,6 +62,18 @@ public class ProgrammaticDemo extends Activity {
                 return green.getId();
             }
             return 0;
+        }
+
+        @Override
+        public String getViewNameById(int id) {
+           if (id == red.getId()) {
+               return "red";
+           } else if (id == blue.getId()) {
+               return "blue";
+           } else if (id == green.getId()) {
+               return "green";
+           }
+           return "";
         }
     };
 
