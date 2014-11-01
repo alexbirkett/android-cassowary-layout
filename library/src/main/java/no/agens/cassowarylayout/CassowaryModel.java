@@ -22,21 +22,19 @@ public class CassowaryModel {
     private Context context;
 
     private static final String LOG_TAG = "CassowaryModel";
-    public CassowaryModel(Context context, ViewIdResolver viewIdResolver) {
-        this.viewIdResolver = viewIdResolver;
+
+    public CassowaryModel(Context context) {
         this.context = context;
         setupCassowary();
     }
 
     private ArrayList<ClConstraint> dynamicConstraints = new ArrayList<ClConstraint>();
 
-    private HashMap<Integer, Node> nodes = new HashMap<Integer, Node>();
+    private HashMap<String, Node> nodes = new HashMap<String, Node>();
 
     private ClSimplexSolver solver = new ClSimplexSolver();
 
     private ContainerNode containerNode = new ContainerNode(solver);
-
-    private ViewIdResolver viewIdResolver;
 
     private CassowaryVariableResolver cassowaryVariableResolver = new CassowaryVariableResolver() {
         @Override
@@ -74,11 +72,11 @@ public class CassowaryModel {
         String[] stringArray = variableName.split("\\.");
 
         if (stringArray.length > 1) {
-            String viewName = stringArray[0];
+            String nodeName = stringArray[0];
             String propertyName = stringArray[1];
 
-            if (viewName != null) {
-                if ("container".equals(viewName) || "parent".equals(viewName)) {
+            if (nodeName != null) {
+                if ("container".equals(nodeName) || "parent".equals(nodeName)) {
                     if ("height".equals(propertyName)) {
                         variable = containerNode.getHeight();
                     } else if ("width".equals(propertyName)) {
@@ -89,7 +87,7 @@ public class CassowaryModel {
                         variable = containerNode.getCenterY();
                     }
                 } else {
-                    Node node = getNodeById(viewIdResolver.getViewIdByName(viewName));
+                    Node node = getNodeByName(nodeName);
                     if (node != null) {
                         variable = node.getVariableByName(propertyName);
                     }
@@ -104,11 +102,11 @@ public class CassowaryModel {
         return variable;
     }
 
-    public Node getNodeById(int id) {
-        Node node = nodes.get(id);
+    public Node getNodeByName(String name) {
+        Node node = nodes.get(name);
         if (node == null) {
             node = new Node(solver, containerNode);
-            nodes.put(id, node);
+            nodes.put(name, node);
         }
         return node;
     }

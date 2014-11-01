@@ -40,19 +40,19 @@ public class CassowaryLayout extends ViewGroup  {
         super(context);
 
         this.viewIdResolver = viewIdResolver;
-        this.cassowaryModel = new CassowaryModel(context, viewIdResolver);
+        this.cassowaryModel = new CassowaryModel(context);
     }
 
     public CassowaryLayout(Context context) {
         super(context);
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
-        this.cassowaryModel = new CassowaryModel(context, this.viewIdResolver);
+        this.cassowaryModel = new CassowaryModel(context);
     }
 
     public CassowaryLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
-        cassowaryModel = new CassowaryModel(context, this.viewIdResolver);
+        cassowaryModel = new CassowaryModel(context);
         readConstraintsFromXml(attrs);
     }
 
@@ -60,7 +60,7 @@ public class CassowaryLayout extends ViewGroup  {
                           int defStyle) {
         super(context, attrs, defStyle);
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
-        this.cassowaryModel = new CassowaryModel(context, this.viewIdResolver);
+        this.cassowaryModel = new CassowaryModel(context);
         readConstraintsFromXml(attrs);
     }
 
@@ -77,7 +77,7 @@ public class CassowaryLayout extends ViewGroup  {
             View child = getChildAt(i);
 
             if (child.getVisibility() != GONE) {
-                Node node = cassowaryModel.getNodeById(child.getId());
+                Node node = getNodeById(child.getId());
                 ClVariable intrinsicWidth = node.getIntrinsicWidth();
                 if (intrinsicWidth != null) {
                     int childWidth = child.getMeasuredWidth();
@@ -101,7 +101,7 @@ public class CassowaryLayout extends ViewGroup  {
             View child = getChildAt(i);
 
             if (child.getVisibility() != GONE) {
-                Node node = cassowaryModel.getNodeById(child.getId());
+                Node node = getNodeById(child.getId());
                 ClVariable intrinsicHeight = node.getIntrinsicHeight();
                 if (intrinsicHeight != null) {
                     int childHeight = child.getMeasuredHeight();
@@ -132,7 +132,7 @@ public class CassowaryLayout extends ViewGroup  {
             if (child.getVisibility() != GONE) {
 
 
-                Node node = cassowaryModel.getNodeById(child.getId());
+                Node node = getNodeById(child.getId());
 
                 if (node.getIntrinsicHeight() != null) {
 
@@ -241,7 +241,7 @@ public class CassowaryLayout extends ViewGroup  {
                         (CassowaryLayout.LayoutParams) child.getLayoutParams();
 
                 int childId = child.getId();
-                Node node = cassowaryModel.getNodeById(childId);
+                Node node = getNodeById(childId);
 
                 int x = (int) node.getLeft().getValue() + getPaddingLeft();
                 int y = (int) node.getTop().getValue() + getPaddingTop();
@@ -379,6 +379,11 @@ public class CassowaryLayout extends ViewGroup  {
             a.recycle();
         }
 
+    }
+
+    public Node getNodeById(int id) {
+        Node node = cassowaryModel.getNodeByName(viewIdResolver.getViewNameById(id));
+        return node;
     }
 
 }

@@ -54,7 +54,7 @@ public class DynamicWidth extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 final int X = (int) event.getRawX();
 
-                Node node = layout.getCassowaryModel().getNodeById(v.getId());
+                Node node = layout.getNodeById(v.getId());
 
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
