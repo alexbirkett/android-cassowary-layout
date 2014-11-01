@@ -27,7 +27,7 @@ public class CassowaryModel {
         setupCassowary();
     }
 
-    private HashMap<String, Node> nodes = new HashMap<String, Node>();
+    private HashMap<String, ChildNode> nodes = new HashMap<String, ChildNode>();
 
     private ClSimplexSolver solver = new ClSimplexSolver();
 
@@ -71,15 +71,7 @@ public class CassowaryModel {
 
             if (nodeName != null) {
                 if ("container".equals(nodeName) || "parent".equals(nodeName)) {
-                    if ("height".equals(propertyName)) {
-                        variable = containerNode.getHeight();
-                    } else if ("width".equals(propertyName)) {
-                        variable = containerNode.getWidth();
-                    } else if ("centerX".equals(propertyName)) {
-                        variable = containerNode.getCenterX();
-                    } else if ("centerY".equals(propertyName)) {
-                        variable = containerNode.getCenterY();
-                    }
+                    variable = containerNode.getVariable(propertyName);
                 } else {
                     Node node = getNodeByName(nodeName);
                     if (node != null) {
@@ -96,10 +88,10 @@ public class CassowaryModel {
         return variable;
     }
 
-    public Node getNodeByName(String name) {
-        Node node = nodes.get(name);
+    public ChildNode getNodeByName(String name) {
+        ChildNode node = nodes.get(name);
         if (node == null) {
-            node = new Node(solver, containerNode);
+            node = new ChildNode(solver, containerNode);
             nodes.put(name, node);
         }
         return node;
@@ -140,7 +132,7 @@ public class CassowaryModel {
         addConstraints(constraints);
     }
 
-    public ContainerNode getContainerNode() {
+    public Node getContainerNode() {
         return containerNode;
     }
 

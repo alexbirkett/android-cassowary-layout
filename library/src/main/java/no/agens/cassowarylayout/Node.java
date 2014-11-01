@@ -33,31 +33,27 @@ import no.agens.cassowarylayout.util.CassowaryUtil;
 /**
  * Created by alex on 25/09/2014.
  */
-public class Node {
+public abstract class Node {
 
-    private ClSimplexSolver solver;
-    private ContainerNode containerNode;
+    protected ClSimplexSolver solver;
 
-    public Node(ClSimplexSolver solver, ContainerNode containerNode) {
+    protected HashMap<String, ClVariable> variables = new HashMap<String, ClVariable>();
+    protected HashMap<String, ClConstraint> constraints = new HashMap<String, ClConstraint>();
+
+    public static final String LEFT = "left";
+    public static final String RIGHT = "right";
+    public static final String TOP = "top";
+    public static final String BOTTOM = "bottom";
+    public static final String HEIGHT = "height";
+    public static final String WIDTH = "width";
+    public static final String CENTERX = "centerX";
+    public static final String CENTERY = "centerY";
+    public static final String INTRINSIC_WIDTH = "intrinsicWidth";
+    public static final String INTRINSIC_HEIGHT = "intrinsicHeight";
+
+    public Node(ClSimplexSolver solver) {
         this.solver = solver;
-        this.containerNode = containerNode;
-        getRight();
-        getBottom();
     }
-
-    private HashMap<String, ClVariable> variables = new HashMap<String, ClVariable>();
-    private HashMap<String, ClConstraint> constraints = new HashMap<String, ClConstraint>();
-
-    private static final String LEFT = "left";
-    private static final String RIGHT = "right";
-    private static final String TOP = "top";
-    private static final String BOTTOM = "bottom";
-    private static final String HEIGHT = "height";
-    private static final String WIDTH = "width";
-    private static final String CENTERX = "centerX";
-    private static final String CENTERY = "centerY";
-    private static final String INTRINSIC_WIDTH = "intrinsicWidth";
-    private static final String INTRINSIC_HEIGHT = "intrinsicHeight";
 
     public ClVariable getLeft() {
         return getVariable(LEFT);
@@ -105,6 +101,13 @@ public class Node {
         constraints.put(nameVariable, constraint);
     }
 
+
+    public void setVariableToAtMost(String nameVariable, double value) {
+        ClConstraint constraint = constraints.get(nameVariable);
+        constraint =  CassowaryUtil.createOrUpdateLeqInequalityConstraint(getVariable(nameVariable), constraint, value, solver);
+        constraints.put(nameVariable, constraint);
+    }
+
     public boolean hasIntrinsicHeight() {
         return hasVariable(INTRINSIC_HEIGHT);
 
@@ -142,19 +145,7 @@ public class Node {
         return variables.containsKey(name);
     }
 
-    private void createImplicitConstraints(String variableName, ClVariable variable) {
-        if (RIGHT.equals(variableName)) {
-            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getLeft()).plus(getWidth()), ClStrength.required));
-            solver.addConstraint(new ClLinearInequality(variable, CL.LEQ, containerNode.getWidth()));
-        } else if (BOTTOM.equals(variableName)) {
-            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getTop()).plus(getHeight()), ClStrength.required));
-            solver.addConstraint(new ClLinearInequality(variable, CL.LEQ, containerNode.getHeight()));
-        } else if (CENTERX.equals(variableName)) {
-            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getWidth()).divide(2).plus(getLeft()), ClStrength.required));
-        } else if (CENTERY.equals(variableName)) {
-            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getHeight()).divide(2).plus(getTop()), ClStrength.required));
-        }
-    }
+    protected abstract void createImplicitConstraints(String variableName, ClVariable variable);
 
     private String getCanonicalName(String name) {
         String canonicalName = name;

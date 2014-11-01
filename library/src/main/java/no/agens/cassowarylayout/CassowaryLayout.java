@@ -164,19 +164,19 @@ public class CassowaryLayout extends ViewGroup  {
         int heightSpec = MeasureSpec.getMode(heightMeasureSpec);
         if (heightSpec == MeasureSpec.EXACTLY) {
             resolvedHeight = resolveSizeAndState(0, heightMeasureSpec, 0);
-            cassowaryModel.getContainerNode().setContainerHeight(resolvedHeight - getPaddingTop() - getPaddingBottom());
+            cassowaryModel.getContainerNode().setVariableToValue(Node.HEIGHT, resolvedHeight - getPaddingTop() - getPaddingBottom());
         } else if (heightSpec == MeasureSpec.AT_MOST) {
             int maxHeight =  MeasureSpec.getSize(heightMeasureSpec);
-            cassowaryModel.getContainerNode().setContainerHeightToAtMost(maxHeight - getPaddingTop() - getPaddingBottom());
+            cassowaryModel.getContainerNode().setVariableToAtMost(Node.HEIGHT, maxHeight - getPaddingTop() - getPaddingBottom());
         }
 
         int widthSpec = MeasureSpec.getMode(widthMeasureSpec);
         if (widthSpec == MeasureSpec.EXACTLY) {
             resolvedWidth = resolveSizeAndState(0, widthMeasureSpec, 0);
-            cassowaryModel.getContainerNode().setContainerWidth(resolvedWidth - getPaddingLeft() - getPaddingRight());
+            cassowaryModel.getContainerNode().setVariableToValue(Node.WIDTH, resolvedWidth - getPaddingLeft() - getPaddingRight());
         } else if (widthSpec == MeasureSpec.AT_MOST) {
             int maxWidth =  MeasureSpec.getSize(widthMeasureSpec);
-            cassowaryModel.getContainerNode().setContainerWidthToAtMost(maxWidth - getPaddingLeft() - getPaddingRight());
+            cassowaryModel.getContainerNode().setVariableToAtMost(Node.WIDTH, maxWidth - getPaddingLeft() - getPaddingRight());
         }
 
 
@@ -250,6 +250,14 @@ public class CassowaryLayout extends ViewGroup  {
 
                 if (node.hasIntrinsicHeight()) {
                     Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " intrinsic height " + node.getIntrinsicHeight().getValue());
+                }
+
+                if (node.hasVariable(Node.CENTERX)) {
+                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " centerX " + node.getVariable(Node.CENTERX).getValue());
+                }
+
+                if (node.hasVariable(Node.CENTERY)) {
+                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " centerY " + node.getVariable(Node.CENTERY).getValue());
                 }
 
                 child.layout(x, y,
