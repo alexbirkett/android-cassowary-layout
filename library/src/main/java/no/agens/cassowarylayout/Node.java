@@ -26,6 +26,8 @@ import org.klomp.cassowary.clconstraint.ClConstraint;
 import org.klomp.cassowary.clconstraint.ClLinearEquation;
 import org.klomp.cassowary.clconstraint.ClLinearInequality;
 
+import java.util.HashMap;
+
 import no.agens.cassowarylayout.util.CassowaryUtil;
 
 /**
@@ -39,138 +41,133 @@ public class Node {
     public Node(ClSimplexSolver solver, ContainerNode containerNode) {
         this.solver = solver;
         this.containerNode = containerNode;
-        createDefaultConstraints();
+        getRight();
+        getBottom();
     }
 
-    private ClVariable left = new ClVariable();
-    private ClVariable top = new ClVariable();
-    private ClVariable width = new ClVariable();
-    private ClVariable height = new ClVariable();
-    private ClVariable bottom;
-    private ClVariable right;
-    private ClVariable centerX;
-    private ClVariable centerY;
-    private ClVariable intrinsicWidth;
-    private ClVariable intrinsicHeight;
-    private ClConstraint intrinsicWidthConstraint;
-    private ClConstraint intrinsicHeightConstraint;
+    private HashMap<String, ClVariable> variables = new HashMap<String, ClVariable>();
+    private HashMap<String, ClConstraint> constraints = new HashMap<String, ClConstraint>();
+
+    private static final String LEFT = "left";
+    private static final String RIGHT = "right";
+    private static final String TOP = "top";
+    private static final String BOTTOM = "bottom";
+    private static final String HEIGHT = "height";
+    private static final String WIDTH = "width";
+    private static final String CENTERX = "centerX";
+    private static final String CENTERY = "centerY";
+    private static final String INTRINSIC_WIDTH = "intrinsicWidth";
+    private static final String INTRINSIC_HEIGHT = "intrinsicHeight";
 
     public ClVariable getLeft() {
-        return left;
+        return getVariable(LEFT);
     }
 
     public ClVariable getTop() {
-        return top;
+        return getVariable(TOP);
     }
 
     public ClVariable getHeight() {
-        return height;
+        return getVariable(HEIGHT);
     }
 
     public ClVariable getWidth() {
-        return width;
+        return getVariable(WIDTH);
     }
 
     public ClVariable getBottom() {
-        if (bottom == null) {
-            bottom = new ClVariable();
-            solver.addConstraint(new ClLinearEquation(bottom, new ClLinearExpression(getTop()).plus(getHeight()), ClStrength.required));
-        }
-        return bottom;
+        return getVariable(BOTTOM);
     }
 
     public ClVariable getRight() {
-        if (right == null) {
-            right = new ClVariable();
-            solver.addConstraint(new ClLinearEquation(right, new ClLinearExpression(getLeft()).plus(getWidth()), ClStrength.required));
-        }
-        return right;
+        return getVariable(RIGHT);
     }
 
     public ClVariable getCenterX() {
-        if (centerX == null) {
-            centerX = new ClVariable();
-            solver.addConstraint(new ClLinearEquation(centerX, new ClLinearExpression(getWidth()).divide(2).plus(getLeft()), ClStrength.required));
-        }
-        return centerX;
+        return getVariable(CENTERX);
     }
 
     public ClVariable getCenterY() {
-        if (centerY == null) {
-            centerY = new ClVariable();
-            solver.addConstraint(new ClLinearEquation(centerY, new ClLinearExpression(getHeight()).divide(2).plus(getTop()), ClStrength.required));
-        }
-        return centerY;
+        return getVariable(CENTERY);
     }
 
-    public ClVariable getVariableByName(String name) {
-        ClVariable variable = null;
-        if ("left".equals(name) || "x".equals(name)) {
-            variable = getLeft();
-        } else if ("top".equals(name) || "y".equals(name)) {
-            variable = getTop();
-        } else if ("bottom".equals(name) || "y2".equals(name)) {
-            variable = getBottom();
-        } else if ("right".equals(name) || "x2".equals(name)) {
-            variable = getRight();
-        } else if ("height".equals(name)) {
-            variable = getHeight();
-        } else if ("width".equals(name)) {
-            variable = getWidth();
-        } else if ("centerX".equals(name)) {
-            variable = getCenterX();
-        } else if ("centerY".equals(name)) {
-            variable = getCenterY();
-        } else if ("intrinsicHeight".equals(name)) {
-            variable = createIntrinsicHeightIfRequired();
-        } else if ("intrinsicWidth".equals(name)) {
-            variable = createIntrinsicWidthIfRequired();
+    public void setIntrinsicWidth(int intrinsicWidth) {
+        setVariableToValue(INTRINSIC_WIDTH, intrinsicWidth);
+    }
+
+    public void setIntrinsicHeight(int intrinsicHeight) {
+        setVariableToValue(INTRINSIC_HEIGHT, intrinsicHeight);
+    }
+
+    public void setVariableToValue(String nameVariable, double value) {
+        ClConstraint constraint = constraints.get(nameVariable);
+        constraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getVariable(nameVariable), constraint, value, solver);
+        constraints.put(nameVariable, constraint);
+    }
+
+    public boolean hasIntrinsicHeight() {
+        return hasVariable(INTRINSIC_HEIGHT);
+
+    }
+    public ClVariable getIntrinsicHeight() {
+        return getVariable(INTRINSIC_HEIGHT);
+    }
+
+    public boolean hasIntrinsicWidth() {
+        return hasVariable(INTRINSIC_WIDTH);
+    }
+    public ClVariable getIntrinsicWidth() {
+        return getVariable(INTRINSIC_WIDTH);
+    }
+
+    public ClVariable getVariable(String name) {
+
+        if (WIDTH.equals(name)) {
+            int i = 0;
+            i++;
+        }
+        name = getCanonicalName(name);
+        ClVariable variable = variables.get(name);
+
+        if (variable == null) {
+            variable = new ClVariable();
+            createImplicitConstraints(name, variable);
+            variables.put(name, variable);
         }
         return variable;
     }
 
-    public ClVariable createIntrinsicWidthIfRequired() {
-        if (intrinsicWidth == null) {
-            intrinsicWidth = new ClVariable();
+    public boolean hasVariable(String name) {
+        name = getCanonicalName(name);
+        return variables.containsKey(name);
+    }
+
+    private void createImplicitConstraints(String variableName, ClVariable variable) {
+        if (RIGHT.equals(variableName)) {
+            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getLeft()).plus(getWidth()), ClStrength.required));
+            solver.addConstraint(new ClLinearInequality(variable, CL.LEQ, containerNode.getWidth()));
+        } else if (BOTTOM.equals(variableName)) {
+            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getTop()).plus(getHeight()), ClStrength.required));
+            solver.addConstraint(new ClLinearInequality(variable, CL.LEQ, containerNode.getHeight()));
+        } else if (CENTERX.equals(variableName)) {
+            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getWidth()).divide(2).plus(getLeft()), ClStrength.required));
+        } else if (CENTERY.equals(variableName)) {
+            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getHeight()).divide(2).plus(getTop()), ClStrength.required));
         }
-        return intrinsicWidth;
     }
 
-    public ClVariable createIntrinsicHeightIfRequired() {
-        if (intrinsicHeight == null) {
-            intrinsicHeight = new ClVariable();
+    private String getCanonicalName(String name) {
+        String canonicalName = name;
+        if ("x".equals(name)) {
+            canonicalName = LEFT;
+        } else if ("y".equals(name)) {
+            canonicalName = TOP;
+        } else if ("x2".equals(name)) {
+            canonicalName = RIGHT;
+        } else if ("y2".equals(name)) {
+            canonicalName = BOTTOM;
         }
-        return intrinsicHeight;
+        return canonicalName;
     }
 
-    public void setIntrinsicWidth(int intrinsicWidth) {
-        intrinsicWidthConstraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getIntrinsicWidth(), intrinsicWidthConstraint, intrinsicWidth, solver);
-    }
-
-    public void setIntrinsicHeight(int intrinsicHeight) {
-        intrinsicHeightConstraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getIntrinsicHeight(), intrinsicHeightConstraint, intrinsicHeight, solver);
-    }
-
-    public ClVariable getIntrinsicHeight() {
-        return intrinsicHeight;
-    }
-
-    public ClVariable getIntrinsicWidth() {
-        return intrinsicWidth;
-    }
-
-    private void createDefaultConstraints() {
-        createWidthConstraint();
-        createHeightConstraint();
-    }
-
-    private void createWidthConstraint() {
-        ClConstraint constraint = new ClLinearInequality(getRight(), CL.LEQ, containerNode.getWidth());
-        solver.addConstraint(constraint);
-    }
-
-    private void createHeightConstraint() {
-        ClConstraint constraint = new ClLinearInequality(getBottom(), CL.LEQ, containerNode.getHeight());
-        solver.addConstraint(constraint);
-    }
 }

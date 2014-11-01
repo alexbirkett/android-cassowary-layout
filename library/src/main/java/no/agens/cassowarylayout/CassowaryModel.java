@@ -8,7 +8,6 @@ import org.klomp.cassowary.ClSimplexSolver;
 import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import no.agens.cassowarylayout.util.DimensionParser;
@@ -27,8 +26,6 @@ public class CassowaryModel {
         this.context = context;
         setupCassowary();
     }
-
-    private ArrayList<ClConstraint> dynamicConstraints = new ArrayList<ClConstraint>();
 
     private HashMap<String, Node> nodes = new HashMap<String, Node>();
 
@@ -58,11 +55,8 @@ public class CassowaryModel {
             if (value != null) {
                 expression = new ClLinearExpression(value);
             }
-
             return expression;
         }
-
-
     };
 
 
@@ -89,7 +83,7 @@ public class CassowaryModel {
                 } else {
                     Node node = getNodeByName(nodeName);
                     if (node != null) {
-                        variable = node.getVariableByName(propertyName);
+                        variable = node.getVariable(propertyName);
                     }
 
                 }
@@ -109,13 +103,6 @@ public class CassowaryModel {
             nodes.put(name, node);
         }
         return node;
-    }
-
-    private void removeDynamicConstraints() {
-        for (ClConstraint constraint : dynamicConstraints) {
-            solver.removeConstraint(constraint);
-        }
-        dynamicConstraints.clear();
     }
 
     private Context getContext() {

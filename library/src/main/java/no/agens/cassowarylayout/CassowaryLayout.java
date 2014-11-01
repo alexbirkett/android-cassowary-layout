@@ -78,11 +78,10 @@ public class CassowaryLayout extends ViewGroup  {
 
             if (child.getVisibility() != GONE) {
                 Node node = getNodeById(child.getId());
-                ClVariable intrinsicWidth = node.getIntrinsicWidth();
-                if (intrinsicWidth != null) {
+                if (node.hasIntrinsicWidth()) {
                     int childWidth = child.getMeasuredWidth();
                     Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic width " + childWidth);
-                    if ((int)intrinsicWidth.getValue() != childWidth) {
+                    if ((int)node.getIntrinsicWidth().getValue() != childWidth) {
                         node.setIntrinsicWidth(childWidth);
                     }
 
@@ -102,11 +101,10 @@ public class CassowaryLayout extends ViewGroup  {
 
             if (child.getVisibility() != GONE) {
                 Node node = getNodeById(child.getId());
-                ClVariable intrinsicHeight = node.getIntrinsicHeight();
-                if (intrinsicHeight != null) {
+
+                if (node.hasIntrinsicHeight()) {
                     int childHeight = child.getMeasuredHeight();
-
-
+                    ClVariable intrinsicHeight = node.getIntrinsicHeight();
                     Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic height (measured)" + childHeight);
                     if ((int)intrinsicHeight.getValue() != childHeight) {
                         long timeBeforeGetMeasuredHeight = System.currentTimeMillis();
@@ -134,7 +132,7 @@ public class CassowaryLayout extends ViewGroup  {
 
                 Node node = getNodeById(child.getId());
 
-                if (node.getIntrinsicHeight() != null) {
+                if (node.hasIntrinsicHeight()) {
 
                     int width = (int) node.getWidth().getValue();
                     Log.d(LOG_TAG, "measureHeightBasedOnWidth child " + viewIdResolver.getViewNameById(child.getId()) + " width " + width);
@@ -250,7 +248,7 @@ public class CassowaryLayout extends ViewGroup  {
                 int height = (int) node.getHeight().getValue();
                 Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " x " + x + " y " + y + " width " + width + " height " + height);
 
-                if (node.getIntrinsicHeight() != null) {
+                if (node.hasIntrinsicHeight()) {
                     Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " intrinsic height " + node.getIntrinsicHeight().getValue());
                 }
 
