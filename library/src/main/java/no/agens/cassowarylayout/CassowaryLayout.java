@@ -151,17 +151,8 @@ public class CassowaryLayout extends ViewGroup  {
         readConstraintsFromXml(attrs);
     }
 
-    private ArrayList<ClConstraint> dynamicConstraints = new ArrayList<ClConstraint>();
-
     private ClLinearEquation getUnusedWeakEqualityConstraint() {
         return CassowaryUtil.createWeakEqualityConstraint();
-    }
-
-    private void removeDynamicConstraints() {
-        for (ClConstraint constraint : dynamicConstraints) {
-            solver.removeConstraint(constraint);
-        }
-        dynamicConstraints.clear();
     }
 
     private void updateIntrinsicWidthConstraints() {
@@ -254,7 +245,6 @@ public class CassowaryLayout extends ViewGroup  {
         Log.d(LOG_TAG, "onMesaure");
 
         long timeBeforeSolve = System.currentTimeMillis();
-        removeDynamicConstraints();
 
 
         int resolvedWidth = -1;
