@@ -24,136 +24,51 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.klomp.cassowary.ClLinearExpression;
-import org.klomp.cassowary.ClSimplexSolver;
 import org.klomp.cassowary.ClVariable;
-import org.klomp.cassowary.clconstraint.ClConstraint;
-import org.klomp.cassowary.clconstraint.ClLinearEquation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import no.agens.cassowarylayout.util.CassowaryUtil;
-import no.agens.cassowarylayout.util.DimensionParser;
 import no.agens.cassowarylayout.util.TimerUtil;
 
 public class CassowaryLayout extends ViewGroup  {
 
     private static final String LOG_TAG = "CassowaryLayout";
 
-    private HashMap<Integer, Node> nodes = new HashMap<Integer, Node>();
-
-    private ClSimplexSolver solver = new ClSimplexSolver();
-
-    private ContainerNode containerNode = new ContainerNode(solver);
+    private CassowaryModel cassowaryModel;
 
     private ViewIdResolver viewIdResolver;
 
-    private CassowaryVariableResolver cassowaryVariableResolver = new CassowaryVariableResolver() {
-        @Override
-        public ClVariable resolveVariable(String variableName) {
-            return CassowaryLayout.this.resolveVariable(variableName);
-        }
-
-        @Override
-        public ClLinearExpression resolveConstant(String constantName) {
-
-            ClLinearExpression expression = null;
-            Double value;
-
-            try {
-                value = new Double(Double.parseDouble(constantName));
-            } catch (NumberFormatException e) {
-                value = DimensionParser.getDimension(constantName, getContext());
-
-            }
-
-            if (value != null) {
-                expression = new ClLinearExpression(value);
-            }
-
-            return expression;
-        }
-
-
-    };
-
-
-    private ClVariable resolveVariable(String variableName) {
-        ClVariable variable = null;
-
-        String[] stringArray = variableName.split("\\.");
-
-        if (stringArray.length > 1) {
-            String viewName = stringArray[0];
-            String propertyName = stringArray[1];
-
-            if (viewName != null) {
-                if ("container".equals(viewName) || "parent".equals(viewName)) {
-                    if ("height".equals(propertyName)) {
-                        variable = containerNode.getHeight();
-                    } else if ("width".equals(propertyName)) {
-                        variable = containerNode.getWidth();
-                    } else if ("centerX".equals(propertyName)) {
-                        variable = containerNode.getCenterX();
-                    } else if ("centerY".equals(propertyName)) {
-                        variable = containerNode.getCenterY();
-                    }
-                } else {
-                    Node node = getNodeById(viewIdResolver.getViewIdByName(viewName));
-                    if (node != null) {
-                        variable = node.getVariableByName(propertyName);
-                    }
-
-                }
-            }
-
-        }
-        if (variable == null) {
-            throw new RuntimeException("unknown variable " + variableName);
-        }
-        return variable;
-    }
-
-    public Node getNodeById(int id) {
-        Node node = nodes.get(id);
-        if (node == null) {
-            node = new Node(solver, containerNode);
-            nodes.put(id, node);
-        }
-        return node;
-    }
-
     public CassowaryLayout(Context context, ViewIdResolver viewIdResolver) {
         super(context);
-        setupCassowary();
+
         this.viewIdResolver = viewIdResolver;
+        this.cassowaryModel = new CassowaryModel(context, viewIdResolver);
     }
 
     public CassowaryLayout(Context context) {
         super(context);
-        setupCassowary();
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
+        this.cassowaryModel = new CassowaryModel(context, this.viewIdResolver);
     }
 
     public CassowaryLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setupCassowary();
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
+        cassowaryModel = new CassowaryModel(context, this.viewIdResolver);
         readConstraintsFromXml(attrs);
     }
 
     public CassowaryLayout(Context context, AttributeSet attrs,
                           int defStyle) {
         super(context, attrs, defStyle);
-        setupCassowary();
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
+        this.cassowaryModel = new CassowaryModel(context, this.viewIdResolver);
         readConstraintsFromXml(attrs);
     }
 
-    private ClLinearEquation getUnusedWeakEqualityConstraint() {
-        return CassowaryUtil.createWeakEqualityConstraint();
+
+    public CassowaryModel getCassowaryModel() {
+        return cassowaryModel;
     }
+
 
     private void updateIntrinsicWidthConstraints() {
         long timeBeforeSolve = System.currentTimeMillis();
@@ -162,7 +77,7 @@ public class CassowaryLayout extends ViewGroup  {
             View child = getChildAt(i);
 
             if (child.getVisibility() != GONE) {
-                Node node = getNodeById(child.getId());
+                Node node = cassowaryModel.getNodeById(child.getId());
                 ClVariable intrinsicWidth = node.getIntrinsicWidth();
                 if (intrinsicWidth != null) {
                     int childWidth = child.getMeasuredWidth();
@@ -186,7 +101,7 @@ public class CassowaryLayout extends ViewGroup  {
             View child = getChildAt(i);
 
             if (child.getVisibility() != GONE) {
-                Node node = getNodeById(child.getId());
+                Node node = cassowaryModel.getNodeById(child.getId());
                 ClVariable intrinsicHeight = node.getIntrinsicHeight();
                 if (intrinsicHeight != null) {
                     int childHeight = child.getMeasuredHeight();
@@ -217,7 +132,7 @@ public class CassowaryLayout extends ViewGroup  {
             if (child.getVisibility() != GONE) {
 
 
-                Node node = getNodeById(child.getId());
+                Node node = cassowaryModel.getNodeById(child.getId());
 
                 if (node.getIntrinsicHeight() != null) {
 
@@ -231,8 +146,6 @@ public class CassowaryLayout extends ViewGroup  {
                     Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId()) + " parent measured width " +  MeasureSpec.getSize(childWidthSpec) + " mode " + MeasureSpec.getMode(childWidthSpec) );
 
                     measureChild(child, childWidthSpec, childHeightSpec);
-
-
 
                 }
              }
@@ -253,19 +166,19 @@ public class CassowaryLayout extends ViewGroup  {
         int heightSpec = MeasureSpec.getMode(heightMeasureSpec);
         if (heightSpec == MeasureSpec.EXACTLY) {
             resolvedHeight = resolveSizeAndState(0, heightMeasureSpec, 0);
-            containerNode.setContainerHeight(resolvedHeight - getPaddingTop() - getPaddingBottom());
+            cassowaryModel.getContainerNode().setContainerHeight(resolvedHeight - getPaddingTop() - getPaddingBottom());
         } else if (heightSpec == MeasureSpec.AT_MOST) {
             int maxHeight =  MeasureSpec.getSize(heightMeasureSpec);
-            containerNode.setContainerHeightToAtMost(maxHeight - getPaddingTop() - getPaddingBottom());
+            cassowaryModel.getContainerNode().setContainerHeightToAtMost(maxHeight - getPaddingTop() - getPaddingBottom());
         }
 
         int widthSpec = MeasureSpec.getMode(widthMeasureSpec);
         if (widthSpec == MeasureSpec.EXACTLY) {
             resolvedWidth = resolveSizeAndState(0, widthMeasureSpec, 0);
-            containerNode.setContainerWidth(resolvedWidth - getPaddingLeft() - getPaddingRight());
+            cassowaryModel.getContainerNode().setContainerWidth(resolvedWidth - getPaddingLeft() - getPaddingRight());
         } else if (widthSpec == MeasureSpec.AT_MOST) {
             int maxWidth =  MeasureSpec.getSize(widthMeasureSpec);
-            containerNode.setContainerWidthToAtMost(maxWidth - getPaddingLeft() - getPaddingRight());
+            cassowaryModel.getContainerNode().setContainerWidthToAtMost(maxWidth - getPaddingLeft() - getPaddingRight());
         }
 
 
@@ -273,20 +186,20 @@ public class CassowaryLayout extends ViewGroup  {
 
         updateIntrinsicWidthConstraints();
 
-        solve();
+        cassowaryModel.solve();
 
         measureHeightBasedOnWidth(widthMeasureSpec, heightMeasureSpec);
 
         updateIntrinsicHeightConstraints();
 
-        solve();
+        cassowaryModel.solve();
 
         if (widthSpec == MeasureSpec.AT_MOST || widthSpec == MeasureSpec.UNSPECIFIED) {
-            resolvedWidth = (int) containerNode.getWidth().getValue() + getPaddingLeft() + getPaddingRight();
+            resolvedWidth = (int) cassowaryModel.getContainerNode().getWidth().getValue() + getPaddingLeft() + getPaddingRight();
         }
 
         if (heightSpec == MeasureSpec.AT_MOST || heightSpec == MeasureSpec.UNSPECIFIED) {
-            resolvedHeight = (int) containerNode.getHeight().getValue() + getPaddingTop() + getPaddingBottom();
+            resolvedHeight = (int) cassowaryModel.getContainerNode().getHeight().getValue() + getPaddingTop() + getPaddingBottom();
         }
 
         setMeasuredDimension(resolvedWidth, resolvedHeight);
@@ -310,13 +223,13 @@ public class CassowaryLayout extends ViewGroup  {
 
         long timeBeforeSolve = System.currentTimeMillis();
 
-        solve();
+        cassowaryModel.solve();
 
         Log.d(LOG_TAG,
-                       " container height " + containerNode.getHeight().getValue() +
-                       " container width " + containerNode.getWidth().getValue() +
-                       " container center x " + containerNode.getCenterX().getValue() +
-                       " container center y " + containerNode.getCenterY().getValue()
+                       " container height " + cassowaryModel.getContainerNode().getHeight().getValue() +
+                       " container width " + cassowaryModel.getContainerNode().getWidth().getValue() +
+                       " container center x " + cassowaryModel.getContainerNode().getCenterX().getValue() +
+                       " container center y " + cassowaryModel.getContainerNode().getCenterY().getValue()
                 );
         int count = getChildCount();
 
@@ -328,7 +241,7 @@ public class CassowaryLayout extends ViewGroup  {
                         (CassowaryLayout.LayoutParams) child.getLayoutParams();
 
                 int childId = child.getId();
-                Node node = getNodeById(childId);
+                Node node = cassowaryModel.getNodeById(childId);
 
                 int x = (int) node.getLeft().getValue() + getPaddingLeft();
                 int y = (int) node.getTop().getValue() + getPaddingTop();
@@ -447,36 +360,6 @@ public class CassowaryLayout extends ViewGroup  {
         }
     }
 
-    private void setupCassowary() {
-        Log.d(LOG_TAG, "setupCassowary");
-        solver.setAutosolve(false);
-    }
-
-    public void addConstraint(ClConstraint constraint) {
-            solver.addConstraint(constraint);
-    }
-
-    public ClConstraint addConstraint(String constraintString) {
-        Log.d(LOG_TAG, "adding constraint " + constraintString);
-        ClConstraint constraint = CassowaryConstraintParser.parseConstraint(constraintString, cassowaryVariableResolver);
-        addConstraint(constraint);
-        return constraint;
-    }
-
-    public void removeConstraint(ClConstraint constraint) {
-        solver.removeConstraint(constraint);
-    }
-
-    public void addConstraints(CharSequence[] constraints) {
-        for (CharSequence constraint : constraints) {
-            addConstraint(constraint.toString());
-        }
-    }
-
-    public void addConstraints(int id) {
-        String[] constraints = getResources().getStringArray(id);
-        addConstraints(constraints);
-    }
 
     private void readConstraintsFromXml(AttributeSet attrs) {
         TypedArray a = getContext().getTheme().obtainStyledAttributes(
@@ -491,19 +374,12 @@ public class CassowaryLayout extends ViewGroup  {
                 throw new RuntimeException("missing cassowary:constraints attribute in XML");
             }
 
-            addConstraints(constraints);
+            cassowaryModel.addConstraints(constraints);
         } finally {
             a.recycle();
         }
 
     }
 
-    private void solve() {
-        long timeBeforeSolve = System.currentTimeMillis();
-
-        solver.solve();
-
-        Log.d(LOG_TAG, "solve took " + TimerUtil.since(timeBeforeSolve));
-    }
 }
 

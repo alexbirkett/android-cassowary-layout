@@ -54,7 +54,7 @@ public class DynamicWidth extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 final int X = (int) event.getRawX();
 
-                Node node = layout.getNodeById(v.getId());
+                Node node = layout.getCassowaryModel().getNodeById(v.getId());
 
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
@@ -70,11 +70,11 @@ public class DynamicWidth extends Activity {
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (constraint != null) {
-                            layout.removeConstraint(constraint);
+                            layout.getCassowaryModel().removeConstraint(constraint);
                         }
 
                         constraint = new ClLinearEquation(node.getLeft(), new ClLinearExpression(X - delta), ClStrength.strong);
-                        layout.addConstraint(constraint);
+                        layout.getCassowaryModel().addConstraint(constraint);
                         layout.requestLayout();
                         break;
                 }
