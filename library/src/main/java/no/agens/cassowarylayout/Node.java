@@ -17,14 +17,10 @@
 package no.agens.cassowarylayout;
 
 
-import org.klomp.cassowary.CL;
-import org.klomp.cassowary.ClLinearExpression;
 import org.klomp.cassowary.ClSimplexSolver;
-import org.klomp.cassowary.ClStrength;
 import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
-import org.klomp.cassowary.clconstraint.ClLinearEquation;
-import org.klomp.cassowary.clconstraint.ClLinearInequality;
+
 
 import java.util.HashMap;
 
@@ -161,4 +157,7 @@ public abstract class Node {
         return canonicalName;
     }
 
+    public double getVariableValue(String variableName) {
+        return getVariable(variableName).getValue();
+    }
 }

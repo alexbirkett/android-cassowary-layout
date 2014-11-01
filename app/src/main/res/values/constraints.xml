@@ -119,6 +119,7 @@
         <item>dragger.y == 0</item>
         <item>dragger.width == 60dp</item>
         <item>dragger.height == dragger.width</item>
+        <item>dragger.left == dragger.draggerPosition</item>
 
         <item>image.x == 0</item>
         <item>image.y == 0</item>

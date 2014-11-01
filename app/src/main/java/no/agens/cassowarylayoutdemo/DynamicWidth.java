@@ -24,11 +24,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
 
-import org.klomp.cassowary.ClLinearExpression;
-import org.klomp.cassowary.ClStrength;
-import org.klomp.cassowary.clconstraint.ClConstraint;
-import org.klomp.cassowary.clconstraint.ClLinearEquation;
-
 import no.agens.cassowarylayout.CassowaryLayout;
 import no.agens.cassowarylayout.Node;
 
@@ -37,9 +32,9 @@ public class DynamicWidth extends Activity {
     private double delta;
 
     private CassowaryLayout layout;
-    private ClConstraint constraint;
     private ScrollView scrollView;
 
+    private static final String DRAGGER_POSITION = "draggerPosition";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +49,12 @@ public class DynamicWidth extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 final int X = (int) event.getRawX();
 
-                Node node = layout.getNodeById(v.getId());
+                Node draggerNode = layout.getNodeById(v.getId());
 
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
                         scrollView.requestDisallowInterceptTouchEvent(true);
-                        delta = X - node.getLeft().getValue();
+                        delta = X - draggerNode.getVariableValue(DRAGGER_POSITION);
                         break;
                     case MotionEvent.ACTION_UP:
                         scrollView.requestDisallowInterceptTouchEvent(false);
@@ -69,12 +64,7 @@ public class DynamicWidth extends Activity {
                     case MotionEvent.ACTION_POINTER_UP:
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if (constraint != null) {
-                            layout.getCassowaryModel().removeConstraint(constraint);
-                        }
-
-                        constraint = new ClLinearEquation(node.getLeft(), new ClLinearExpression(X - delta), ClStrength.strong);
-                        layout.getCassowaryModel().addConstraint(constraint);
+                        draggerNode.setVariableToValue(DRAGGER_POSITION, X - delta);
                         layout.requestLayout();
                         break;
                 }
