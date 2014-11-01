@@ -31,23 +31,23 @@ import no.agens.cassowarylayout.util.CassowaryUtil;
 /**
  * Created by alex on 25/09/2014.
  */
-public class ViewModel {
+public class Node {
 
     private ClSimplexSolver solver;
-    private ContainerModel containerModel;
+    private ContainerNode containerNode;
 
-    public ViewModel(ClSimplexSolver solver, ContainerModel containerModel) {
+    public Node(ClSimplexSolver solver, ContainerNode containerNode) {
         this.solver = solver;
-        this.containerModel = containerModel;
+        this.containerNode = containerNode;
         createDefaultConstraints();
     }
 
-    private ClVariable x = new ClVariable();
-    private ClVariable y = new ClVariable();
+    private ClVariable left = new ClVariable();
+    private ClVariable top = new ClVariable();
     private ClVariable width = new ClVariable();
     private ClVariable height = new ClVariable();
-    private ClVariable y2;
-    private ClVariable x2;
+    private ClVariable bottom;
+    private ClVariable right;
     private ClVariable centerX;
     private ClVariable centerY;
     private ClVariable intrinsicWidth;
@@ -55,12 +55,12 @@ public class ViewModel {
     private ClConstraint intrinsicWidthConstraint;
     private ClConstraint intrinsicHeightConstraint;
 
-    public ClVariable getX() {
-        return x;
+    public ClVariable getLeft() {
+        return left;
     }
 
-    public ClVariable getY() {
-        return y;
+    public ClVariable getTop() {
+        return top;
     }
 
     public ClVariable getHeight() {
@@ -71,26 +71,26 @@ public class ViewModel {
         return width;
     }
 
-    public ClVariable getY2() {
-        if (y2 == null) {
-            y2 = new ClVariable();
-            solver.addConstraint(new ClLinearEquation(y2, new ClLinearExpression(getY()).plus(getHeight()), ClStrength.required));
+    public ClVariable getBottom() {
+        if (bottom == null) {
+            bottom = new ClVariable();
+            solver.addConstraint(new ClLinearEquation(bottom, new ClLinearExpression(getTop()).plus(getHeight()), ClStrength.required));
         }
-        return y2;
+        return bottom;
     }
 
-    public ClVariable getX2() {
-        if (x2 == null) {
-            x2 = new ClVariable();
-            solver.addConstraint(new ClLinearEquation(x2, new ClLinearExpression(getX()).plus(getWidth()), ClStrength.required));
+    public ClVariable getRight() {
+        if (right == null) {
+            right = new ClVariable();
+            solver.addConstraint(new ClLinearEquation(right, new ClLinearExpression(getLeft()).plus(getWidth()), ClStrength.required));
         }
-        return x2;
+        return right;
     }
 
     public ClVariable getCenterX() {
         if (centerX == null) {
             centerX = new ClVariable();
-            solver.addConstraint(new ClLinearEquation(centerX, new ClLinearExpression(getWidth()).divide(2).plus(getX()), ClStrength.required));
+            solver.addConstraint(new ClLinearEquation(centerX, new ClLinearExpression(getWidth()).divide(2).plus(getLeft()), ClStrength.required));
         }
         return centerX;
     }
@@ -98,7 +98,7 @@ public class ViewModel {
     public ClVariable getCenterY() {
         if (centerY == null) {
             centerY = new ClVariable();
-            solver.addConstraint(new ClLinearEquation(centerY, new ClLinearExpression(getHeight()).divide(2).plus(getY()), ClStrength.required));
+            solver.addConstraint(new ClLinearEquation(centerY, new ClLinearExpression(getHeight()).divide(2).plus(getTop()), ClStrength.required));
         }
         return centerY;
     }
@@ -106,13 +106,13 @@ public class ViewModel {
     public ClVariable getVariableByName(String name) {
         ClVariable variable = null;
         if ("left".equals(name) || "x".equals(name)) {
-            variable = getX();
+            variable = getLeft();
         } else if ("top".equals(name) || "y".equals(name)) {
-            variable = getY();
+            variable = getTop();
         } else if ("bottom".equals(name) || "y2".equals(name)) {
-            variable = getY2();
+            variable = getBottom();
         } else if ("right".equals(name) || "x2".equals(name)) {
-            variable = getX2();
+            variable = getRight();
         } else if ("height".equals(name)) {
             variable = getHeight();
         } else if ("width".equals(name)) {
@@ -165,12 +165,12 @@ public class ViewModel {
     }
 
     private void createWidthConstraint() {
-        ClConstraint constraint = new ClLinearInequality(getX2(), CL.LEQ, containerModel.getWidth());
+        ClConstraint constraint = new ClLinearInequality(getRight(), CL.LEQ, containerNode.getWidth());
         solver.addConstraint(constraint);
     }
 
     private void createHeightConstraint() {
-        ClConstraint constraint = new ClLinearInequality(getY2(), CL.LEQ, containerModel.getHeight());
+        ClConstraint constraint = new ClLinearInequality(getBottom(), CL.LEQ, containerNode.getHeight());
         solver.addConstraint(constraint);
     }
 }

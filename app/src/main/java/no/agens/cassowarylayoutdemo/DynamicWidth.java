@@ -30,8 +30,7 @@ import org.klomp.cassowary.clconstraint.ClConstraint;
 import org.klomp.cassowary.clconstraint.ClLinearEquation;
 
 import no.agens.cassowarylayout.CassowaryLayout;
-import no.agens.cassowarylayout.ViewModel;
-import no.agens.cassowarylayoutdemo.R;
+import no.agens.cassowarylayout.Node;
 
 public class DynamicWidth extends Activity {
 
@@ -55,12 +54,12 @@ public class DynamicWidth extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 final int X = (int) event.getRawX();
 
-                ViewModel viewModel = layout.getViewModelById(v.getId());
+                Node node = layout.getNodeById(v.getId());
 
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
                         scrollView.requestDisallowInterceptTouchEvent(true);
-                        delta = X - viewModel.getX().getValue();
+                        delta = X - node.getLeft().getValue();
                         break;
                     case MotionEvent.ACTION_UP:
                         scrollView.requestDisallowInterceptTouchEvent(false);
@@ -74,7 +73,7 @@ public class DynamicWidth extends Activity {
                             layout.removeConstraint(constraint);
                         }
 
-                        constraint = new ClLinearEquation(viewModel.getX(), new ClLinearExpression(X - delta), ClStrength.strong);
+                        constraint = new ClLinearEquation(node.getLeft(), new ClLinearExpression(X - delta), ClStrength.strong);
                         layout.addConstraint(constraint);
                         layout.requestLayout();
                         break;

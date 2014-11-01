@@ -29,14 +29,14 @@ import no.agens.cassowarylayout.util.CassowaryUtil;
 /**
  * Created by alex on 10/10/2014.
  */
-public class ContainerModel {
+public class ContainerNode {
 
     private ClSimplexSolver solver;
 
     private ClConstraint containerWidthConstraint;
     private ClConstraint containerHeightConstraint;
 
-    public ContainerModel(ClSimplexSolver solver) {
+    public ContainerNode(ClSimplexSolver solver) {
         this.solver = solver;
     }
 
