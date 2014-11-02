@@ -19,8 +19,10 @@ package no.agens.cassowarylayout;
 
 import android.util.Log;
 
+import org.pybee.cassowary.CassowaryError;
 import org.pybee.cassowary.Constraint;
 import org.pybee.cassowary.SimplexSolver;
+import org.pybee.cassowary.Strength;
 import org.pybee.cassowary.Variable;
 
 
@@ -39,6 +41,7 @@ public abstract class Node {
 
     protected HashMap<String, Variable> variables = new HashMap<String, Variable>();
     protected HashMap<String, Constraint> constraints = new HashMap<String, Constraint>();
+    protected HashMap<String, Variable> stays = new HashMap<String, Variable>();
 
     public static final String LEFT = "left";
     public static final String RIGHT = "right";
@@ -95,12 +98,25 @@ public abstract class Node {
         setVariableToValue(INTRINSIC_HEIGHT, intrinsicHeight);
     }
 
-    public void setVariableToValue(String nameVariable, double value) {
+    public void setVariableToValue(String variableName, double value) {
         long timeBefore = System.currentTimeMillis();
-        Constraint constraint = constraints.get(nameVariable);
-        constraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getVariable(nameVariable), constraint, value, solver);
-        constraints.put(nameVariable, constraint);
-        Log.d(LOG_TAG, "setVariableToValue name " + nameVariable + " value " + value + " took " + TimerUtil.since(timeBefore));
+
+        Variable variable = getVariable(variableName);
+
+        if (stays.containsKey(variable)) {
+            variable.set_value(value);
+            solver.addStay(variable);
+            stays.put(variableName, variable);
+        } else {
+
+            try {
+                solver.addEditVar(variable).beginEdit().suggestValue(variable, value).endEdit();
+            } catch (CassowaryError cassowaryError) {
+                cassowaryError.printStackTrace();
+            }
+        }
+
+        Log.d(LOG_TAG, "setVariableToValue name " + variableName + " value " + value + " took " + TimerUtil.since(timeBefore));
     }
 
 
@@ -126,7 +142,6 @@ public abstract class Node {
     }
 
     public Variable getVariable(String name) {
-
         name = getCanonicalName(name);
         Variable variable = variables.get(name);
 
