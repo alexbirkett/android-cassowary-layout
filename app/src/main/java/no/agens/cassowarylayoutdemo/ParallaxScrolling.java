@@ -11,6 +11,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ScrollView;
 
 import no.agens.cassowarylayout.CassowaryLayout;
+import no.agens.cassowarylayout.Node;
 
 
 public class ParallaxScrolling extends Activity {
@@ -21,28 +22,39 @@ public class ParallaxScrolling extends Activity {
     private CassowaryLayout cassowaryLayout;
 
     private static final String SCROLL_POSITION = "scrollPosition";
+    private static final String SCREEN_WIDTH = "screenWidth";
+    private static final String SCREEN_HEIGHT = "screenHeight";
+    private static final String SCROLL_Y = "scrollY";
 
     private int screenHeight;
+    private int screenWidth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parallax_scrolling);
+        setScreenHeightAndWidth();
         scrollView = (ScrollView)findViewById(R.id.scroll_view);
         cassowaryLayout = (CassowaryLayout)findViewById(R.id.cassowary_layout);
+
+        final Node containerNode = cassowaryLayout.getCassowaryModel().getContainerNode();
 
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
 
             @Override
             public void onScrollChanged() {
 
-                int scrollY = scrollView.getScrollY(); //for verticalScrollView
-                cassowaryLayout.getCassowaryModel().getContainerNode().setVariableToValue(SCROLL_POSITION, getScrollPosition(scrollY)) ;
+                int scrollY = scrollView.getScrollY();
+                containerNode.setVariableToValue(SCROLL_POSITION, getScrollPosition(scrollY));
+                containerNode.setVariableToValue(SCROLL_Y, scrollY);
                 cassowaryLayout.getCassowaryModel().solve();
                 cassowaryLayout.setChildPositionsFromCassowaryModel();
             }
         });
-        cassowaryLayout.getCassowaryModel().getContainerNode().setVariableToValue(SCROLL_POSITION, 0) ;
-        screenHeight = getScreenHeight();
+        containerNode.setVariableToValue(SCROLL_POSITION, 0);
+        containerNode.setVariableToValue(SCROLL_Y, 0);
+        containerNode.setVariableToValue(SCREEN_HEIGHT, screenHeight);
+        containerNode.setVariableToValue(SCREEN_WIDTH, screenWidth);
     }
 
     @Override
@@ -67,11 +79,12 @@ public class ParallaxScrolling extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private int getScreenHeight() {
+    private void setScreenHeightAndWidth() {
         Display display = getWindowManager().getDefaultDisplay();
         Point point = new Point();
         display.getSize(point);
-        return point.y;
+        screenHeight = point.y;
+        screenWidth = point.x;
     }
 
     private double getScrollPosition(int scrollY) {

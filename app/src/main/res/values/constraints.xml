@@ -120,6 +120,14 @@
         <item>image_three.top == long_paragraph_three.bottom + 8dp - container.parallaxOffset</item>
         <item>image_three.height == 200dp</item>
 
+
+        <item>image_four.centerY == container.centerY</item>
+        <item>image_four.right LEQ container.margin_right</item>
+        <item>image_four.left == container.scrollPosition * 300dp</item>
+
+        <item>image_four.height == 40dp</item>
+        <item>image_four.width == image_four.height</item>
+
     </string-array>
 
     <string-array name="center_view_relative_to_sibling">

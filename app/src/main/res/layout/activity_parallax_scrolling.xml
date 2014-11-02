@@ -6,7 +6,7 @@
 
     <no.agens.cassowarylayout.CassowaryLayout xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/cassowary_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         cassowary:constraints="@array/parallax_scrolling"
         tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
@@ -53,6 +53,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/purple" />
+
+        <View
+            android:id="@+id/image_four"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/darkorange" />
 
     </no.agens.cassowarylayout.CassowaryLayout>
 </ScrollView>
