@@ -38,6 +38,8 @@ public abstract class Node {
     protected ClSimplexSolver solver;
 
     protected HashMap<String, ClVariable> variables = new HashMap<String, ClVariable>();
+    protected HashMap<String, ClVariable> stays = new HashMap<String, ClVariable>();
+
     protected HashMap<String, ClConstraint> constraints = new HashMap<String, ClConstraint>();
 
     public static final String LEFT = "left";
@@ -95,12 +97,21 @@ public abstract class Node {
         setVariableToValue(INTRINSIC_HEIGHT, intrinsicHeight);
     }
 
-    public void setVariableToValue(String nameVariable, double value) {
+    public void setVariableToValue(String variableName, double value) {
         long timeBefore = System.currentTimeMillis();
-        ClConstraint constraint = constraints.get(nameVariable);
-        constraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getVariable(nameVariable), constraint, value, solver);
-        constraints.put(nameVariable, constraint);
-        Log.d(LOG_TAG, "setVariableToValue name " + nameVariable + " value " + value + " took " + TimerUtil.since(timeBefore));
+
+        ClVariable variable = getVariable(variableName);
+
+        if (!stays.containsKey(variable)) {
+            solver.addStay(variable);
+            stays.put(variableName, variable);
+        }
+
+        solver.beginEdit().addEditVar(variable).suggestValue(variable, value).endEdit();
+
+        //solver.setEditedValue(variable, value);
+
+        Log.d(LOG_TAG, "setVariableToValue name " + variableName + " value " + value + " took " + TimerUtil.since(timeBefore));
     }
 
 
@@ -126,11 +137,6 @@ public abstract class Node {
     }
 
     public ClVariable getVariable(String name) {
-
-        if (WIDTH.equals(name)) {
-            int i = 0;
-            i++;
-        }
         name = getCanonicalName(name);
         ClVariable variable = variables.get(name);
 
