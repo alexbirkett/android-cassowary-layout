@@ -17,10 +17,9 @@
 package no.agens.cassowarylayout;
 
 
-import org.klomp.cassowary.ClSimplexSolver;
-import org.klomp.cassowary.ClVariable;
-import org.klomp.cassowary.clconstraint.ClConstraint;
-
+import org.pybee.cassowary.Constraint;
+import org.pybee.cassowary.SimplexSolver;
+import org.pybee.cassowary.Variable;
 
 import java.util.HashMap;
 
@@ -31,10 +30,11 @@ import no.agens.cassowarylayout.util.CassowaryUtil;
  */
 public abstract class Node {
 
-    protected ClSimplexSolver solver;
+    private static final String LOG_TAG = "CassowaryNode";
+    protected SimplexSolver solver;
 
-    protected HashMap<String, ClVariable> variables = new HashMap<String, ClVariable>();
-    protected HashMap<String, ClConstraint> constraints = new HashMap<String, ClConstraint>();
+    protected HashMap<String, Variable> variables = new HashMap<String, Variable>();
+    protected HashMap<String, Constraint> constraints = new HashMap<String, Constraint>();
 
     public static final String LEFT = "left";
     public static final String RIGHT = "right";
@@ -47,39 +47,39 @@ public abstract class Node {
     public static final String INTRINSIC_WIDTH = "intrinsicWidth";
     public static final String INTRINSIC_HEIGHT = "intrinsicHeight";
 
-    public Node(ClSimplexSolver solver) {
+    public Node(SimplexSolver solver) {
         this.solver = solver;
     }
 
-    public ClVariable getLeft() {
+    public Variable getLeft() {
         return getVariable(LEFT);
     }
 
-    public ClVariable getTop() {
+    public Variable getTop() {
         return getVariable(TOP);
     }
 
-    public ClVariable getHeight() {
+    public Variable getHeight() {
         return getVariable(HEIGHT);
     }
 
-    public ClVariable getWidth() {
+    public Variable getWidth() {
         return getVariable(WIDTH);
     }
 
-    public ClVariable getBottom() {
+    public Variable getBottom() {
         return getVariable(BOTTOM);
     }
 
-    public ClVariable getRight() {
+    public Variable getRight() {
         return getVariable(RIGHT);
     }
 
-    public ClVariable getCenterX() {
+    public Variable getCenterX() {
         return getVariable(CENTERX);
     }
 
-    public ClVariable getCenterY() {
+    public Variable getCenterY() {
         return getVariable(CENTERY);
     }
 
@@ -92,14 +92,15 @@ public abstract class Node {
     }
 
     public void setVariableToValue(String nameVariable, double value) {
-        ClConstraint constraint = constraints.get(nameVariable);
+        long timeBefore = System.currentTimeMillis();
+        Constraint constraint = constraints.get(nameVariable);
         constraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getVariable(nameVariable), constraint, value, solver);
         constraints.put(nameVariable, constraint);
     }
 
 
     public void setVariableToAtMost(String nameVariable, double value) {
-        ClConstraint constraint = constraints.get(nameVariable);
+        Constraint constraint = constraints.get(nameVariable);
         constraint =  CassowaryUtil.createOrUpdateLeqInequalityConstraint(getVariable(nameVariable), constraint, value, solver);
         constraints.put(nameVariable, constraint);
     }
@@ -108,28 +109,24 @@ public abstract class Node {
         return hasVariable(INTRINSIC_HEIGHT);
 
     }
-    public ClVariable getIntrinsicHeight() {
+    public Variable getIntrinsicHeight() {
         return getVariable(INTRINSIC_HEIGHT);
     }
 
     public boolean hasIntrinsicWidth() {
         return hasVariable(INTRINSIC_WIDTH);
     }
-    public ClVariable getIntrinsicWidth() {
+    public Variable getIntrinsicWidth() {
         return getVariable(INTRINSIC_WIDTH);
     }
 
-    public ClVariable getVariable(String name) {
+    public Variable getVariable(String name) {
 
-        if (WIDTH.equals(name)) {
-            int i = 0;
-            i++;
-        }
         name = getCanonicalName(name);
-        ClVariable variable = variables.get(name);
+        Variable variable = variables.get(name);
 
         if (variable == null) {
-            variable = new ClVariable();
+            variable = new Variable();
             createImplicitConstraints(name, variable);
             variables.put(name, variable);
         }
@@ -141,7 +138,7 @@ public abstract class Node {
         return variables.containsKey(name);
     }
 
-    protected abstract void createImplicitConstraints(String variableName, ClVariable variable);
+    protected abstract void createImplicitConstraints(String variableName, Variable variable);
 
     private String getCanonicalName(String name) {
         String canonicalName = name;
@@ -158,6 +155,6 @@ public abstract class Node {
     }
 
     public double getVariableValue(String variableName) {
-        return getVariable(variableName).getValue();
+        return getVariable(variableName).value();
     }
 }

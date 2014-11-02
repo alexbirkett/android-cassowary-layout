@@ -1,66 +1,72 @@
 package no.agens.cassowarylayout.util;
 
-import org.klomp.cassowary.CL;
-import org.klomp.cassowary.ClLinearExpression;
-import org.klomp.cassowary.ClSimplexSolver;
-import org.klomp.cassowary.ClStrength;
-import org.klomp.cassowary.ClVariable;
-import org.klomp.cassowary.clconstraint.ClConstraint;
-import org.klomp.cassowary.clconstraint.ClLinearConstraint;
-import org.klomp.cassowary.clconstraint.ClLinearEquation;
-import org.klomp.cassowary.clconstraint.ClLinearInequality;
+
+import org.pybee.cassowary.Constraint;
+import org.pybee.cassowary.ConstraintNotFound;
+import org.pybee.cassowary.Expression;
+import org.pybee.cassowary.SimplexSolver;
+import org.pybee.cassowary.Strength;
+import org.pybee.cassowary.Variable;
 
 /**
  * Created by alex on 08/10/2014.
  */
 public class CassowaryUtil {
 
-    public static ClLinearEquation createWeakEqualityConstraint() {
-        return new ClLinearEquation(new ClLinearExpression(null, -1.0, 0), ClStrength.weak);
+    public static Constraint createWeakEqualityConstraint() {
+        return new Constraint(new Expression(null, -1.0, 0), Strength.WEAK);
     }
 
-    public static ClLinearInequality createWeakInequalityConstraint(ClVariable variable, byte op, double value) {
-        ClLinearExpression expression = new ClLinearExpression(value);
-        return new ClLinearInequality(variable, op, expression, ClStrength.strong);
+    public static Constraint createWeakInequalityConstraint(Variable variable, Constraint.Operator op, double value) {
+        Expression expression = new Expression(value);
+        return new Constraint(variable, op, expression, Strength.STRONG);
     }
 
-    public static void updateConstraint(ClLinearConstraint constraint, ClVariable variable, double value) {
-        ClLinearExpression expression = constraint.expression();
-        expression.setConstant(value);
+    public static void updateConstraint(Constraint constraint, Variable variable, double value) {
+        Expression expression = constraint.expression();
+        expression.set_constant(value);
         expression.setVariable(variable, -1);
     }
 
 
-    public static ClConstraint createOrUpdateLeqInequalityConstraint(ClVariable variable, ClConstraint constraint, double value, ClSimplexSolver solver) {
+    public static Constraint createOrUpdateLeqInequalityConstraint(Variable variable, Constraint constraint, double value, SimplexSolver solver) {
         if (constraint != null) {
-            double currentValue = constraint.expression().getConstant();
+            double currentValue = constraint.expression().constant();
             // This will not detect if the variable or strength has changed.
-            if (!(constraint instanceof ClLinearInequality) || currentValue != value) {
-                solver.removeConstraint(constraint);
+            if (currentValue != value) {
+                try {
+                    solver.removeConstraint(constraint);
+                } catch (ConstraintNotFound constraintNotFound) {
+                    constraintNotFound.printStackTrace();
+                }
                 constraint = null;
             }
         }
 
         if (constraint == null) {
-            constraint = new ClLinearInequality(variable, CL.LEQ, value, ClStrength.strong);
+            constraint = new Constraint(variable, Constraint.Operator.LEQ, value, Strength.STRONG);
             solver.addConstraint(constraint);
         }
 
         return constraint;
     }
 
-    public static ClConstraint createOrUpdateLinearEquationConstraint(ClVariable variable, ClConstraint constraint, double value, ClSimplexSolver solver) {
+    public static Constraint createOrUpdateLinearEquationConstraint(Variable variable, Constraint constraint, double value, SimplexSolver solver) {
         if (constraint != null) {
-            double currentValue = constraint.expression().getConstant();
+            double currentValue = constraint.expression().constant();
             // This will not detect if the variable, strength or operation has changed
-            if (!(constraint instanceof ClLinearEquation) || currentValue != value) {
-                solver.removeConstraint(constraint);
+            if (currentValue != value) {
+                try {
+                    solver.removeConstraint(constraint);
+                } catch (ConstraintNotFound constraintNotFound) {
+                    constraintNotFound.printStackTrace();
+                }
                 constraint = null;
             }
         }
 
         if (constraint == null) {
-            constraint = new ClLinearEquation(variable, value, ClStrength.strong);
+            constraint = new Constraint(variable, Constraint.Operator.EQ, value, Strength.STRONG);
             solver.addConstraint(constraint);
         }
 

@@ -27,7 +27,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "org.klomp:cassowary:1.0.0-SNAPSHOT"
+    compile "org.pybee:cassowary:1.0.0-SNAPSHOT"
 }
 
 uploadArchives {

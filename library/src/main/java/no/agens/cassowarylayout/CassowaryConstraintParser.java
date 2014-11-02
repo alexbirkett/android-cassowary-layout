@@ -19,13 +19,11 @@ package no.agens.cassowarylayout;
 
 import android.util.Log;
 
-import org.klomp.cassowary.CL;
-import org.klomp.cassowary.ClLinearExpression;
-import org.klomp.cassowary.ClStrength;
-import org.klomp.cassowary.ClVariable;
-import org.klomp.cassowary.clconstraint.ClConstraint;
-import org.klomp.cassowary.clconstraint.ClLinearEquation;
-import org.klomp.cassowary.clconstraint.ClLinearInequality;
+
+import org.pybee.cassowary.Constraint;
+import org.pybee.cassowary.Expression;
+import org.pybee.cassowary.Strength;
+import org.pybee.cassowary.Variable;
 
 import java.util.List;
 import java.util.Stack;
@@ -42,47 +40,47 @@ public class CassowaryConstraintParser {
     private static final String LOG_TAG = "CassowaryConstraintParser";
 
 
-    public static ClConstraint parseConstraint(String constraintString, CassowaryVariableResolver variableResolver) {
+    public static Constraint parseConstraint(String constraintString, CassowaryVariableResolver variableResolver) {
 
         Log.d(LOG_TAG, "CassowaryConstraintParser.parseConstraint " + constraintString);
 
 
         ConstraintParser.Constraint constraint = ConstraintParser.parseConstraint(constraintString);
 
-        ClLinearExpression expression = resolveExpression(constraint.getExpression(), variableResolver);
-        ClVariable variable = variableResolver.resolveVariable(constraint.getVariable());
+        Expression expression = resolveExpression(constraint.getExpression(), variableResolver);
+        Variable variable = variableResolver.resolveVariable(constraint.getVariable());
 
         switch(constraint.getOperator()) {
             case EQ:
-                return new ClLinearEquation(variable, expression, getStrength(constraint.getStrength()));
+                return new Constraint(variable, Constraint.Operator.EQ, expression, getStrength(constraint.getStrength()));
             case GEQ:
-                return new ClLinearInequality(variable, CL.GEQ, expression, getStrength(constraint.getStrength()));
+                return new Constraint(variable, Constraint.Operator.GEQ, expression, getStrength(constraint.getStrength()));
             case LEQ:
-                return new ClLinearInequality(variable, CL.LEQ, expression, getStrength(constraint.getStrength()));
+                return new Constraint(variable, Constraint.Operator.LEQ, expression, getStrength(constraint.getStrength()));
 
         }
         return null;
     }
 
-    private static ClStrength getStrength(ConstraintParser.Constraint.Strength strength) {
+    private static Strength getStrength(ConstraintParser.Constraint.Strength strength) {
         switch (strength) {
             case WEAK:
-                return ClStrength.weak;
+                return Strength.WEAK;
             case MEDIUM:
-                return ClStrength.medium;
+                return Strength.MEDIUM;
             case STRONG:
-                return ClStrength.strong;
+                return Strength.STRONG;
             case REQUIRED:
-                return ClStrength.required;
+                return Strength.REQUIRED;
         }
-        return ClStrength.required;
+        return Strength.MEDIUM;
     }
 
-    public static ClLinearExpression resolveExpression(String expressionString, CassowaryVariableResolver variableResolver) {
+    public static Expression resolveExpression(String expressionString, CassowaryVariableResolver variableResolver) {
 
         List<String> postFixExpression = InfixToPostfix.infixToPostfix(ExpressionTokenizer.tokenizeExpression(expressionString));
 
-        Stack<ClLinearExpression> linearExpressionsStack = new Stack<ClLinearExpression>();
+        Stack<Expression> linearExpressionsStack = new Stack<Expression>();
 
         for (String expression : postFixExpression) {
             if ("+".equals(expression)) {
@@ -90,15 +88,15 @@ public class CassowaryConstraintParser {
             } else if ("-".equals(expression)) {
                 linearExpressionsStack.push(linearExpressionsStack.pop().subtractFrom(linearExpressionsStack.pop()));
             } else if ("/".equals(expression)) {
-                ClLinearExpression denominator = linearExpressionsStack.pop();
-                ClLinearExpression numerator = linearExpressionsStack.pop();
+                Expression denominator = linearExpressionsStack.pop();
+                Expression numerator = linearExpressionsStack.pop();
                 linearExpressionsStack.push(numerator.divide(denominator));
             } else if ("*".equals(expression)) {
                 linearExpressionsStack.push(linearExpressionsStack.pop().times(linearExpressionsStack.pop()));
             } else {
-                ClLinearExpression linearExpression =  variableResolver.resolveConstant(expression);
+                Expression linearExpression =  variableResolver.resolveConstant(expression);
                 if (linearExpression == null) {
-                    linearExpression = new ClLinearExpression(variableResolver.resolveVariable(expression));
+                    linearExpression = new Expression(variableResolver.resolveVariable(expression));
                 }
 
                 linearExpressionsStack.push(linearExpression);

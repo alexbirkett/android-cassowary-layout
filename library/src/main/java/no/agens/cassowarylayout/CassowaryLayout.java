@@ -24,7 +24,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.klomp.cassowary.ClVariable;
+
+import org.pybee.cassowary.Variable;
 
 import no.agens.cassowarylayout.util.TimerUtil;
 
@@ -81,7 +82,7 @@ public class CassowaryLayout extends ViewGroup  {
                 if (node.hasIntrinsicWidth()) {
                     int childWidth = child.getMeasuredWidth();
                     Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic width " + childWidth);
-                    if ((int)node.getIntrinsicWidth().getValue() != childWidth) {
+                    if ((int)node.getIntrinsicWidth().value() != childWidth) {
                         node.setIntrinsicWidth(childWidth);
                     }
 
@@ -104,9 +105,9 @@ public class CassowaryLayout extends ViewGroup  {
 
                 if (node.hasIntrinsicHeight()) {
                     int childHeight = child.getMeasuredHeight();
-                    ClVariable intrinsicHeight = node.getIntrinsicHeight();
+                    Variable intrinsicHeight = node.getIntrinsicHeight();
                     Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic height (measured)" + childHeight);
-                    if ((int)intrinsicHeight.getValue() != childHeight) {
+                    if ((int)intrinsicHeight.value() != childHeight) {
                         long timeBeforeGetMeasuredHeight = System.currentTimeMillis();
 
                         node.setIntrinsicHeight(childHeight);
@@ -134,7 +135,7 @@ public class CassowaryLayout extends ViewGroup  {
 
                 if (node.hasIntrinsicHeight()) {
 
-                    int width = (int) node.getWidth().getValue();
+                    int width = (int) node.getWidth().value();
                     Log.d(LOG_TAG, "measureHeightBasedOnWidth child " + viewIdResolver.getViewNameById(child.getId()) + " width " + width);
 
                     int childHeightSpec = MeasureSpec.makeMeasureSpec(heightMeasureSpec, MeasureSpec.getMode(heightMeasureSpec));
@@ -193,11 +194,11 @@ public class CassowaryLayout extends ViewGroup  {
         cassowaryModel.solve();
 
         if (widthSpec == MeasureSpec.AT_MOST || widthSpec == MeasureSpec.UNSPECIFIED) {
-            resolvedWidth = (int) cassowaryModel.getContainerNode().getWidth().getValue() + getPaddingLeft() + getPaddingRight();
+            resolvedWidth = (int) cassowaryModel.getContainerNode().getWidth().value() + getPaddingLeft() + getPaddingRight();
         }
 
         if (heightSpec == MeasureSpec.AT_MOST || heightSpec == MeasureSpec.UNSPECIFIED) {
-            resolvedHeight = (int) cassowaryModel.getContainerNode().getHeight().getValue() + getPaddingTop() + getPaddingBottom();
+            resolvedHeight = (int) cassowaryModel.getContainerNode().getHeight().value() + getPaddingTop() + getPaddingBottom();
         }
 
         setMeasuredDimension(resolvedWidth, resolvedHeight);
@@ -224,10 +225,10 @@ public class CassowaryLayout extends ViewGroup  {
         cassowaryModel.solve();
 
         Log.d(LOG_TAG,
-                       " container height " + cassowaryModel.getContainerNode().getHeight().getValue() +
-                       " container width " + cassowaryModel.getContainerNode().getWidth().getValue() +
-                       " container center x " + cassowaryModel.getContainerNode().getCenterX().getValue() +
-                       " container center y " + cassowaryModel.getContainerNode().getCenterY().getValue()
+                       " container height " + cassowaryModel.getContainerNode().getHeight().value() +
+                       " container width " + cassowaryModel.getContainerNode().getWidth().value() +
+                       " container center x " + cassowaryModel.getContainerNode().getCenterX().value() +
+                       " container center y " + cassowaryModel.getContainerNode().getCenterY().value()
                 );
         int count = getChildCount();
 
@@ -241,23 +242,23 @@ public class CassowaryLayout extends ViewGroup  {
                 int childId = child.getId();
                 Node node = getNodeById(childId);
 
-                int x = (int) node.getLeft().getValue() + getPaddingLeft();
-                int y = (int) node.getTop().getValue() + getPaddingTop();
+                int x = (int) node.getLeft().value() + getPaddingLeft();
+                int y = (int) node.getTop().value() + getPaddingTop();
 
-                int width = (int) node.getWidth().getValue();
-                int height = (int) node.getHeight().getValue();
+                int width = (int) node.getWidth().value();
+                int height = (int) node.getHeight().value();
                 Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " x " + x + " y " + y + " width " + width + " height " + height);
 
                 if (node.hasIntrinsicHeight()) {
-                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " intrinsic height " + node.getIntrinsicHeight().getValue());
+                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " intrinsic height " + node.getIntrinsicHeight().value());
                 }
 
                 if (node.hasVariable(Node.CENTERX)) {
-                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " centerX " + node.getVariable(Node.CENTERX).getValue());
+                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " centerX " + node.getVariable(Node.CENTERX).value());
                 }
 
                 if (node.hasVariable(Node.CENTERY)) {
-                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " centerY " + node.getVariable(Node.CENTERY).getValue());
+                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " centerY " + node.getVariable(Node.CENTERY).value());
                 }
 
                 child.layout(x, y,

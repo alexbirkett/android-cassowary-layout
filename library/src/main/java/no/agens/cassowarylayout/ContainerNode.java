@@ -18,28 +18,28 @@
 package no.agens.cassowarylayout;
 
 
-import org.klomp.cassowary.ClLinearExpression;
-import org.klomp.cassowary.ClSimplexSolver;
-import org.klomp.cassowary.ClStrength;
-import org.klomp.cassowary.ClVariable;
-import org.klomp.cassowary.clconstraint.ClLinearEquation;
+import org.pybee.cassowary.Constraint;
+import org.pybee.cassowary.Expression;
+import org.pybee.cassowary.SimplexSolver;
+import org.pybee.cassowary.Strength;
+import org.pybee.cassowary.Variable;
 
 /**
  * Created by alex on 10/10/2014.
  */
 public class ContainerNode extends Node {
 
-    public ContainerNode(ClSimplexSolver solver) {
+    public ContainerNode(SimplexSolver solver) {
         super(solver);
     }
 
     @Override
-    protected void createImplicitConstraints(String variableName, ClVariable variable) {
+    protected void createImplicitConstraints(String variableName, Variable variable) {
 
         if (CENTERX.equals(variableName)) {
-            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getWidth()).divide(2), ClStrength.required));
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getWidth()).divide(2), Strength.REQUIRED));
         } else if (CENTERY.equals(variableName)) {
-            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getHeight()).divide(2), ClStrength.required));
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getHeight()).divide(2), Strength.REQUIRED));
         }
     }
 
