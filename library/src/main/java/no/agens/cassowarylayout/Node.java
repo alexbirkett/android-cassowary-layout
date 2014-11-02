@@ -17,13 +17,16 @@
 package no.agens.cassowarylayout;
 
 
+
 import org.pybee.cassowary.Constraint;
 import org.pybee.cassowary.SimplexSolver;
 import org.pybee.cassowary.Variable;
+import android.util.Log;
 
 import java.util.HashMap;
 
 import no.agens.cassowarylayout.util.CassowaryUtil;
+import no.agens.cassowarylayout.util.TimerUtil;
 
 /**
  * Created by alex on 25/09/2014.
@@ -31,6 +34,7 @@ import no.agens.cassowarylayout.util.CassowaryUtil;
 public abstract class Node {
 
     private static final String LOG_TAG = "CassowaryNode";
+
     protected SimplexSolver solver;
 
     protected HashMap<String, Variable> variables = new HashMap<String, Variable>();
@@ -96,6 +100,7 @@ public abstract class Node {
         Constraint constraint = constraints.get(nameVariable);
         constraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getVariable(nameVariable), constraint, value, solver);
         constraints.put(nameVariable, constraint);
+        Log.d(LOG_TAG, "setVariableToValue name " + nameVariable + " value " + value + " took " + TimerUtil.since(timeBefore));
     }
 
 

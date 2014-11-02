@@ -13,6 +13,7 @@
     <string name="title_activity_center_in_parent">CenterInParent</string>
     <string name="center_in_parent">Center In Parent</string>
     <string name="dynamic_width">Dynamic width</string>
+    <string name="parallax_scrolling">Parallax scrolling (custom constraint)</string>
     <string name="title_activity_cassowary_layout_in_linear_layout">CassowaryLayoutInLinearLayout</string>
     <string name="cassowary_layout_in_linear_layout">CassowaryLayout In LinearLayout</string>
     <string name="title_activity_cassowary_layout_wrap_content">CassowaryLayoutWrapContent</string>
@@ -30,5 +31,6 @@
     <string name="text_in_cassowary_layout">Text in Cassowary Layout</string>
     <string name="text_in_linear_layout">Text in Linear Layout</string>
     <string name="title_activity_intrinsic_height_text_in_wrap_content_container">IntrinsicHeightTextInWrapContentContainer</string>
+    <string name="title_activity_parallax_scrolling">ParallaxScrolling</string>
 
 </resources>

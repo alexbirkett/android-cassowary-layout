@@ -51,6 +51,10 @@
             android:label="@string/title_activity_dynamic_width" >
         </activity>
         <activity
+            android:name="no.agens.cassowarylayoutdemo.ParallaxScrolling"
+            android:label="@string/title_activity_parallax_scrolling" >
+        </activity>
+        <activity
             android:name=".LinearLayoutInCassowaryLayout"
             android:label="@string/title_activity_linear_layout_in_cassowary_layout" >
         </activity>

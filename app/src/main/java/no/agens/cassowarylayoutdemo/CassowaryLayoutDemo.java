@@ -57,6 +57,13 @@ public class CassowaryLayoutDemo extends Activity {
             }
         });
 
+        findViewById(R.id.parallax_scrolling).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CassowaryLayoutDemo.this, ParallaxScrolling.class));
+            }
+        });
+
         findViewById(R.id.dynamic_width).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

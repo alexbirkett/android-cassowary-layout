@@ -12,4 +12,8 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="paragraph_style">
+        <item name="android:textSize">20sp</item>
+        <item name="android:padding">8dp</item>
+    </style>
 </resources>

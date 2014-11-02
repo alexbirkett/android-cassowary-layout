@@ -1,0 +1,58 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cassowary="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scroll_view">
+
+    <no.agens.cassowarylayout.CassowaryLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cassowary_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cassowary:constraints="@array/parallax_scrolling"
+        tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
+        android:padding="@dimen/default_padding">
+
+        <TextView
+            android:id="@+id/long_paragraph_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_paragraph"
+            style="@style/paragraph_style"/>
+
+        <View
+            android:id="@+id/image_one"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/red" />
+
+        <TextView
+            android:id="@+id/long_paragraph_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_paragraph"
+            style="@style/paragraph_style"/>
+
+        <View
+            android:id="@+id/image_two"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/green" />
+
+        <TextView
+            android:id="@+id/long_paragraph_three"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_paragraph"
+            style="@style/paragraph_style"/>
+
+        <View
+            android:id="@+id/image_three"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/purple" />
+
+    </no.agens.cassowarylayout.CassowaryLayout>
+</ScrollView>
