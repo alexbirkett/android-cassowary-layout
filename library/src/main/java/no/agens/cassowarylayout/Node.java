@@ -17,6 +17,8 @@
 package no.agens.cassowarylayout;
 
 
+import android.util.Log;
+
 import org.klomp.cassowary.ClSimplexSolver;
 import org.klomp.cassowary.ClVariable;
 import org.klomp.cassowary.clconstraint.ClConstraint;
@@ -25,12 +27,14 @@ import org.klomp.cassowary.clconstraint.ClConstraint;
 import java.util.HashMap;
 
 import no.agens.cassowarylayout.util.CassowaryUtil;
+import no.agens.cassowarylayout.util.TimerUtil;
 
 /**
  * Created by alex on 25/09/2014.
  */
 public abstract class Node {
 
+    private static final String LOG_TAG = "CassowaryNode";
     protected ClSimplexSolver solver;
 
     protected HashMap<String, ClVariable> variables = new HashMap<String, ClVariable>();
@@ -92,9 +96,11 @@ public abstract class Node {
     }
 
     public void setVariableToValue(String nameVariable, double value) {
+        long timeBefore = System.currentTimeMillis();
         ClConstraint constraint = constraints.get(nameVariable);
         constraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getVariable(nameVariable), constraint, value, solver);
         constraints.put(nameVariable, constraint);
+        Log.d(LOG_TAG, "setVariableToValue name " + nameVariable + " value " + value + " took " + TimerUtil.since(timeBefore));
     }
 
 

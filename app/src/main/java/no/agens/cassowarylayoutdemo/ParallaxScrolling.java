@@ -4,16 +4,38 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewTreeObserver;
+import android.widget.ScrollView;
+
+import no.agens.cassowarylayout.CassowaryLayout;
 
 
 public class ParallaxScrolling extends Activity {
+
+    private ScrollView scrollView;
+    private CassowaryLayout cassowaryLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parallax_scrolling);
-    }
+        scrollView = (ScrollView)findViewById(R.id.scroll_view);
+        cassowaryLayout = (CassowaryLayout)findViewById(R.id.cassowary_layout);
 
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+
+            @Override
+            public void onScrollChanged() {
+
+                int scrollY = scrollView.getScrollY(); //for verticalScrollView
+
+                cassowaryLayout.getCassowaryModel().getContainerNode().setVariableToValue("scrollY", scrollY);
+                cassowaryLayout.getCassowaryModel().solve();
+                cassowaryLayout.setChildPositionsFromCassowaryModel();
+            }
+        });
+        cassowaryLayout.getCassowaryModel().getContainerNode().setVariableToValue("scrollY", 0);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

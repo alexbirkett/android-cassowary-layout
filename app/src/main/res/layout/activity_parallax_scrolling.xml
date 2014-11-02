@@ -1,12 +1,100 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="no.agens.cassowarylayoutdemo.ParallaxScrolling">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cassowary="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scroll_view">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <no.agens.cassowarylayout.CassowaryLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cassowary_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cassowary:constraints="@array/parallax_scrolling"
+        tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
+        android:padding="@dimen/default_padding">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/long_paragraph_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_paragraph"
+            style="@style/paragraph_style"/>
+
+        <View
+            android:id="@+id/image_one"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/red" />
+
+        <TextView
+            android:id="@+id/long_paragraph_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_paragraph"
+            style="@style/paragraph_style"/>
+
+        <View
+            android:id="@+id/image_two"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/green" />
+
+        <TextView
+            android:id="@+id/long_paragraph_three"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_paragraph"
+            style="@style/paragraph_style"/>
+
+        <View
+            android:id="@+id/image_three"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/purple" />
+
+        <!--<TextView
+            android:id="@+id/long_paragraph_two"
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_paragraph" />
+
+        <View
+            android:id="@+id/image_two"
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/xml_layout_demo" />
+
+        <TextView
+            android:id="@+id/long_paragraph_three"
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_paragraph" />
+
+        <View
+            android:id="@+id/image_three"
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/xml_layout_demo" />
+
+        <TextView
+            android:id="@+id/long_paragraph_four"
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_paragraph" />
+
+        <View
+            android:id="@+id/image_four"
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/xml_layout_demo" />-->
+
+    </no.agens.cassowarylayout.CassowaryLayout>
+</ScrollView>

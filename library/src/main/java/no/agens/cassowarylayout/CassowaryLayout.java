@@ -269,6 +269,28 @@ public class CassowaryLayout extends ViewGroup  {
         Log.d(LOG_TAG, "onLayout - took " + TimerUtil.since(timeBeforeSolve));
     }
 
+    public void setChildPositionsFromCassowaryModel() {
+        long timeBeforeSolve = System.currentTimeMillis();
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+            if (child.getVisibility() != GONE) {
+
+                int childId = child.getId();
+
+                Node node = getNodeById(childId);
+
+                int x = (int) node.getLeft().getValue() + getPaddingLeft();
+                int y = (int) node.getTop().getValue() + getPaddingTop();
+
+                child.setX(x);
+                child.setY(y);
+
+            }
+        }
+        Log.d(LOG_TAG, "setChildPositionsFromCassowaryModel - took " + TimerUtil.since(timeBeforeSolve));
+    }
+
     @Override
     public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new CassowaryLayout.LayoutParams(getContext(), attrs);

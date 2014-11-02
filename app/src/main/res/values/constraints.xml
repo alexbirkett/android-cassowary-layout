@@ -83,6 +83,46 @@
         <item>intrinsic_height_text_in_wrap_content_container.y2 == container.height - 8dp</item>
     </string-array>
 
+    <string-array name="parallax_scrolling">
+
+        <item>container.margin_left == 8dp</item>
+        <item>container.margin_right == container.width - 8dp</item>
+        <item>container.parallaxOffset == container.scrollY / 3</item>
+        <item>container.height == image_three.bottom</item>
+
+        <item>long_paragraph_one.top == 8dp</item>
+        <item>long_paragraph_one.left == container.margin_left</item>
+        <item>long_paragraph_one.right == container.margin_right</item>
+        <item>long_paragraph_one.height == long_paragraph_one.intrinsicHeight</item>
+
+        <item>image_one.left == container.margin_left</item>
+        <item>image_one.right == container.margin_right</item>
+        <item>image_one.top == long_paragraph_one.bottom + 8dp - container.parallaxOffset</item>
+        <item>image_one.height == 200dp</item>
+
+        <item>long_paragraph_two.top == image_one.bottom</item>
+        <item>long_paragraph_two.left == container.margin_left</item>
+        <item>long_paragraph_two.right == container.margin_right</item>
+        <item>long_paragraph_two.height == long_paragraph_one.intrinsicHeight</item>
+
+        <item>image_two.left == container.margin_left</item>
+        <item>image_two.right == container.margin_right</item>
+        <item>image_two.top == long_paragraph_two.bottom + 8dp - container.parallaxOffset</item>
+        <item>image_two.height == 200dp</item>
+
+        <item>long_paragraph_three.top == image_two.bottom</item>
+        <item>long_paragraph_three.left == container.margin_left</item>
+        <item>long_paragraph_three.right == container.margin_right</item>
+        <item>long_paragraph_three.height == long_paragraph_one.intrinsicHeight</item>
+
+        <item>image_three.left == container.margin_left</item>
+        <item>image_three.right == container.margin_right</item>
+        <item>image_three.top == long_paragraph_three.bottom + 8dp - container.parallaxOffset</item>
+        <item>image_three.height == 200dp</item>
+
+        <item>intrinsic_height_text_in_wrap_content_container.y2 == container.height - 8dp</item>
+    </string-array>
+
     <string-array name="center_view_relative_to_sibling">
         <item>red.x == 0</item>
         <item>red.y == 0</item>
