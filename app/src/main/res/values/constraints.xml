@@ -87,7 +87,7 @@
 
         <item>container.margin_left == 8dp</item>
         <item>container.margin_right == container.width - 8dp</item>
-        <item>container.parallaxOffset == container.scrollY / 3</item>
+        <item>container.parallaxOffset == container.scrollPosition * 100dp</item>
         <item>container.height == image_three.bottom</item>
 
         <item>long_paragraph_one.top == 8dp</item>
@@ -119,6 +119,7 @@
         <item>image_three.right == container.margin_right</item>
         <item>image_three.top == long_paragraph_three.bottom + 8dp - container.parallaxOffset</item>
         <item>image_three.height == 200dp</item>
+
     </string-array>
 
     <string-array name="center_view_relative_to_sibling">

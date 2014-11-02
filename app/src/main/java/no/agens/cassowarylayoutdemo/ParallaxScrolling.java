@@ -1,7 +1,10 @@
 package no.agens.cassowarylayoutdemo;
 
 import android.app.Activity;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
@@ -12,9 +15,14 @@ import no.agens.cassowarylayout.CassowaryLayout;
 
 public class ParallaxScrolling extends Activity {
 
+    private static final String LOG_TAG = "ParallaxScrolling";
+
     private ScrollView scrollView;
     private CassowaryLayout cassowaryLayout;
 
+    private static final String SCROLL_POSITION = "scrollPosition";
+
+    private int screenHeight;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,13 +36,13 @@ public class ParallaxScrolling extends Activity {
             public void onScrollChanged() {
 
                 int scrollY = scrollView.getScrollY(); //for verticalScrollView
-
-                cassowaryLayout.getCassowaryModel().getContainerNode().setVariableToValue("scrollY", scrollY);
+                cassowaryLayout.getCassowaryModel().getContainerNode().setVariableToValue(SCROLL_POSITION, getScrollPosition(scrollY)) ;
                 cassowaryLayout.getCassowaryModel().solve();
                 cassowaryLayout.setChildPositionsFromCassowaryModel();
             }
         });
-        cassowaryLayout.getCassowaryModel().getContainerNode().setVariableToValue("scrollY", 0);
+        cassowaryLayout.getCassowaryModel().getContainerNode().setVariableToValue(SCROLL_POSITION, 0) ;
+        screenHeight = getScreenHeight();
     }
 
     @Override
@@ -58,4 +66,18 @@ public class ParallaxScrolling extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private int getScreenHeight() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point point = new Point();
+        display.getSize(point);
+        return point.y;
+    }
+
+    private double getScrollPosition(int scrollY) {
+        double scrollPosition =  (double)scrollY / (double)(cassowaryLayout.getHeight() - screenHeight);
+        Log.d(LOG_TAG, "scroll position " + scrollPosition);
+        return scrollPosition;
+    }
+
 }
