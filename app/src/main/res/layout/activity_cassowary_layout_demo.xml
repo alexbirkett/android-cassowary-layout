@@ -47,6 +47,13 @@
             android:text="@string/dynamic_width" />
 
         <TextView
+            android:id="@+id/parallax_scrolling"
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/parallax_scrolling" />
+
+        <TextView
             android:id="@+id/cassowary_layout_in_linear_layout"
             style="@style/button_style"
             android:layout_width="wrap_content"
