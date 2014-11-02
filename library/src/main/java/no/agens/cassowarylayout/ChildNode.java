@@ -1,12 +1,11 @@
 package no.agens.cassowarylayout;
 
-import org.klomp.cassowary.CL;
-import org.klomp.cassowary.ClLinearExpression;
-import org.klomp.cassowary.ClSimplexSolver;
-import org.klomp.cassowary.ClStrength;
-import org.klomp.cassowary.ClVariable;
-import org.klomp.cassowary.clconstraint.ClLinearEquation;
-import org.klomp.cassowary.clconstraint.ClLinearInequality;
+import org.pybee.cassowary.SimplexSolver;
+
+import org.pybee.cassowary.Constraint;
+import org.pybee.cassowary.Expression;
+import org.pybee.cassowary.Strength;
+import org.pybee.cassowary.Variable;
 
 /**
  * Created by alex on 02/11/14.
@@ -14,7 +13,7 @@ import org.klomp.cassowary.clconstraint.ClLinearInequality;
 public class ChildNode extends Node {
     private Node containerNode;
 
-    public ChildNode(ClSimplexSolver solver, Node containerNode) {
+    public ChildNode(SimplexSolver solver, Node containerNode) {
         super(solver);
         this.containerNode = containerNode;
         getRight();
@@ -22,18 +21,18 @@ public class ChildNode extends Node {
     }
 
     @Override
-    protected void createImplicitConstraints(String variableName, ClVariable variable) {
+    protected void createImplicitConstraints(String variableName, Variable variable) {
 
         if (RIGHT.equals(variableName)) {
-            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getLeft()).plus(getWidth()), ClStrength.required));
-            solver.addConstraint(new ClLinearInequality(variable, CL.LEQ, containerNode.getWidth()));
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getLeft()).plus(getWidth()), Strength.REQUIRED));
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.LEQ, containerNode.getWidth()));
         } else if (BOTTOM.equals(variableName)) {
-            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getTop()).plus(getHeight()), ClStrength.required));
-            solver.addConstraint(new ClLinearInequality(variable, CL.LEQ, containerNode.getHeight()));
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getTop()).plus(getHeight()), Strength.REQUIRED));
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.LEQ, containerNode.getHeight()));
         } else if (CENTERX.equals(variableName)) {
-            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getWidth()).divide(2).plus(getLeft()), ClStrength.required));
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getWidth()).divide(2).plus(getLeft()), Strength.REQUIRED));
         } else if (CENTERY.equals(variableName)) {
-            solver.addConstraint(new ClLinearEquation(variable, new ClLinearExpression(getHeight()).divide(2).plus(getTop()), ClStrength.required));
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getHeight()).divide(2).plus(getTop()), Strength.REQUIRED));
         }
 
     }

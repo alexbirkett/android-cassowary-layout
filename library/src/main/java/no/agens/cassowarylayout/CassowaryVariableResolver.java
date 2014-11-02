@@ -16,15 +16,14 @@
 
 package no.agens.cassowarylayout;
 
-
-import org.klomp.cassowary.ClLinearExpression;
-import org.klomp.cassowary.ClVariable;
+import org.pybee.cassowary.Expression;
+import org.pybee.cassowary.Variable;
 
 /**
  * Created by alex on 26/09/2014.
  */
 public interface CassowaryVariableResolver {
 
-    ClVariable resolveVariable(String variableName);
-    ClLinearExpression resolveConstant(String name);
+    Variable resolveVariable(String variableName);
+    Expression resolveConstant(String name);
 }

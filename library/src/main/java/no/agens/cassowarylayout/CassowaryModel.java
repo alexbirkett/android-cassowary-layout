@@ -3,10 +3,11 @@ package no.agens.cassowarylayout;
 import android.content.Context;
 import android.util.Log;
 
-import org.klomp.cassowary.ClLinearExpression;
-import org.klomp.cassowary.ClSimplexSolver;
-import org.klomp.cassowary.ClVariable;
-import org.klomp.cassowary.clconstraint.ClConstraint;
+import org.pybee.cassowary.Constraint;
+import org.pybee.cassowary.ConstraintNotFound;
+import org.pybee.cassowary.Expression;
+import org.pybee.cassowary.SimplexSolver;
+import org.pybee.cassowary.Variable;
 
 import java.util.HashMap;
 
@@ -29,20 +30,20 @@ public class CassowaryModel {
 
     private HashMap<String, ChildNode> nodes = new HashMap<String, ChildNode>();
 
-    private ClSimplexSolver solver = new ClSimplexSolver();
+    private SimplexSolver solver = new SimplexSolver();
 
     private ContainerNode containerNode = new ContainerNode(solver);
 
     private CassowaryVariableResolver cassowaryVariableResolver = new CassowaryVariableResolver() {
         @Override
-        public ClVariable resolveVariable(String variableName) {
+        public Variable resolveVariable(String variableName) {
             return CassowaryModel.this.resolveVariable(variableName);
         }
 
         @Override
-        public ClLinearExpression resolveConstant(String constantName) {
+        public Expression resolveConstant(String constantName) {
 
-            ClLinearExpression expression = null;
+            Expression expression = null;
             Double value;
 
             try {
@@ -53,15 +54,15 @@ public class CassowaryModel {
             }
 
             if (value != null) {
-                expression = new ClLinearExpression(value);
+                expression = new Expression(value);
             }
             return expression;
         }
     };
 
 
-    private ClVariable resolveVariable(String variableName) {
-        ClVariable variable = null;
+    private Variable resolveVariable(String variableName) {
+        Variable variable = null;
 
         String[] stringArray = variableName.split("\\.");
 
@@ -106,19 +107,23 @@ public class CassowaryModel {
         solver.setAutosolve(false);
     }
 
-    public void addConstraint(ClConstraint constraint) {
+    public void addConstraint(Constraint constraint) {
         solver.addConstraint(constraint);
     }
 
-    public ClConstraint addConstraint(String constraintString) {
+    public Constraint addConstraint(String constraintString) {
         Log.d(LOG_TAG, "adding constraint " + constraintString);
-        ClConstraint constraint = CassowaryConstraintParser.parseConstraint(constraintString, cassowaryVariableResolver);
+        Constraint constraint = CassowaryConstraintParser.parseConstraint(constraintString, cassowaryVariableResolver);
         addConstraint(constraint);
         return constraint;
     }
 
-    public void removeConstraint(ClConstraint constraint) {
-        solver.removeConstraint(constraint);
+    public void removeConstraint(Constraint constraint) {
+        try {
+            solver.removeConstraint(constraint);
+        } catch (ConstraintNotFound constraintNotFound) {
+            constraintNotFound.printStackTrace();
+        }
     }
 
     public void addConstraints(CharSequence[] constraints) {
