@@ -8,7 +8,7 @@ repositories {
 
 android {
     compileSdkVersion 20
-    buildToolsVersion "21.1"
+    buildToolsVersion "21"
 
     defaultConfig {
         applicationId "no.agens.cassowarylayout"
