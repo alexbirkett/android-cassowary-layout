@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
-    cassowary:constraints="@array/stairs"
+    cassowary:constraints="@array/xml_demo"
     android:padding="@dimen/default_padding">
 
     <View
@@ -24,6 +24,12 @@
     <View
         android:id="@+id/blue"
         android:background="@color/blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:id="@+id/purple"
+        android:background="@color/purple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
