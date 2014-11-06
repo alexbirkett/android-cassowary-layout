@@ -44,6 +44,11 @@ public class CassowaryLayout extends ViewGroup  {
         this.cassowaryModel = new CassowaryModel(context);
     }
 
+    public CassowaryLayout(Context context, ViewIdResolver viewIdResolver, CassowaryModel cassowaryModel) {
+        this(context, viewIdResolver);
+        this.cassowaryModel = cassowaryModel;
+    }
+
     public CassowaryLayout(Context context) {
         super(context);
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
