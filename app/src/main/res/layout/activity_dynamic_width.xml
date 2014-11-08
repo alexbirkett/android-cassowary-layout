@@ -58,7 +58,8 @@
         android:textSize="22sp"
         android:singleLine="false"
         android:background="@color/dark_gray"
-        android:layout_toLeftOf="@+id/space"
+        android:padding="10dp"
+        android:gravity="center"
         />
 
 
