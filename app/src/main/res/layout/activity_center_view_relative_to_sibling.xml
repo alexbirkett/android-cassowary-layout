@@ -1,25 +1,26 @@
 <no.agens.cassowarylayout.CassowaryLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cassowary="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
     cassowary:constraints="@array/center_view_relative_to_sibling"
-    android:padding="@dimen/default_padding">
+    android:padding="@dimen/default_padding"
+    android:background="@color/black">
 
-    <View
-        android:id="@+id/red"
-        android:background="@color/red"
+    <ImageView
+        android:id="@+id/sun"
+        android:src="@drawable/sun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <View
-        android:id="@+id/green"
-        android:background="@color/green"
+    <ImageView
+        android:id="@+id/earth"
+        android:src="@drawable/earth"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"/>
 
 
 

@@ -131,14 +131,14 @@
     </string-array>
 
     <string-array name="center_view_relative_to_sibling">
-        <item>red.x == 0</item>
-        <item>red.y == 0</item>
-        <item>red.width == 200dp</item>
-        <item>red.height == 200dp</item>
-        <item>green.width == 50dp</item>
-        <item>green.height == 50dp</item>
-        <item>green.centerX == red.centerX</item>
-        <item>green.centerY == red.centerY</item>
+        <item>sun.x == 0</item>
+        <item>sun.y == 0</item>
+        <item>sun.width == container.width / 2</item>
+        <item>sun.height == container.width / 2</item>
+        <item>earth.width == 100dp</item>
+        <item>earth.height == 50dp</item>
+        <item>earth.centerX == sun.centerX</item>
+        <item>earth.centerY == sun.centerY</item>
     </string-array>
 
     <string-array name="center_in_parent">
