@@ -89,5 +89,12 @@
             android:layout_height="wrap_content"
             android:text="@string/intrinsic_height_text_in_wrap_content_container" />
 
+        <TextView
+            android:id="@+id/chess_board"
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chess_board" />
+
     </no.agens.cassowarylayout.CassowaryLayout>
 </ScrollView>
