@@ -3,9 +3,6 @@
 
     <string-array name="chess">
 
-        <item>container.tileSize LEQ container.width / 8</item>
-        <item>container.tileSize LEQ container.height / 8</item>
-
         <item>rank1.top == 0</item>
         <item>rank1.height == container.tileSize</item>
 
@@ -48,6 +45,14 @@
         <item>file7.width == container.tileSize</item>
         <item>file8.left == container.tileSize * 7</item>
         <item>file8.width == container.tileSize</item>
+
+        <item>container.tileSize == container.width / 8</item>
+
+        <item>dragger.top == 0</item>
+        <item>dragger.width == 60dp</item>
+        <item>dragger.height == dragger.width</item>
+        <item>dragger.left == dragger.draggerPosition</item>
+        <item>dragger.draggerPosition == 400px !weak</item>
 
     </string-array>
 
