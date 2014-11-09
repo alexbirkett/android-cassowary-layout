@@ -23,6 +23,7 @@ import org.pybee.cassowary.SimplexSolver;
 import org.pybee.cassowary.Variable;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import no.agens.cassowarylayout.util.CassowaryUtil;
@@ -40,6 +41,8 @@ public abstract class Node {
     protected HashMap<String, Variable> variables = new HashMap<String, Variable>();
     protected HashMap<String, Constraint> constraints = new HashMap<String, Constraint>();
 
+    private ArrayList<Node> fallbackNodes;
+
     public static final String LEFT = "left";
     public static final String RIGHT = "right";
     public static final String TOP = "top";
@@ -53,6 +56,14 @@ public abstract class Node {
 
     public Node(SimplexSolver solver) {
         this.solver = solver;
+    }
+
+    public void setFallbackNodes(ArrayList<Node> fallbackNodes) {
+        this.fallbackNodes = fallbackNodes;
+    }
+
+    public void clearFallbackNodes() {
+        this.fallbackNodes = null;
     }
 
     public Variable getLeft() {
@@ -129,6 +140,15 @@ public abstract class Node {
 
         name = getCanonicalName(name);
         Variable variable = variables.get(name);
+
+        if (variable == null && fallbackNodes != null) {
+            for (Node node : fallbackNodes) {
+                variable = node.variables.get(name);
+                if (variable != null) {
+                    break;
+                }
+            }
+        }
 
         if (variable == null) {
             variable = new Variable();

@@ -9,6 +9,7 @@ import org.pybee.cassowary.Expression;
 import org.pybee.cassowary.SimplexSolver;
 import org.pybee.cassowary.Variable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import no.agens.cassowarylayout.util.DimensionParser;
@@ -147,6 +148,16 @@ public class CassowaryModel {
         solver.solve();
 
         Log.d(LOG_TAG, "solve took " + TimerUtil.since(timeBeforeSolve));
+    }
+
+    public ArrayList<Node> getNodes(ArrayList<String> nodeNames) {
+        ArrayList<Node> nodeList = new ArrayList<Node>();
+
+        for (String nodeName : nodeNames) {
+            nodeList.add(getNodeByName(nodeName));
+        }
+
+        return nodeList;
     }
 
 }

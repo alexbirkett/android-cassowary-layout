@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="AbsoluteLayout_Layout">
-        <attr name="layout_x" format="dimension" />
-        <attr name="layout_y" format="dimension" />
+    <declare-styleable name="CassowaryLayout_Layout">
+        <attr name="fallback0" format="string" />
+        <attr name="fallback1" format="string" />
+        <attr name="fallback2" format="string" />
     </declare-styleable>
 
     <declare-styleable name="CassowaryLayout">
