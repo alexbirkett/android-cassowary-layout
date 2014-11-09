@@ -408,7 +408,9 @@ public class CassowaryLayout extends ViewGroup  {
                 throw new RuntimeException("missing cassowary:constraints attribute in XML");
             }
 
+            long timebefore = System.currentTimeMillis();
             cassowaryModel.addConstraints(constraints);
+            Log.d(LOG_TAG, "addConstraints took " + TimerUtil.since(timebefore));
         } finally {
             a.recycle();
         }
