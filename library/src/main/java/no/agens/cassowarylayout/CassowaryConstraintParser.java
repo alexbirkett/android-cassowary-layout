@@ -73,7 +73,7 @@ public class CassowaryConstraintParser {
             case REQUIRED:
                 return Strength.REQUIRED;
         }
-        return Strength.MEDIUM;
+        return null;
     }
 
     public static Expression resolveExpression(String expressionString, CassowaryVariableResolver variableResolver) {
