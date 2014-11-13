@@ -126,13 +126,13 @@ public class ConstraintParser {
     private static Constraint.Strength parseStrength(String strengthString) {
 
         Constraint.Strength strength =  Constraint.Strength.REQUIRED;
-        if ("!required".equalsIgnoreCase(strengthString)) {
+        if ("!required".equals(strengthString)) {
             strength = Constraint.Strength.REQUIRED;
-        } else if ("!strong".equalsIgnoreCase(strengthString)) {
+        } else if ("!strong".equals(strengthString)) {
             strength = Constraint.Strength.STRONG;
-        } else if ("!medium".equalsIgnoreCase(strengthString)) {
+        } else if ("!medium".equals(strengthString)) {
             strength = Constraint.Strength.MEDIUM;
-        } else if ("!weak".equalsIgnoreCase(strengthString)) {
+        } else if ("!weak".equals(strengthString)) {
             strength = Constraint.Strength.WEAK;
         }
         return strength;
