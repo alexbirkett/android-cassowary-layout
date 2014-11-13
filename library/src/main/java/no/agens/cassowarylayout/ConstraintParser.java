@@ -28,7 +28,7 @@ public class ConstraintParser {
 
     private static final String LOG_TAG = "ConstraintParser";
 
-    private static final Pattern pattern = Pattern.compile("(.*?)(<=|==|>=|[GL]?EQ)(.*?)(!(required|strong|medium|weak))?");
+    private static final Pattern pattern = Pattern.compile("\\s*(.*?)\\s*(<=|==|>=|[GL]?EQ)\\s*(.*?)\\s*(!(required|strong|medium|weak))?");
 
 
     public static class Constraint {
@@ -94,14 +94,14 @@ public class ConstraintParser {
         if (matcher.matches()) {
             String variable = matcher.group(1);
             if (variable != null) {
-                constraint.setVariable(variable.trim());
+                constraint.setVariable(variable);
             }
 
             constraint.setOperator(parseOperator(matcher.group(2)));
 
             String expression = matcher.group(3);
             if (expression != null) {
-                constraint.setExpression(expression.trim());
+                constraint.setExpression(expression);
             }
 
             constraint.setStrength(parseStrength(matcher.group(4)));
