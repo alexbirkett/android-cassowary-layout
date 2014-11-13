@@ -25,66 +25,66 @@
         <item>xml_layout_demo.x == 8dp</item>
         <item>xml_layout_demo.x2 == container.width - 8dp</item>
         <item>xml_layout_demo.y == programmatic_demo.y2 + 8dp</item>
-        <item>xml_layout_demo.height == programmatic_demo.intrinsicHeight</item>
+        <item>xml_layout_demo.height == xml_layout_demo.intrinsicHeight</item>
 
         <item>center_view_relative_to_sibling.x == 8dp</item>
         <item>center_view_relative_to_sibling.x2 == container.width - 8dp</item>
         <item>center_view_relative_to_sibling.y == xml_layout_demo.y2 + 8dp</item>
-        <item>center_view_relative_to_sibling.height == programmatic_demo.intrinsicHeight</item>
+        <item>center_view_relative_to_sibling.height == center_view_relative_to_sibling.intrinsicHeight</item>
 
         <item>center_in_parent.x == 8dp</item>
         <item>center_in_parent.x2 == container.width - 8dp</item>
         <item>center_in_parent.y == center_view_relative_to_sibling.y2 + 8dp</item>
-        <item>center_in_parent.height == programmatic_demo.intrinsicHeight</item>
+        <item>center_in_parent.height == center_in_parent.intrinsicHeight</item>
 
         <item>dynamic_width.x == 8dp</item>
         <item>dynamic_width.x2 == container.width - 8dp</item>
         <item>dynamic_width.y == center_in_parent.y2 + 8dp</item>
-        <item>dynamic_width.height == programmatic_demo.intrinsicHeight</item>
+        <item>dynamic_width.height == dynamic_width.intrinsicHeight</item>
 
         <item>parallax_scrolling.x == 8dp</item>
         <item>parallax_scrolling.x2 == container.width - 8dp</item>
         <item>parallax_scrolling.y == dynamic_width.y2 + 8dp</item>
-        <item>parallax_scrolling.height == programmatic_demo.intrinsicHeight</item>
+        <item>parallax_scrolling.height == parallax_scrolling.intrinsicHeight</item>
 
         <item>cassowary_layout_match_parent.x == 8dp</item>
         <item>cassowary_layout_match_parent.x2 == container.width - 8dp</item>
         <item>cassowary_layout_match_parent.y == parallax_scrolling.y2 + 8dp</item>
-        <item>cassowary_layout_match_parent.height == programmatic_demo.intrinsicHeight</item>
+        <item>cassowary_layout_match_parent.height == cassowary_layout_match_parent.intrinsicHeight</item>
 
         <item>cassowary_layout_wrap_content.x == 8dp</item>
         <item>cassowary_layout_wrap_content.x2 == container.width - 8dp</item>
         <item>cassowary_layout_wrap_content.y == cassowary_layout_match_parent.y2 + 8dp</item>
-        <item>cassowary_layout_wrap_content.height == programmatic_demo.intrinsicHeight</item>
+        <item>cassowary_layout_wrap_content.height == cassowary_layout_wrap_content.intrinsicHeight</item>
 
         <item>cassowary_layout_in_linear_layout.x == 8dp</item>
         <item>cassowary_layout_in_linear_layout.x2 == container.width - 8dp</item>
         <item>cassowary_layout_in_linear_layout.y == cassowary_layout_wrap_content.y2 + 8dp</item>
-        <item>cassowary_layout_in_linear_layout.height == programmatic_demo.intrinsicHeight</item>
+        <item>cassowary_layout_in_linear_layout.height == cassowary_layout_in_linear_layout.intrinsicHeight</item>
 
         <item>cassowary_layout_in_linear_layout.x == 8dp</item>
         <item>cassowary_layout_in_linear_layout.x2 == container.width - 8dp</item>
         <item>cassowary_layout_in_linear_layout.y == cassowary_layout_wrap_content.y2 + 8dp</item>
-        <item>cassowary_layout_in_linear_layout.height == programmatic_demo.intrinsicHeight</item>
+        <item>cassowary_layout_in_linear_layout.height == cassowary_layout_in_linear_layout.intrinsicHeight</item>
         <item>cassowary_layout_in_linear_layout.x == 8dp</item>
 
         <item>linear_layout_in_cassowary_layout.x == 8dp</item>
         <item>linear_layout_in_cassowary_layout.x2 == container.width - 8dp</item>
         <item>linear_layout_in_cassowary_layout.y == cassowary_layout_in_linear_layout.y2 + 8dp</item>
-        <item>linear_layout_in_cassowary_layout.height == programmatic_demo.intrinsicHeight</item>
+        <item>linear_layout_in_cassowary_layout.height == linear_layout_in_cassowary_layout.intrinsicHeight</item>
         <item>linear_layout_in_cassowary_layout.x == 8dp</item>
 
         <item>intrinsic_height_text_in_wrap_content_container.x == 8dp</item>
         <item>intrinsic_height_text_in_wrap_content_container.x2 == container.width - 8dp</item>
         <item>intrinsic_height_text_in_wrap_content_container.y == linear_layout_in_cassowary_layout.y2 + 8dp</item>
-        <item>intrinsic_height_text_in_wrap_content_container.height == programmatic_demo.intrinsicHeight</item>
+        <item>intrinsic_height_text_in_wrap_content_container.height == intrinsic_height_text_in_wrap_content_container.intrinsicHeight</item>
         <item>intrinsic_height_text_in_wrap_content_container.x == 8dp</item>
 
 
         <item>chess_board.x == 8dp</item>
         <item>chess_board.x2 == container.width - 8dp</item>
         <item>chess_board.y == intrinsic_height_text_in_wrap_content_container.y2 + 8dp</item>
-        <item>chess_board.height == programmatic_demo.intrinsicHeight</item>
+        <item>chess_board.height == chess_board.intrinsicHeight</item>
         <item>chess_board.x == 8dp</item>
 
         <item>chess_board.y2 == container.height - 8dp</item>
