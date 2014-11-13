@@ -16,8 +16,6 @@ public class ChildNode extends Node {
     public ChildNode(SimplexSolver solver, Node containerNode) {
         super(solver);
         this.containerNode = containerNode;
-        getRight();
-        getBottom();
     }
 
     @Override
