@@ -92,7 +92,7 @@ public class CassowaryModel {
     public ChildNode getNodeByName(String name) {
         ChildNode node = nodes.get(name);
         if (node == null) {
-            node = new ChildNode(solver, containerNode);
+            node = new ChildNode(solver);
             nodes.put(name, node);
         }
         return node;

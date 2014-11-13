@@ -11,11 +11,9 @@ import org.pybee.cassowary.Variable;
  * Created by alex on 02/11/14.
  */
 public class ChildNode extends Node {
-    private Node containerNode;
 
-    public ChildNode(SimplexSolver solver, Node containerNode) {
+    public ChildNode(SimplexSolver solver) {
         super(solver);
-        this.containerNode = containerNode;
     }
 
     @Override
@@ -23,10 +21,8 @@ public class ChildNode extends Node {
 
         if (RIGHT.equals(variableName)) {
             solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getLeft()).plus(getWidth()), Strength.REQUIRED));
-            solver.addConstraint(new Constraint(variable, Constraint.Operator.LEQ, containerNode.getWidth()));
         } else if (BOTTOM.equals(variableName)) {
             solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getTop()).plus(getHeight()), Strength.REQUIRED));
-            solver.addConstraint(new Constraint(variable, Constraint.Operator.LEQ, containerNode.getHeight()));
         } else if (CENTERX.equals(variableName)) {
             solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getWidth()).divide(2).plus(getLeft()), Strength.REQUIRED));
         } else if (CENTERY.equals(variableName)) {
