@@ -3,9 +3,11 @@
 
     <string-array name="inner_layout">
 
+        <item>text.top == 0</item>
         <item>text.left == 0</item>
         <item>text.right == container.width</item>
         <item>text.height == text.intrinsicHeight</item>
+        <item>container.height == text.bottom + 10dp</item>
 
     </string-array>
 
@@ -17,10 +19,13 @@
         <item>inner_layout_0.height == inner_layout_0.intrinsicHeight</item>
 
 
-        <item>inner_layout_1.top == inner_layout_0.bottom</item>
+        <item>inner_layout_1.top == inner_layout_0.bottom + 10dp</item>
         <item>inner_layout_1.left == 0</item>
         <item>inner_layout_1.right == container.width</item>
         <item>inner_layout_1.height == inner_layout_1.intrinsicHeight</item>
+
+
+        <item>container.height == inner_layout_1.bottom + 10dp</item>
 
     </string-array>
 
