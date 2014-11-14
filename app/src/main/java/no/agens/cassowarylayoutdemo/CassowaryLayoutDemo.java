@@ -104,6 +104,13 @@ public class CassowaryLayoutDemo extends Activity {
             }
         });
 
+        findViewById(R.id.cassowary_layouts_in_cassowary_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CassowaryLayoutDemo.this, CassowaryLayoutsInCassowaryLayout.class));
+            }
+        });
+
         findViewById(R.id.chess_board).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

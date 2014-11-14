@@ -66,6 +66,10 @@
             android:name="no.agens.cassowarylayoutdemo.ChessBoard"
             android:label="@string/title_activity_chess_board" >
         </activity>
+        <activity
+            android:name="no.agens.cassowarylayoutdemo.CassowaryLayoutsInCassowaryLayout"
+            android:label="@string/title_activity_cassowary_layouts_in_cassowary_layout" >
+        </activity>
     </application>
 
 </manifest>

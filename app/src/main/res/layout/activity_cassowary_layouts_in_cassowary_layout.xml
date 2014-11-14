@@ -1,0 +1,48 @@
+<no.agens.cassowarylayout.CassowaryLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cassowary="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    cassowary:constraints="@array/outer_layout"
+    tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
+    android:background="@color/red">
+
+    <no.agens.cassowarylayout.CassowaryLayout
+        android:id="@+id/inner_layout_0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cassowary:constraints="@array/inner_layout"
+        android:background="@color/blue">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_paragraph"
+            android:background="@color/green"
+            />
+
+    </no.agens.cassowarylayout.CassowaryLayout>
+
+
+    <no.agens.cassowarylayout.CassowaryLayout
+        android:id="@+id/inner_layout_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        cassowary:constraints="@array/inner_layout"
+        android:background="@color/darkorange">
+
+        <TextView
+            android:id="@id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/long_paragraph"
+            android:background="@color/purple"
+            />
+
+    </no.agens.cassowarylayout.CassowaryLayout>
+
+
+</no.agens.cassowarylayout.CassowaryLayout>
+

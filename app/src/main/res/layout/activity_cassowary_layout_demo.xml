@@ -90,6 +90,13 @@
             android:text="@string/intrinsic_height_text_in_wrap_content_container" />
 
         <TextView
+            android:id="@+id/cassowary_layouts_in_cassowary_layout"
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cassowary_layouts_in_cassowary_layout" />
+
+        <TextView
             android:id="@+id/chess_board"
             style="@style/button_style"
             android:layout_width="wrap_content"
