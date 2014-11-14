@@ -14,7 +14,7 @@ You can reach me on twitter as [@alexbirkett](https://twitter.com/alexbirkett).
 ## Dependencies
 
 ###Cassowary
-This project currenly depends on [my cassowary fork](https://github.com/alexbirkett/cassowary-java).
+This project currenly depends on [my cassowary fork](https://github.com/alexbirkett/cassowary-java-1).
 
 #Examples
 
