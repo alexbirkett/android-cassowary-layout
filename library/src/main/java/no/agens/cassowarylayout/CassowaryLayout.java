@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 
 import org.pybee.cassowary.Variable;
 
+import no.agens.cassowarylayout.util.MeasureSpecUtils;
 import no.agens.cassowarylayout.util.TimerUtil;
 
 public class CassowaryLayout extends ViewGroup  {
@@ -159,9 +160,13 @@ public class CassowaryLayout extends ViewGroup  {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        log("onMesaure");
-
         long timeBeforeSolve = System.currentTimeMillis();
+
+        log("onMeasure width " +
+           MeasureSpecUtils.getModeAsString(widthMeasureSpec) + " " +
+           MeasureSpec.getSize(widthMeasureSpec) + " height " +
+           MeasureSpecUtils.getModeAsString(heightMeasureSpec) + " " +
+           MeasureSpec.getSize(heightMeasureSpec));
 
 
         int resolvedWidth = -1;
@@ -210,6 +215,8 @@ public class CassowaryLayout extends ViewGroup  {
 
         log("onMeasure took " + TimerUtil.since(timeBeforeSolve));
     }
+
+
 
     /**
      * Returns a set of layout parameters with a width of
