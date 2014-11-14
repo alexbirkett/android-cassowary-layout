@@ -86,7 +86,7 @@ public class CassowaryLayout extends ViewGroup  {
                 Node node = getNodeById(child.getId());
                 if (node.hasIntrinsicWidth()) {
                     int childWidth = child.getMeasuredWidth();
-                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic width " + childWidth);
+                    log("child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic width " + childWidth);
                     if ((int)node.getIntrinsicWidth().value() != childWidth) {
                         node.setIntrinsicWidth(childWidth);
                     }
@@ -94,7 +94,7 @@ public class CassowaryLayout extends ViewGroup  {
                 }
             }
         }
-        Log.d(LOG_TAG, "updateIntrinsicWidthConstraints took " +  TimerUtil.since(timeBeforeSolve));
+        log("updateIntrinsicWidthConstraints took " +  TimerUtil.since(timeBeforeSolve));
     }
 
     private void updateIntrinsicHeightConstraints() {
@@ -111,19 +111,19 @@ public class CassowaryLayout extends ViewGroup  {
                 if (node.hasIntrinsicHeight()) {
                     int childHeight = child.getMeasuredHeight();
                     Variable intrinsicHeight = node.getIntrinsicHeight();
-                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic height (measured)" + childHeight);
+                    log("child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic height (measured)" + childHeight);
                     if ((int)intrinsicHeight.value() != childHeight) {
                         long timeBeforeGetMeasuredHeight = System.currentTimeMillis();
 
                         node.setIntrinsicHeight(childHeight);
-                        Log.d(LOG_TAG, "node.setIntrinsicHeight took " +  TimerUtil.since(timeBeforeGetMeasuredHeight));
+                        log("node.setIntrinsicHeight took " +  TimerUtil.since(timeBeforeGetMeasuredHeight));
                     }
                 }
 
             }
 
         }
-        Log.d(LOG_TAG, "updateIntrinsicHeightConstraints took " +  TimerUtil.since(timeBeforeSolve));
+        log("updateIntrinsicHeightConstraints took " +  TimerUtil.since(timeBeforeSolve));
     }
 
     protected void measureHeightBasedOnWidth(int widthMeasureSpec, int heightMeasureSpec) {
@@ -141,25 +141,25 @@ public class CassowaryLayout extends ViewGroup  {
                 if (node.hasIntrinsicHeight()) {
 
                     int width = (int) node.getWidth().value();
-                    Log.d(LOG_TAG, "measureHeightBasedOnWidth child " + viewIdResolver.getViewNameById(child.getId()) + " width " + width);
+                    log("measureHeightBasedOnWidth child " + viewIdResolver.getViewNameById(child.getId()) + " width " + width);
 
                     int childHeightSpec = MeasureSpec.makeMeasureSpec(heightMeasureSpec, MeasureSpec.getMode(heightMeasureSpec));
 
                     int childWidthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST);
 
-                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId()) + " parent measured width " +  MeasureSpec.getSize(childWidthSpec) + " mode " + MeasureSpec.getMode(childWidthSpec) );
+                    log("child " + viewIdResolver.getViewNameById(child.getId()) + " parent measured width " +  MeasureSpec.getSize(childWidthSpec) + " mode " + MeasureSpec.getMode(childWidthSpec) );
 
                     measureChild(child, childWidthSpec, childHeightSpec);
 
                 }
              }
         }
-        Log.d(LOG_TAG, "measureHeightBasedOnWidth took " +  TimerUtil.since(timeBeforeSolve));
+        log("measureHeightBasedOnWidth took " +  TimerUtil.since(timeBeforeSolve));
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Log.d(LOG_TAG, "onMesaure");
+        log("onMesaure");
 
         long timeBeforeSolve = System.currentTimeMillis();
 
@@ -207,7 +207,8 @@ public class CassowaryLayout extends ViewGroup  {
         }
 
         setMeasuredDimension(resolvedWidth, resolvedHeight);
-        Log.d(LOG_TAG, "onMeasure took " + TimerUtil.since(timeBeforeSolve));
+
+        log("onMeasure took " + TimerUtil.since(timeBeforeSolve));
     }
 
     /**
@@ -229,7 +230,7 @@ public class CassowaryLayout extends ViewGroup  {
 
         cassowaryModel.solve();
 
-        Log.d(LOG_TAG,
+        log(
                        " container height " + cassowaryModel.getContainerNode().getHeight().value() +
                        " container width " + cassowaryModel.getContainerNode().getWidth().value() +
                        " container center x " + cassowaryModel.getContainerNode().getCenterX().value() +
@@ -252,18 +253,18 @@ public class CassowaryLayout extends ViewGroup  {
 
                 int width = (int) node.getWidth().value();
                 int height = (int) node.getHeight().value();
-                Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " x " + x + " y " + y + " width " + width + " height " + height);
+                log("child " + viewIdResolver.getViewNameById(child.getId())  + " x " + x + " y " + y + " width " + width + " height " + height);
 
                 if (node.hasIntrinsicHeight()) {
-                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " intrinsic height " + node.getIntrinsicHeight().value());
+                    log("child " + viewIdResolver.getViewNameById(child.getId())  + " intrinsic height " + node.getIntrinsicHeight().value());
                 }
 
                 if (node.hasVariable(Node.CENTERX)) {
-                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " centerX " + node.getVariable(Node.CENTERX).value());
+                    log("child " + viewIdResolver.getViewNameById(child.getId())  + " centerX " + node.getVariable(Node.CENTERX).value());
                 }
 
                 if (node.hasVariable(Node.CENTERY)) {
-                    Log.d(LOG_TAG, "child " + viewIdResolver.getViewNameById(child.getId())  + " centerY " + node.getVariable(Node.CENTERY).value());
+                    log("child " + viewIdResolver.getViewNameById(child.getId())  + " centerY " + node.getVariable(Node.CENTERY).value());
                 }
 
                 child.layout(x, y,
@@ -272,7 +273,7 @@ public class CassowaryLayout extends ViewGroup  {
 
             }
         }
-        Log.d(LOG_TAG, "onLayout - took " + TimerUtil.since(timeBeforeSolve));
+        log("onLayout - took " + TimerUtil.since(timeBeforeSolve));
     }
 
     public void setChildPositionsFromCassowaryModel() {
@@ -294,7 +295,7 @@ public class CassowaryLayout extends ViewGroup  {
 
             }
         }
-        Log.d(LOG_TAG, "setChildPositionsFromCassowaryModel - took " + TimerUtil.since(timeBeforeSolve));
+        log("setChildPositionsFromCassowaryModel - took " + TimerUtil.since(timeBeforeSolve));
     }
 
     @Override
@@ -410,7 +411,7 @@ public class CassowaryLayout extends ViewGroup  {
 
             long timebefore = System.currentTimeMillis();
             cassowaryModel.addConstraints(constraints);
-            Log.d(LOG_TAG, "addConstraints took " + TimerUtil.since(timebefore));
+            log("addConstraints took " + TimerUtil.since(timebefore));
         } finally {
             a.recycle();
         }
@@ -422,5 +423,9 @@ public class CassowaryLayout extends ViewGroup  {
         return node;
     }
 
+
+    private void log(String message) {
+        Log.d(LOG_TAG + " " + viewIdResolver.getViewNameById(getId()), message);
+    }
 }
 
