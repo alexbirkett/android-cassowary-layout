@@ -31,7 +31,7 @@ import no.agens.cassowarylayout.util.TimerUtil;
 
 public class CassowaryLayout extends ViewGroup  {
 
-    private static final String LOG_TAG = "CassowaryLayout";
+    private String logTag;
 
     private CassowaryModel cassowaryModel;
 
@@ -425,7 +425,14 @@ public class CassowaryLayout extends ViewGroup  {
 
 
     private void log(String message) {
-        Log.d(LOG_TAG + " " + viewIdResolver.getViewNameById(getId()), message);
+        if (logTag == null) {
+            try {
+                logTag = "CassowaryLayout " + viewIdResolver.getViewNameById(getId());
+            } catch (RuntimeException e) {
+                logTag = "CassowaryLayout noid";
+            }
+        }
+        Log.d(logTag, message);
     }
 }
 
