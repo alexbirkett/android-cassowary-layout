@@ -13,384 +13,515 @@
         android:id="@+id/a1"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank1"
+        cassowary:horizontalNode="file1"
+       />
 
     <View
         android:id="@+id/a2"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank2"
+        cassowary:horizontalNode="file1"
+       />
 
     <View
         android:id="@+id/a3"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank3"
+        cassowary:horizontalNode="file1"/>
 
     <View
         android:id="@+id/a4"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank4"
+        cassowary:horizontalNode="file1"/>
 
     <View
         android:id="@+id/a5"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank5"
+        cassowary:horizontalNode="file1"/>
 
     <View
         android:id="@+id/a6"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank6"
+        cassowary:horizontalNode="file1"/>
 
     <View
         android:id="@+id/a7"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank7"
+        cassowary:horizontalNode="file1"/>
 
     <View
         android:id="@+id/a8"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank8"
+        cassowary:horizontalNode="file1"/>
 
     <View
         android:id="@+id/b1"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank1"
+        cassowary:horizontalNode="file2"
+        />
 
     <View
         android:id="@+id/b2"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank2"
+        cassowary:horizontalNode="file2"/>
 
     <View
         android:id="@+id/b3"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank3"
+        cassowary:horizontalNode="file2"/>
 
     <View
         android:id="@+id/b4"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank4"
+        cassowary:horizontalNode="file2"/>
 
     <View
         android:id="@+id/b5"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank5"
+        cassowary:horizontalNode="file2"/>
 
     <View
         android:id="@+id/b6"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank6"
+        cassowary:horizontalNode="file2"/>
 
     <View
         android:id="@+id/b7"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank7"
+        cassowary:horizontalNode="file2"/>
 
     <View
         android:id="@+id/b8"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank8"
+        cassowary:horizontalNode="file2"/>
 
     <View
         android:id="@+id/c1"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank1"
+        cassowary:horizontalNode="file3"/>
 
     <View
         android:id="@+id/c2"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank2"
+        cassowary:horizontalNode="file3"/>
 
     <View
         android:id="@+id/c3"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank3"
+        cassowary:horizontalNode="file3"/>
 
     <View
         android:id="@+id/c4"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank4"
+        cassowary:horizontalNode="file3"/>
 
     <View
         android:id="@+id/c5"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank5"
+        cassowary:horizontalNode="file3"/>
 
     <View
         android:id="@+id/c6"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank6"
+        cassowary:horizontalNode="file3"/>
 
     <View
         android:id="@+id/c7"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank7"
+        cassowary:horizontalNode="file3"/>
 
     <View
         android:id="@+id/c8"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank8"
+        cassowary:horizontalNode="file3"/>
 
     <View
         android:id="@+id/d1"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank1"
+        cassowary:horizontalNode="file4"/>
 
     <View
         android:id="@+id/d2"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank2"
+        cassowary:horizontalNode="file4"/>
 
     <View
         android:id="@+id/d3"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank3"
+        cassowary:horizontalNode="file4"/>
 
     <View
         android:id="@+id/d4"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank4"
+        cassowary:horizontalNode="file4"/>
 
     <View
         android:id="@+id/d5"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank5"
+        cassowary:horizontalNode="file4"/>
 
     <View
         android:id="@+id/d6"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank6"
+        cassowary:horizontalNode="file4"/>
 
     <View
         android:id="@+id/d7"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank7"
+        cassowary:horizontalNode="file4"/>
 
     <View
         android:id="@+id/d8"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank8"
+        cassowary:horizontalNode="file4"/>
 
     <View
         android:id="@+id/e1"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank1"
+        cassowary:horizontalNode="file5"/>
 
     <View
         android:id="@+id/e2"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank2"
+        cassowary:horizontalNode="file5"/>
 
     <View
         android:id="@+id/e3"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank3"
+        cassowary:horizontalNode="file5"/>
 
     <View
         android:id="@+id/e4"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank4"
+        cassowary:horizontalNode="file5"/>
 
     <View
         android:id="@+id/e5"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank5"
+        cassowary:horizontalNode="file5"/>
 
     <View
         android:id="@+id/e6"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank6"
+        cassowary:horizontalNode="file5"/>
 
     <View
         android:id="@+id/e7"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank7"
+        cassowary:horizontalNode="file5"/>
 
     <View
         android:id="@+id/e8"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank8"
+        cassowary:horizontalNode="file5"/>
 
     <View
         android:id="@+id/f1"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank1"
+        cassowary:horizontalNode="file6"/>
 
     <View
         android:id="@+id/f2"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank2"
+        cassowary:horizontalNode="file6"/>
 
     <View
         android:id="@+id/f3"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank3"
+        cassowary:horizontalNode="file6"/>
 
     <View
         android:id="@+id/f4"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank4"
+        cassowary:horizontalNode="file6"/>
 
     <View
         android:id="@+id/f5"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank5"
+        cassowary:horizontalNode="file6"/>
 
     <View
         android:id="@+id/f6"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank6"
+        cassowary:horizontalNode="file6"/>
 
     <View
         android:id="@+id/f7"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank7"
+        cassowary:horizontalNode="file6"/>
 
     <View
         android:id="@+id/f8"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank8"
+        cassowary:horizontalNode="file6"/>
 
     <View
         android:id="@+id/g1"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank1"
+        cassowary:horizontalNode="file7"/>
 
     <View
         android:id="@+id/g2"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank2"
+        cassowary:horizontalNode="file7"/>
 
     <View
         android:id="@+id/g3"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank3"
+        cassowary:horizontalNode="file7"/>
 
     <View
         android:id="@+id/g4"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank4"
+        cassowary:horizontalNode="file7"/>
 
     <View
         android:id="@+id/g5"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank5"
+        cassowary:horizontalNode="file7"/>
 
     <View
         android:id="@+id/g6"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank6"
+        cassowary:horizontalNode="file7"/>
 
     <View
         android:id="@+id/g7"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank7"
+        cassowary:horizontalNode="file7"/>
 
     <View
         android:id="@+id/g8"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank8"
+        cassowary:horizontalNode="file7"/>
 
     <View
         android:id="@+id/h1"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank1"
+        cassowary:horizontalNode="file8"/>
 
     <View
         android:id="@+id/h2"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank2"
+        cassowary:horizontalNode="file8"/>
 
     <View
         android:id="@+id/h3"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank3"
+        cassowary:horizontalNode="file8"/>
 
     <View
         android:id="@+id/h4"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank4"
+        cassowary:horizontalNode="file8"/>
 
     <View
         android:id="@+id/h5"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank5"
+        cassowary:horizontalNode="file8"/>
 
     <View
         android:id="@+id/h6"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank6"
+        cassowary:horizontalNode="file8"/>
 
     <View
         android:id="@+id/h7"
         android:background="@color/chess_light"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank7"
+        cassowary:horizontalNode="file8"/>
 
     <View
         android:id="@+id/h8"
         android:background="@color/chess_dark"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cassowary:verticalNode="rank8"
+        cassowary:horizontalNode="file8"/>
 
 </no.agens.cassowarylayout.CassowaryLayout>

@@ -12,6 +12,12 @@ import org.pybee.cassowary.Variable;
  */
 public class ChildNode extends Node {
 
+    public static final String LOW = "low";
+    public static final String HIGH = "high";
+    public static final String DISTANCE = "distance";
+    public static final String CENTER = "center";
+    public static final String INTRINSIC_DISTANCE = "intrinsic_distance";
+
     public ChildNode(SimplexSolver solver) {
         super(solver);
     }
@@ -19,14 +25,10 @@ public class ChildNode extends Node {
     @Override
     protected void createImplicitConstraints(String variableName, Variable variable) {
 
-        if (RIGHT.equals(variableName)) {
-            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getLeft()).plus(getWidth()), Strength.REQUIRED));
-        } else if (BOTTOM.equals(variableName)) {
-            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getTop()).plus(getHeight()), Strength.REQUIRED));
-        } else if (CENTERX.equals(variableName)) {
-            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getWidth()).divide(2).plus(getLeft()), Strength.REQUIRED));
-        } else if (CENTERY.equals(variableName)) {
-            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getHeight()).divide(2).plus(getTop()), Strength.REQUIRED));
+        if (HIGH.equals(variableName)) {
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getVariable(LOW)).plus(getVariable(DISTANCE)), Strength.REQUIRED));
+        } else if (CENTER.equals(variableName)) {
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getVariable(DISTANCE)).divide(2).plus(getVariable(LOW)), Strength.REQUIRED));
         }
 
     }

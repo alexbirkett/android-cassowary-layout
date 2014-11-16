@@ -29,6 +29,11 @@ import org.pybee.cassowary.Variable;
  */
 public class ContainerNode extends Node {
 
+    public static final String HEIGHT = "height";
+    public static final String WIDTH = "width";
+    public static final String CENTERX = "centerX";
+    public static final String CENTERY = "centerY";
+
     public ContainerNode(SimplexSolver solver) {
         super(solver);
     }
@@ -37,9 +42,9 @@ public class ContainerNode extends Node {
     protected void createImplicitConstraints(String variableName, Variable variable) {
 
         if (CENTERX.equals(variableName)) {
-            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getWidth()).divide(2), Strength.REQUIRED));
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getVariable(WIDTH)).divide(2), Strength.REQUIRED));
         } else if (CENTERY.equals(variableName)) {
-            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getHeight()).divide(2), Strength.REQUIRED));
+            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getVariable(HEIGHT)).divide(2), Strength.REQUIRED));
         }
     }
 

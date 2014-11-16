@@ -23,12 +23,24 @@ public class CassowaryModel {
 
     private static final String LOG_TAG = "CassowaryModel";
 
+    public static final String LEFT = "left";
+    public static final String RIGHT = "right";
+    public static final String TOP = "top";
+    public static final String BOTTOM = "bottom";
+    public static final String HEIGHT = "height";
+    public static final String WIDTH = "width";
+    public static final String CENTERX = "centerX";
+    public static final String CENTERY = "centerY";
+    public static final String INTRINSIC_WIDTH = "intrinsicWidth";
+    public static final String INTRINSIC_HEIGHT = "intrinsicHeight";
+
     public CassowaryModel(Context context) {
         this.context = context;
         setupCassowary();
     }
 
-    private HashMap<String, ChildNode> nodes = new HashMap<String, ChildNode>();
+    private HashMap<String, ChildNode> horizontalNodes = new HashMap<String, ChildNode>();
+    private HashMap<String, ChildNode> verticalNodes = new HashMap<String, ChildNode>();
 
     private SimplexSolver solver = new SimplexSolver();
 
@@ -74,14 +86,9 @@ public class CassowaryModel {
                 if ("container".equals(nodeName) || "parent".equals(nodeName)) {
                     variable = containerNode.getVariable(propertyName);
                 } else {
-                    Node node = getNodeByName(nodeName);
-                    if (node != null) {
-                        variable = node.getVariable(propertyName);
-                    }
-
+                    variable = resolveProperty(nodeName, getCanonicalName(propertyName));
                 }
             }
-
         }
         if (variable == null) {
             throw new RuntimeException("unknown variable " + variableName);
@@ -89,11 +96,64 @@ public class CassowaryModel {
         return variable;
     }
 
-    public ChildNode getNodeByName(String name) {
-        ChildNode node = nodes.get(name);
+
+    private Variable resolveProperty(String nodeName, String propertyName) {
+        Variable variable = null;
+
+        if (LEFT.equals(propertyName)) {
+            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.LOW);
+        } else if (RIGHT.equals(propertyName)) {
+            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.HIGH);
+        } else if (TOP.equals(propertyName)) {
+            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.LOW);
+        } else if (BOTTOM.equals(propertyName)) {
+            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.HIGH);
+        } else if (CENTERX.equals(propertyName)) {
+            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.CENTER);
+        } else if (CENTERY.equals(propertyName)) {
+            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.CENTER);
+        } else if (INTRINSIC_HEIGHT.equals(propertyName)) {
+            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.INTRINSIC_DISTANCE);
+        } else if (INTRINSIC_WIDTH.equals(propertyName)) {
+            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.INTRINSIC_DISTANCE);
+        } else if (HEIGHT.equals(propertyName)) {
+            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.DISTANCE);
+        } else if (WIDTH.equals(propertyName)) {
+            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.DISTANCE);
+        } else  {
+            variable = getHorizontalNodeByName(nodeName).getVariable(propertyName);
+        }
+        return  variable;
+
+    }
+    private String getCanonicalName(String name) {
+        String canonicalName = name;
+        if ("x".equals(name)) {
+            canonicalName = LEFT;
+        } else if ("y".equals(name)) {
+            canonicalName = TOP;
+        } else if ("x2".equals(name)) {
+            canonicalName = RIGHT;
+        } else if ("y2".equals(name)) {
+            canonicalName = BOTTOM;
+        }
+        return canonicalName;
+    }
+
+    public ChildNode getHorizontalNodeByName(String name) {
+        ChildNode node = horizontalNodes.get(name);
         if (node == null) {
             node = new ChildNode(solver);
-            nodes.put(name, node);
+            horizontalNodes.put(name, node);
+        }
+        return node;
+    }
+
+    public ChildNode getVerticalNodeByName(String name) {
+        ChildNode node = verticalNodes.get(name);
+        if (node == null) {
+            node = new ChildNode(solver);
+            verticalNodes.put(name, node);
         }
         return node;
     }
@@ -137,7 +197,7 @@ public class CassowaryModel {
         addConstraints(constraints);
     }
 
-    public Node getContainerNode() {
+    public ContainerNode getContainerNode() {
         return containerNode;
     }
 

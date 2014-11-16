@@ -6,332 +6,49 @@
         <item>container.tileSize LEQ container.width / 8</item>
         <item>container.tileSize LEQ container.height / 8</item>
 
-        <item>a8.left == 0</item>
-        <item>a8.top == 0</item>
-        <item>a8.height == container.tileSize</item>
-        <item>a8.width == container.tileSize</item>
+        <item>rank1.top == 0</item>
+        <item>rank1.height == container.tileSize</item>
 
-        <item>a7.left == 0</item>
-        <item>a7.top == container.tileSize</item>
-        <item>a7.height == container.tileSize</item>
-        <item>a7.width == container.tileSize</item>
+        <item>rank2.top == container.tileSize</item>
+        <item>rank2.height == container.tileSize</item>
 
-        <item>a6.left == 0</item>
-        <item>a6.top == container.tileSize * 2</item>
-        <item>a6.height == container.tileSize</item>
-        <item>a6.width == container.tileSize</item>
+        <item>rank3.top == container.tileSize * 2</item>
+        <item>rank3.height == container.tileSize</item>
 
-        <item>a5.left == 0</item>
-        <item>a5.top == container.tileSize * 3</item>
-        <item>a5.height == container.tileSize</item>
-        <item>a5.width == container.tileSize</item>
+        <item>rank4.top == container.tileSize * 3</item>
+        <item>rank4.height == container.tileSize</item>
 
-        <item>a4.left == 0</item>
-        <item>a4.top == container.tileSize * 4</item>
-        <item>a4.height == container.tileSize</item>
-        <item>a4.width == container.tileSize</item>
+        <item>rank5.top == container.tileSize * 4</item>
+        <item>rank5.height == container.tileSize</item>
 
-        <item>a3.left == 0</item>
-        <item>a3.top == container.tileSize * 5</item>
-        <item>a3.height == container.tileSize</item>
-        <item>a3.width == container.tileSize</item>
+        <item>rank6.top == container.tileSize * 5</item>
+        <item>rank6.height == container.tileSize</item>
 
-        <item>a2.left == 0</item>
-        <item>a2.top == container.tileSize * 6</item>
-        <item>a2.height == container.tileSize</item>
-        <item>a2.width == container.tileSize</item>
+        <item>rank7.top == container.tileSize * 6</item>
+        <item>rank7.height == container.tileSize</item>
 
-        <item>a1.left == 0</item>
-        <item>a1.top == container.tileSize * 7</item>
-        <item>a1.height == container.tileSize</item>
-        <item>a1.width == container.tileSize</item>
+        <item>rank8.top == container.tileSize * 7</item>
+        <item>rank8.height == container.tileSize</item>
 
+        <item>file1.left == 0</item>
+        <item>file1.width == container.tileSize</item>
 
+        <item>file2.left == container.tileSize</item>
+        <item>file2.width == container.tileSize</item>
 
-        <item>b8.left == container.tileSize</item>
-        <item>b8.top == 0</item>
-        <item>b8.height == container.tileSize</item>
-        <item>b8.width == container.tileSize</item>
+        <item>file3.left == container.tileSize * 2</item>
+        <item>file3.width == container.tileSize</item>
+        <item>file4.left == container.tileSize * 3</item>
+        <item>file4.width == container.tileSize</item>
+        <item>file5.left == container.tileSize * 4</item>
+        <item>file5.width == container.tileSize</item>
+        <item>file6.left == container.tileSize * 5</item>
+        <item>file6.width == container.tileSize</item>
+        <item>file7.left == container.tileSize * 6</item>
+        <item>file7.width == container.tileSize</item>
+        <item>file8.left == container.tileSize * 7</item>
+        <item>file8.width == container.tileSize</item>
 
-        <item>b7.left == container.tileSize</item>
-        <item>b7.top == container.tileSize</item>
-        <item>b7.height == container.tileSize</item>
-        <item>b7.width == container.tileSize</item>
-
-        <item>b6.left == container.tileSize</item>
-        <item>b6.top == container.tileSize * 2</item>
-        <item>b6.height == container.tileSize</item>
-        <item>b6.width == container.tileSize</item>
-
-        <item>b5.left == container.tileSize</item>
-        <item>b5.top == container.tileSize * 3</item>
-        <item>b5.height == container.tileSize</item>
-        <item>b5.width == container.tileSize</item>
-
-        <item>b4.left == container.tileSize</item>
-        <item>b4.top == container.tileSize * 4</item>
-        <item>b4.height == container.tileSize</item>
-        <item>b4.width == container.tileSize</item>
-
-        <item>b3.left == container.tileSize</item>
-        <item>b3.top == container.tileSize * 5</item>
-        <item>b3.height == container.tileSize</item>
-        <item>b3.width == container.tileSize</item>
-
-        <item>b2.left == container.tileSize</item>
-        <item>b2.top == container.tileSize * 6</item>
-        <item>b2.height == container.tileSize</item>
-        <item>b2.width == container.tileSize</item>
-
-        <item>b1.left == container.tileSize</item>
-        <item>b1.top == container.tileSize * 7</item>
-        <item>b1.height == container.tileSize</item>
-        <item>b1.width == container.tileSize</item>
-
-
-        <item>c8.left == container.tileSize * 2</item>
-        <item>c8.top == 0</item>
-        <item>c8.height == container.tileSize</item>
-        <item>c8.width == container.tileSize</item>
-
-        <item>c7.left == container.tileSize * 2</item>
-        <item>c7.top == container.tileSize</item>
-        <item>c7.height == container.tileSize</item>
-        <item>c7.width == container.tileSize</item>
-
-        <item>c6.left == container.tileSize * 2</item>
-        <item>c6.top == container.tileSize * 2</item>
-        <item>c6.height == container.tileSize</item>
-        <item>c6.width == container.tileSize</item>
-
-        <item>c5.left == container.tileSize * 2</item>
-        <item>c5.top == container.tileSize * 3</item>
-        <item>c5.height == container.tileSize</item>
-        <item>c5.width == container.tileSize</item>
-
-        <item>c4.left == container.tileSize * 2</item>
-        <item>c4.top == container.tileSize * 4</item>
-        <item>c4.height == container.tileSize</item>
-        <item>c4.width == container.tileSize</item>
-
-        <item>c3.left == container.tileSize * 2</item>
-        <item>c3.top == container.tileSize * 5</item>
-        <item>c3.height == container.tileSize</item>
-        <item>c3.width == container.tileSize</item>
-
-        <item>c2.left == container.tileSize * 2</item>
-        <item>c2.top == container.tileSize * 6</item>
-        <item>c2.height == container.tileSize</item>
-        <item>c2.width == container.tileSize</item>
-
-        <item>c1.left == container.tileSize * 2</item>
-        <item>c1.top == container.tileSize * 7</item>
-        <item>c1.height == container.tileSize</item>
-        <item>c1.width == container.tileSize</item>
-
-        <item>d8.left == container.tileSize * 3</item>
-        <item>d8.top == 0</item>
-        <item>d8.height == container.tileSize</item>
-        <item>d8.width == container.tileSize</item>
-
-        <item>d7.left == container.tileSize * 3</item>
-        <item>d7.top == container.tileSize</item>
-        <item>d7.height == container.tileSize</item>
-        <item>d7.width == container.tileSize</item>
-
-        <item>d6.left == container.tileSize * 3</item>
-        <item>d6.top == container.tileSize * 2</item>
-        <item>d6.height == container.tileSize</item>
-        <item>d6.width == container.tileSize</item>
-
-        <item>d5.left == container.tileSize * 3</item>
-        <item>d5.top == container.tileSize * 3</item>
-        <item>d5.height == container.tileSize</item>
-        <item>d5.width == container.tileSize</item>
-
-        <item>d4.left == container.tileSize * 3</item>
-        <item>d4.top == container.tileSize * 4</item>
-        <item>d4.height == container.tileSize</item>
-        <item>d4.width == container.tileSize</item>
-
-        <item>d3.left == container.tileSize * 3</item>
-        <item>d3.top == container.tileSize * 5</item>
-        <item>d3.height == container.tileSize</item>
-        <item>d3.width == container.tileSize</item>
-
-        <item>d2.left == container.tileSize * 3</item>
-        <item>d2.top == container.tileSize * 6</item>
-        <item>d2.height == container.tileSize</item>
-        <item>d2.width == container.tileSize</item>
-
-        <item>d1.left == container.tileSize * 3</item>
-        <item>d1.top == container.tileSize * 7</item>
-        <item>d1.height == container.tileSize</item>
-        <item>d1.width == container.tileSize</item>
-
-
-        <item>e8.left == container.tileSize * 4</item>
-        <item>e8.top == 0</item>
-        <item>e8.height == container.tileSize</item>
-        <item>e8.width == container.tileSize</item>
-
-        <item>e7.left == container.tileSize * 4</item>
-        <item>e7.top == container.tileSize</item>
-        <item>e7.height == container.tileSize</item>
-        <item>e7.width == container.tileSize</item>
-
-        <item>e6.left == container.tileSize * 4</item>
-        <item>e6.top == container.tileSize * 2</item>
-        <item>e6.height == container.tileSize</item>
-        <item>e6.width == container.tileSize</item>
-
-        <item>e5.left == container.tileSize * 4</item>
-        <item>e5.top == container.tileSize * 3</item>
-        <item>e5.height == container.tileSize</item>
-        <item>e5.width == container.tileSize</item>
-
-        <item>e4.left == container.tileSize * 4</item>
-        <item>e4.top == container.tileSize * 4</item>
-        <item>e4.height == container.tileSize</item>
-        <item>e4.width == container.tileSize</item>
-
-        <item>e3.left == container.tileSize * 4</item>
-        <item>e3.top == container.tileSize * 5</item>
-        <item>e3.height == container.tileSize</item>
-        <item>e3.width == container.tileSize</item>
-
-        <item>e2.left == container.tileSize * 4</item>
-        <item>e2.top == container.tileSize * 6</item>
-        <item>e2.height == container.tileSize</item>
-        <item>e2.width == container.tileSize</item>
-
-        <item>e1.left == container.tileSize * 4</item>
-        <item>e1.top == container.tileSize * 7</item>
-        <item>e1.height == container.tileSize</item>
-        <item>e1.width == container.tileSize</item>
-
-
-        <item>f8.left == container.tileSize * 5</item>
-        <item>f8.top == 0</item>
-        <item>f8.height == container.tileSize</item>
-        <item>f8.width == container.tileSize</item>
-
-        <item>f7.left == container.tileSize * 5</item>
-        <item>f7.top == container.tileSize</item>
-        <item>f7.height == container.tileSize</item>
-        <item>f7.width == container.tileSize</item>
-
-        <item>f6.left == container.tileSize * 5</item>
-        <item>f6.top == container.tileSize * 2</item>
-        <item>f6.height == container.tileSize</item>
-        <item>f6.width == container.tileSize</item>
-
-        <item>f5.left == container.tileSize * 5</item>
-        <item>f5.top == container.tileSize * 3</item>
-        <item>f5.height == container.tileSize</item>
-        <item>f5.width == container.tileSize</item>
-
-        <item>f4.left == container.tileSize * 5</item>
-        <item>f4.top == container.tileSize * 4</item>
-        <item>f4.height == container.tileSize</item>
-        <item>f4.width == container.tileSize</item>
-
-        <item>f3.left == container.tileSize * 5</item>
-        <item>f3.top == container.tileSize * 5</item>
-        <item>f3.height == container.tileSize</item>
-        <item>f3.width == container.tileSize</item>
-
-        <item>f2.left == container.tileSize * 5</item>
-        <item>f2.top == container.tileSize * 6</item>
-        <item>f2.height == container.tileSize</item>
-        <item>f2.width == container.tileSize</item>
-
-        <item>f1.left == container.tileSize * 5</item>
-        <item>f1.top == container.tileSize * 7</item>
-        <item>f1.height == container.tileSize</item>
-        <item>f1.width == container.tileSize</item>
-
-
-        <item>g8.left == container.tileSize * 6</item>
-        <item>g8.top == 0</item>
-        <item>g8.height == container.tileSize</item>
-        <item>g8.width == container.tileSize</item>
-
-        <item>g7.left == container.tileSize * 6</item>
-        <item>g7.top == container.tileSize</item>
-        <item>g7.height == container.tileSize</item>
-        <item>g7.width == container.tileSize</item>
-
-        <item>g6.left == container.tileSize * 6</item>
-        <item>g6.top == container.tileSize * 2</item>
-        <item>g6.height == container.tileSize</item>
-        <item>g6.width == container.tileSize</item>
-
-        <item>g5.left == container.tileSize * 6</item>
-        <item>g5.top == container.tileSize * 3</item>
-        <item>g5.height == container.tileSize</item>
-        <item>g5.width == container.tileSize</item>
-
-        <item>g4.left == container.tileSize * 6</item>
-        <item>g4.top == container.tileSize * 4</item>
-        <item>g4.height == container.tileSize</item>
-        <item>g4.width == container.tileSize</item>
-
-        <item>g3.left == container.tileSize * 6</item>
-        <item>g3.top == container.tileSize * 5</item>
-        <item>g3.height == container.tileSize</item>
-        <item>g3.width == container.tileSize</item>
-
-        <item>g2.left == container.tileSize * 6</item>
-        <item>g2.top == container.tileSize * 6</item>
-        <item>g2.height == container.tileSize</item>
-        <item>g2.width == container.tileSize</item>
-
-        <item>g1.left == container.tileSize * 6</item>
-        <item>g1.top == container.tileSize * 7</item>
-        <item>g1.height == container.tileSize</item>
-        <item>g1.width == container.tileSize</item>
-
-
-        <item>h8.left == container.tileSize * 7</item>
-        <item>h8.top == 0</item>
-        <item>h8.height == container.tileSize</item>
-        <item>h8.width == container.tileSize</item>
-
-        <item>h7.left == container.tileSize * 7</item>
-        <item>h7.top == container.tileSize</item>
-        <item>h7.height == container.tileSize</item>
-        <item>h7.width == container.tileSize</item>
-
-        <item>h6.left == container.tileSize * 7</item>
-        <item>h6.top == container.tileSize * 2</item>
-        <item>h6.height == container.tileSize</item>
-        <item>h6.width == container.tileSize</item>
-
-        <item>h5.left == container.tileSize * 7</item>
-        <item>h5.top == container.tileSize * 3</item>
-        <item>h5.height == container.tileSize</item>
-        <item>h5.width == container.tileSize</item>
-
-        <item>h4.left == container.tileSize * 7</item>
-        <item>h4.top == container.tileSize * 4</item>
-        <item>h4.height == container.tileSize</item>
-        <item>h4.width == container.tileSize</item>
-
-        <item>h3.left == container.tileSize * 7</item>
-        <item>h3.top == container.tileSize * 5</item>
-        <item>h3.height == container.tileSize</item>
-        <item>h3.width == container.tileSize</item>
-
-        <item>h2.left == container.tileSize * 7</item>
-        <item>h2.top == container.tileSize * 6</item>
-        <item>h2.height == container.tileSize</item>
-        <item>h2.width == container.tileSize</item>
-
-        <item>h1.left == container.tileSize * 7</item>
-        <item>h1.top == container.tileSize * 7</item>
-        <item>h1.height == container.tileSize</item>
-        <item>h1.width == container.tileSize</item>
     </string-array>
 
 </resources>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="AbsoluteLayout_Layout">
-        <attr name="layout_x" format="dimension" />
-        <attr name="layout_y" format="dimension" />
+    <declare-styleable name="CassowaryLayout_Layout">
+        <attr name="horizontalNode" format="string" />
+        <attr name="verticalNode" format="string" />
     </declare-styleable>
 
     <declare-styleable name="CassowaryLayout">
