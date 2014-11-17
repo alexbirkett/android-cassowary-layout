@@ -75,8 +75,18 @@
         <item>chess_board.y == cassowary_layouts_in_cassowary_layout.y2 + 8dp</item>
         <item>chess_board.height == chess_board.intrinsicHeight</item>
 
+        <item>chess_board.x == 8dp</item>
+        <item>chess_board.x2 == container.width - 8dp</item>
+        <item>chess_board.y == cassowary_layouts_in_cassowary_layout.y2 + 8dp</item>
+        <item>chess_board.height == chess_board.intrinsicHeight</item>
 
-        <item>chess_board.y2 == container.height - 8dp</item>
+        <item>cassowary_layouts_in_list_view.x == 8dp</item>
+        <item>cassowary_layouts_in_list_view.x2 == container.width - 8dp</item>
+        <item>cassowary_layouts_in_list_view.y == chess_board.y2 + 8dp</item>
+        <item>cassowary_layouts_in_list_view.height == cassowary_layouts_in_list_view.intrinsicHeight</item>
+
+
+        <item>cassowary_layouts_in_list_view.y2 == container.height - 8dp</item>
     </string-array>
 
 </resources>

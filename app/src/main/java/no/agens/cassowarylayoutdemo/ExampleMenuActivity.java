@@ -118,6 +118,13 @@ public class ExampleMenuActivity extends Activity {
             }
         });
 
+        findViewById(R.id.cassowary_layouts_in_list_view).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ExampleMenuActivity.this, CassowaryLayoutsInListViewActivity.class));
+            }
+        });
+
     }
 
 }

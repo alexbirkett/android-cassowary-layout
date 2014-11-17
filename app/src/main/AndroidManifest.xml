@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ExampleMenuActivity"
+            android:name="no.agens.cassowarylayoutdemo.ExampleMenuActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,58 +17,62 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProgrammaticDemoActivity"
+            android:name="no.agens.cassowarylayoutdemo.ProgrammaticDemoActivity"
             android:label="@string/title_activity_programmatic_demo" >
         </activity>
         <activity
-            android:name=".XmlLayoutDemoActivity"
+            android:name="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
             android:label="@string/title_activity_xml_layout_demo" >
         </activity>
         <activity
-            android:name=".CenterViewRelativeToSiblingActivity"
+            android:name="no.agens.cassowarylayoutdemo.CenterViewRelativeToSiblingActivity"
             android:label="@string/title_activity_center_view_relative_to_sibling" >
         </activity>
         <activity
-            android:name=".CenterInParentActivity"
+            android:name="no.agens.cassowarylayoutdemo.CenterInParentActivity"
             android:label="@string/title_activity_center_in_parent" >
             android:name=".CassowaryLayoutInLinearLayout"
             android:label="@string/title_activity_cassowary_layout_in_linear_layout" >
         </activity>
         <activity
-            android:name=".CassowaryLayoutMatchParentActivity"
+            android:name="no.agens.cassowarylayoutdemo.CassowaryLayoutMatchParentActivity"
             android:label="@string/title_activity_cassowary_layout_match_parent" >
         </activity>
         <activity
-            android:name=".CassowaryLayoutWrapContentActivity"
+            android:name="no.agens.cassowarylayoutdemo.CassowaryLayoutWrapContentActivity"
             android:label="@string/title_activity_cassowary_layout_wrap_content" >
         </activity>
         <activity
-            android:name=".CassowaryLayoutInLinearLayoutActivity"
+            android:name="no.agens.cassowarylayoutdemo.CassowaryLayoutInLinearLayoutActivity"
             android:label="@string/title_activity_cassowary_layout_in_linear_layout" >
         </activity>
         <activity
-            android:name=".DynamicWidthActivity"
+            android:name="no.agens.cassowarylayoutdemo.DynamicWidthActivity"
             android:label="@string/title_activity_dynamic_width" >
         </activity>
         <activity
-            android:name=".ParallaxScrollingActivity"
+            android:name="no.agens.cassowarylayoutdemo.ParallaxScrollingActivity"
             android:label="@string/title_activity_parallax_scrolling" >
         </activity>
         <activity
-            android:name=".LinearLayoutInCassowaryLayoutActivity"
+            android:name="no.agens.cassowarylayoutdemo.LinearLayoutInCassowaryLayoutActivity"
             android:label="@string/title_activity_linear_layout_in_cassowary_layout" >
         </activity>
         <activity
-            android:name=".IntrinsicHeightTextInWrapContentContainerActivity"
+            android:name="no.agens.cassowarylayoutdemo.IntrinsicHeightTextInWrapContentContainerActivity"
             android:label="@string/title_activity_intrinsic_height_text_in_wrap_content_container" >
         </activity>
         <activity
-            android:name=".ChessBoardActivity"
+            android:name="no.agens.cassowarylayoutdemo.ChessBoardActivity"
             android:label="@string/title_activity_chess_board" >
         </activity>
         <activity
-            android:name=".CassowaryLayoutsInCassowaryLayoutActivity"
+            android:name="no.agens.cassowarylayoutdemo.CassowaryLayoutsInCassowaryLayoutActivity"
             android:label="@string/title_activity_cassowary_layouts_in_cassowary_layout" >
+        </activity>
+        <activity
+            android:name="no.agens.cassowarylayoutdemo.CassowaryLayoutsInListViewActivity"
+            android:label="@string/title_activity_cassowary_layouts_in_list_view" >
         </activity>
     </application>
 
