@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="constraints_item_stairs">
+        <item>blue.x == 0</item>
+        <item>blue.y == 0</item>
+        <item>blue.width == container.width / 3</item>
+        <item>blue.height == blue.width</item>
+
+        <item>green.width == blue.width</item>
+        <item>green.height == blue.height</item>
+        <item>green.x == blue.y2</item>
+        <item>green.y == blue.y2</item>
+
+        <item>red.width == green.width</item>
+        <item>red.height == green.height</item>
+        <item>red.x == green.x2</item>
+        <item>red.y == green.y2</item>
+
+        <item>container.width == container.height</item>
+
+    </string-array>
+</resources>

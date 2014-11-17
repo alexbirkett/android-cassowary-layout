@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="constraints_item_squares">
+        <item>blue.left == container.width / 9</item>
+        <item>blue.top == container.height / 9</item>
+        <item>blue.width == (container.width + container.height) / 9</item>
+        <item>blue.height == blue.width</item>
+
+        <item>green.right == container.width - (container.width / 9)</item>
+        <item>green.top == container.height / 9</item>
+        <item>green.width == blue.width</item>
+        <item>green.height == blue.height</item>
+
+        <item>red.left == container.width / 9</item>
+        <item>red.bottom == container.height - (container.height / 9)</item>
+        <item>red.width == blue.width</item>
+        <item>red.height == blue.width</item>
+
+        <item>purple.right == container.width - (container.width / 9)</item>
+        <item>purple.bottom == container.height - (container.height / 9)</item>
+        <item>purple.width == blue.width</item>
+        <item>purple.height == blue.width</item>
+
+        <item>container.height == container.width</item>
+
+    </string-array>
+</resources>

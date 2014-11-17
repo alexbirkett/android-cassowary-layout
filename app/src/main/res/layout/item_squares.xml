@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<no.agens.cassowarylayout.CassowaryLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cassowary="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
+    cassowary:constraints="@array/constraints_item_squares"
+    android:padding="@dimen/default_padding">
+
+    <View
+        android:id="@+id/red"
+        android:background="@color/red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:id="@+id/green"
+        android:background="@color/green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:id="@+id/blue"
+        android:background="@color/blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:id="@+id/purple"
+        android:background="@color/purple"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</no.agens.cassowarylayout.CassowaryLayout>
