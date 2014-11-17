@@ -24,9 +24,6 @@
         <item>inner_layout_1.right == container.width</item>
         <item>inner_layout_1.height == inner_layout_1.intrinsicHeight</item>
 
-
-        <item>container.height == inner_layout_1.bottom + 10dp</item>
-
     </string-array>
 
 </resources>
