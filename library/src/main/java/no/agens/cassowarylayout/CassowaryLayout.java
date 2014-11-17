@@ -85,11 +85,11 @@ public class CassowaryLayout extends ViewGroup  {
 
             if (child.getVisibility() != GONE) {
                 Node node = getHorizontalNode(child);
-                if (node.hasVariable(ChildNode.INTRINSIC_DISTANCE)) {
+                if (node.hasVariable(ChildNode.INTRINSIC_LENGTH)) {
                     int childWidth = child.getMeasuredWidth();
                     log("child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic width " + childWidth);
-                    if ((int)node.getVariableValue(ChildNode.INTRINSIC_DISTANCE) != childWidth) {
-                        node.setVariableToValue(ChildNode.INTRINSIC_DISTANCE, childWidth);
+                    if ((int)node.getVariableValue(ChildNode.INTRINSIC_LENGTH) != childWidth) {
+                        node.setVariableToValue(ChildNode.INTRINSIC_LENGTH, childWidth);
                     }
 
                 }
@@ -109,14 +109,14 @@ public class CassowaryLayout extends ViewGroup  {
             if (child.getVisibility() != GONE) {
                 Node node = getVerticalNode(child);
 
-                if (node.hasVariable(ChildNode.INTRINSIC_DISTANCE)) {
+                if (node.hasVariable(ChildNode.INTRINSIC_LENGTH)) {
                     int childHeight = child.getMeasuredHeight();
-                    Variable intrinsicHeight = node.getVariable(ChildNode.INTRINSIC_DISTANCE);
+                    Variable intrinsicHeight = node.getVariable(ChildNode.INTRINSIC_LENGTH);
                     log("child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic height (measured)" + childHeight);
                     if ((int)intrinsicHeight.value() != childHeight) {
                         long timeBeforeGetMeasuredHeight = System.currentTimeMillis();
 
-                        node.setVariableToValue(ChildNode.INTRINSIC_DISTANCE, childHeight);
+                        node.setVariableToValue(ChildNode.INTRINSIC_LENGTH, childHeight);
                         log("node.setIntrinsicHeight took " + TimerUtil.since(timeBeforeGetMeasuredHeight));
                     }
                 }
@@ -139,17 +139,17 @@ public class CassowaryLayout extends ViewGroup  {
                 Node verticalNode = getVerticalNode(child);
                 Node horizontalNode  = getHorizontalNode(child);
 
-                int nodeHeight = (int) verticalNode.getVariableValue(ChildNode.DISTANCE);
-                int nodeWidth = (int) horizontalNode.getVariableValue(ChildNode.DISTANCE);
+                int nodeHeight = (int) verticalNode.getVariableValue(ChildNode.LENGTH);
+                int nodeWidth = (int) horizontalNode.getVariableValue(ChildNode.LENGTH);
 
                 int widthMode = parentWidthMode;
-                if (horizontalNode.hasVariable(ChildNode.INTRINSIC_DISTANCE)) {
+                if (horizontalNode.hasVariable(ChildNode.INTRINSIC_LENGTH)) {
                     widthMode = MeasureSpec.UNSPECIFIED;
                     nodeWidth = 0;
                 }
 
                 int heightMode = parentHeightMode;
-                if (verticalNode.hasVariable(ChildNode.INTRINSIC_DISTANCE)) {
+                if (verticalNode.hasVariable(ChildNode.INTRINSIC_LENGTH)) {
                     heightMode = MeasureSpec.UNSPECIFIED;
                     nodeHeight = 0;
                 }
@@ -252,15 +252,15 @@ public class CassowaryLayout extends ViewGroup  {
                 Node verticalNode = getVerticalNode(child);
                 Node horizontalNode  = getHorizontalNode(child);
 
-                int x = (int) horizontalNode.getVariableValue(ChildNode.LOW) + getPaddingLeft();
-                int y = (int) verticalNode.getVariableValue(ChildNode.LOW) + getPaddingTop();
+                int x = (int) horizontalNode.getVariableValue(ChildNode.START) + getPaddingLeft();
+                int y = (int) verticalNode.getVariableValue(ChildNode.START) + getPaddingTop();
 
-                int width = (int) horizontalNode.getVariableValue(ChildNode.DISTANCE);
-                int height = (int) verticalNode.getVariableValue(ChildNode.DISTANCE);
+                int width = (int) horizontalNode.getVariableValue(ChildNode.LENGTH);
+                int height = (int) verticalNode.getVariableValue(ChildNode.LENGTH);
                 log("child " + viewIdResolver.getViewNameById(child.getId()) + " x " + x + " y " + y + " width " + width + " height " + height);
 
-                if (verticalNode.hasVariable(ChildNode.INTRINSIC_DISTANCE)) {
-                    log("child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic height " + verticalNode.getVariableValue(ChildNode.INTRINSIC_DISTANCE));
+                if (verticalNode.hasVariable(ChildNode.INTRINSIC_LENGTH)) {
+                    log("child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic height " + verticalNode.getVariableValue(ChildNode.INTRINSIC_LENGTH));
                 }
 
                 if (horizontalNode.hasVariable(ChildNode.CENTER)) {
@@ -290,8 +290,8 @@ public class CassowaryLayout extends ViewGroup  {
                 Node verticalNode = getVerticalNode(child);
                 Node horizontalNode = getHorizontalNode(child);
 
-                int x = (int) horizontalNode.getVariableValue(ChildNode.LOW) + getPaddingLeft();
-                int y = (int) verticalNode.getVariableValue(ChildNode.LOW) + getPaddingTop();
+                int x = (int) horizontalNode.getVariableValue(ChildNode.START) + getPaddingLeft();
+                int y = (int) verticalNode.getVariableValue(ChildNode.START) + getPaddingTop();
 
                 child.setX(x);
                 child.setY(y);

@@ -101,25 +101,25 @@ public class CassowaryModel {
         Variable variable = null;
 
         if (LEFT.equals(propertyName)) {
-            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.LOW);
+            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.START);
         } else if (RIGHT.equals(propertyName)) {
-            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.HIGH);
+            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.END);
         } else if (TOP.equals(propertyName)) {
-            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.LOW);
+            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.START);
         } else if (BOTTOM.equals(propertyName)) {
-            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.HIGH);
+            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.END);
         } else if (CENTERX.equals(propertyName)) {
             variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.CENTER);
         } else if (CENTERY.equals(propertyName)) {
             variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.CENTER);
         } else if (INTRINSIC_HEIGHT.equals(propertyName)) {
-            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.INTRINSIC_DISTANCE);
+            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.INTRINSIC_LENGTH);
         } else if (INTRINSIC_WIDTH.equals(propertyName)) {
-            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.INTRINSIC_DISTANCE);
+            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.INTRINSIC_LENGTH);
         } else if (HEIGHT.equals(propertyName)) {
-            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.DISTANCE);
+            variable = getVerticalNodeByName(nodeName).getVariable(ChildNode.LENGTH);
         } else if (WIDTH.equals(propertyName)) {
-            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.DISTANCE);
+            variable = getHorizontalNodeByName(nodeName).getVariable(ChildNode.LENGTH);
         } else  {
             variable = getHorizontalNodeByName(nodeName).getVariable(propertyName);
         }
