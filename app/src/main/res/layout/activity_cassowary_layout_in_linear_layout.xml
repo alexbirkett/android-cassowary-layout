@@ -4,7 +4,7 @@
     xmlns:cassowary="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="no.agens.cassowarylayoutdemo.CassowaryLayoutInLinearLayout"
+    tools:context="no.agens.cassowarylayoutdemo.CassowaryLayoutInLinearLayoutActivity"
     android:orientation="vertical">
 
     <TextView
@@ -20,7 +20,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
+        tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
         cassowary:constraints="@array/stairs"
         android:padding="@dimen/default_padding">
 

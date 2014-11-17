@@ -31,90 +31,90 @@ public class ExampleMenuActivity extends Activity {
         findViewById(R.id.programmatic_demo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, ProgrammaticDemo.class));
+                startActivity(new Intent(ExampleMenuActivity.this, ProgrammaticDemoActivity.class));
             }
         });
         findViewById(R.id.xml_layout_demo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, XmlLayoutDemo.class));
+                startActivity(new Intent(ExampleMenuActivity.this, XmlLayoutDemoActivity.class));
             }
         });
 
         findViewById(R.id.center_view_relative_to_sibling).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, CenterViewRelativeToSibling.class));
+                startActivity(new Intent(ExampleMenuActivity.this, CenterViewRelativeToSiblingActivity.class));
             }
         });
 
         findViewById(R.id.center_in_parent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, CenterInParent.class));
+                startActivity(new Intent(ExampleMenuActivity.this, CenterInParentActivity.class));
             }
         });
 
         findViewById(R.id.parallax_scrolling).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, ParallaxScrolling.class));
+                startActivity(new Intent(ExampleMenuActivity.this, ParallaxScrollingActivity.class));
             }
         });
 
         findViewById(R.id.dynamic_width).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, DynamicWidth.class));
+                startActivity(new Intent(ExampleMenuActivity.this, DynamicWidthActivity.class));
             }
         });
 
         findViewById(R.id.cassowary_layout_match_parent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, CassowaryLayoutMatchParent.class));
+                startActivity(new Intent(ExampleMenuActivity.this, CassowaryLayoutMatchParentActivity.class));
             }
         });
 
         findViewById(R.id.cassowary_layout_wrap_content).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, CassowaryLayoutWrapContent.class));
+                startActivity(new Intent(ExampleMenuActivity.this, CassowaryLayoutWrapContentActivity.class));
             }
         });
 
         findViewById(R.id.cassowary_layout_in_linear_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, CassowaryLayoutInLinearLayout.class));
+                startActivity(new Intent(ExampleMenuActivity.this, CassowaryLayoutInLinearLayoutActivity.class));
             }
         });
 
         findViewById(R.id.linear_layout_in_cassowary_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, LinearLayoutInCassowaryLayout.class));
+                startActivity(new Intent(ExampleMenuActivity.this, LinearLayoutInCassowaryLayoutActivity.class));
             }
         });
 
         findViewById(R.id.intrinsic_height_text_in_wrap_content_container).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, IntrinsicHeightTextInWrapContentContainer.class));
+                startActivity(new Intent(ExampleMenuActivity.this, IntrinsicHeightTextInWrapContentContainerActivity.class));
             }
         });
 
         findViewById(R.id.cassowary_layouts_in_cassowary_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, CassowaryLayoutsInCassowaryLayout.class));
+                startActivity(new Intent(ExampleMenuActivity.this, CassowaryLayoutsInCassowaryLayoutActivity.class));
             }
         });
 
         findViewById(R.id.chess_board).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ExampleMenuActivity.this, ChessBoard.class));
+                startActivity(new Intent(ExampleMenuActivity.this, ChessBoardActivity.class));
             }
         });
 

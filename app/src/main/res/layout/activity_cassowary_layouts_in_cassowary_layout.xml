@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     cassowary:constraints="@array/outer_layout"
-    tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
+    tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
     android:background="@color/red">
 
     <no.agens.cassowarylayout.CassowaryLayout

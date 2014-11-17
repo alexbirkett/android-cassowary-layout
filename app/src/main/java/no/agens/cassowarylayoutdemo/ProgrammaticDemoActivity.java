@@ -23,7 +23,7 @@ import android.view.View;
 import no.agens.cassowarylayout.CassowaryLayout;
 import no.agens.cassowarylayout.ViewIdResolver;
 
-public class ProgrammaticDemo extends Activity {
+public class ProgrammaticDemoActivity extends Activity {
 
     private static String[] CONSTRAINTS = {
             "blue.x == 0",

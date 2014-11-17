@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         cassowary:constraints="@array/parallax_scrolling"
-        tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
+        tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
         android:padding="@dimen/default_padding">
 
         <TextView

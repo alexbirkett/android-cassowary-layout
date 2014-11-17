@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
+    tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
     cassowary:constraints="@array/xml_demo"
     android:padding="@dimen/default_padding">
 

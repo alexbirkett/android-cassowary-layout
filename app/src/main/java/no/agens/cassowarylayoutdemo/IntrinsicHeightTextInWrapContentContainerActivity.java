@@ -3,7 +3,7 @@ package no.agens.cassowarylayoutdemo;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class IntrinsicHeightTextInWrapContentContainer extends Activity {
+public class IntrinsicHeightTextInWrapContentContainerActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

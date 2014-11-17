@@ -19,12 +19,12 @@ package no.agens.cassowarylayoutdemo;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class CenterViewRelativeToSibling extends Activity {
+public class XmlLayoutDemoActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_center_view_relative_to_sibling);
+        setContentView(R.layout.activity_xml_layout_demo);
     }
 
 }

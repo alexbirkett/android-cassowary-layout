@@ -20,12 +20,12 @@ package no.agens.cassowarylayoutdemo;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class CassowaryLayoutWrapContent extends Activity {
+public class CassowaryLayoutMatchParentActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cassowary_layout_wrap_content);
+        setContentView(R.layout.activity_cassowary_layout_match_parent);
     }
 
 }

@@ -10,7 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/light_gray"
-    tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
+    tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
     cassowary:constraints="@array/dynamic_width"
     android:padding="@dimen/default_padding">
 

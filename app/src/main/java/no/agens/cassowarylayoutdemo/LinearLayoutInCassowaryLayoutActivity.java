@@ -19,12 +19,12 @@ package no.agens.cassowarylayoutdemo;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class CenterInParent extends Activity {
+public class LinearLayoutInCassowaryLayoutActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_center_in_parent);
+        setContentView(R.layout.activity_linear_layout_in_cassowary_layout);
     }
 
 }

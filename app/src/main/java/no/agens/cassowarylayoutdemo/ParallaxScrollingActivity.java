@@ -12,7 +12,7 @@ import no.agens.cassowarylayout.CassowaryLayout;
 import no.agens.cassowarylayout.Node;
 
 
-public class ParallaxScrolling extends Activity {
+public class ParallaxScrollingActivity extends Activity {
 
     private static final String LOG_TAG = "ParallaxScrolling";
 

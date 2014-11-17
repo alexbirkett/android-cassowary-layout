@@ -25,7 +25,7 @@ import android.widget.ScrollView;
 import no.agens.cassowarylayout.CassowaryLayout;
 import no.agens.cassowarylayout.Node;
 
-public class DynamicWidth extends Activity {
+public class DynamicWidthActivity extends Activity {
 
     private double delta;
 

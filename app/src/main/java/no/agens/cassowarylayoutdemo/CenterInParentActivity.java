@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-
 package no.agens.cassowarylayoutdemo;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-public class CassowaryLayoutMatchParent extends Activity {
+public class CenterInParentActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cassowary_layout_match_parent);
+        setContentView(R.layout.activity_center_in_parent);
     }
 
 }

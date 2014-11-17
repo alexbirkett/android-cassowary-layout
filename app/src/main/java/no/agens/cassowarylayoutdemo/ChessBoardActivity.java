@@ -2,12 +2,15 @@ package no.agens.cassowarylayoutdemo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
-public class CassowaryLayoutsInCassowaryLayout extends Activity {
+
+public class ChessBoardActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cassowary_layouts_in_cassowary_layout);
+        setContentView(R.layout.activity_chess_board);
     }
 }

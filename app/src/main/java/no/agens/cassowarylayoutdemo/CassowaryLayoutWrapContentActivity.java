@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
+
 package no.agens.cassowarylayoutdemo;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-public class XmlLayoutDemo extends Activity {
+public class CassowaryLayoutWrapContentActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_xml_layout_demo);
+        setContentView(R.layout.activity_cassowary_layout_wrap_content);
     }
 
 }
