@@ -7,7 +7,7 @@
         android:id="@+id/layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        cassowary:constraints="@array/cassowary_layout_demo"
+        cassowary:constraints="@array/constraints_example_menu"
         tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemo"
         android:padding="@dimen/default_padding">
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="cassowary_layout_demo">
+    <string-array name="constraints_example_menu">
 
         <item>programmatic_demo.y == 8dp</item>
         <item>programmatic_demo.x == 8dp</item>
