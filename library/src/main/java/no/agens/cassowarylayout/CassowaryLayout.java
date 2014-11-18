@@ -20,6 +20,7 @@ package no.agens.cassowarylayout;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 
 import org.pybee.cassowary.Variable;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -42,27 +44,31 @@ public class CassowaryLayout extends ViewGroup  {
 
     private ViewIdResolver viewIdResolver;
 
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
     private static ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(4);
 
-    public boolean setupComplete = false;
+    public interface CassowaryLayoutSetupCallback {
+        void onCassowaryLayoutSetupComplete(CassowaryLayout layout);
+    }
+
+    private ArrayList<CassowaryLayoutSetupCallback> setupObservers;
+
     public CassowaryLayout(Context context, ViewIdResolver viewIdResolver) {
         super(context);
         this.viewIdResolver = viewIdResolver;
         this.cassowaryModel = new CassowaryModel(context);
-        this.setupComplete = true;
     }
 
     public CassowaryLayout(Context context, ViewIdResolver viewIdResolver, CassowaryModel cassowaryModel) {
         this(context, viewIdResolver);
         this.cassowaryModel = cassowaryModel;
-        this.setupComplete = true;
     }
 
     public CassowaryLayout(Context context) {
         super(context);
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
         this.cassowaryModel = new CassowaryModel(context);
-        this.setupComplete = true;
     }
 
     public CassowaryLayout(Context context, AttributeSet attrs) {
@@ -84,10 +90,37 @@ public class CassowaryLayout extends ViewGroup  {
     }
 
 
+    public void addSetupCallback(final CassowaryLayoutSetupCallback setupObserver) {
+
+        if (isSetupComplete()) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    setupObserver.onCassowaryLayoutSetupComplete(CassowaryLayout.this);
+                }
+            });
+        } else {
+            if (setupObservers == null) {
+                setupObservers = new ArrayList<CassowaryLayoutSetupCallback>();
+            }
+            setupObservers.add(setupObserver);
+        }
+    }
+
+    private void callbackAfterSetup() {
+        if (setupObservers != null) {
+            for (CassowaryLayoutSetupCallback observer : setupObservers) {
+                observer.onCassowaryLayoutSetupComplete(this);
+            }
+            setupObservers.clear();
+        }
+    }
+
+
     public void setupSolverAsync(final CharSequence[] constraints) {
         final long timeBefore = System.currentTimeMillis();
 
-            final Handler handler = new Handler();
+
             threadPoolExecutor.submit(new Runnable() {
                 @Override
                 public void run() {
@@ -97,7 +130,6 @@ public class CassowaryLayout extends ViewGroup  {
                     final long setupStart = System.currentTimeMillis();
 
                     doSetupSolver(constraints);
-                    setupComplete = true;
 
                     log("creation took " + TimerUtil.since(setupStart));
 
@@ -107,6 +139,8 @@ public class CassowaryLayout extends ViewGroup  {
                         public void run() {
                             log("post to main thread took " + TimerUtil.since(setupEnd));
                             requestLayout();
+                            callbackAfterSetup();
+
                         }
                     });
                 }
@@ -115,8 +149,10 @@ public class CassowaryLayout extends ViewGroup  {
     }
 
     private void doSetupSolver(CharSequence[] constraints) {
-        this.cassowaryModel = new CassowaryModel(getContext().getApplicationContext());
+        CassowaryModel cassowaryModel = new CassowaryModel(getContext().getApplicationContext());
         cassowaryModel.addConstraints(constraints);
+        // don't set this.cassowaryModel until after constraints have been added because it's existence indicates that setup is complete
+        this.cassowaryModel = cassowaryModel;
     }
 
     private void updateIntrinsicWidthConstraints() {
@@ -224,7 +260,7 @@ public class CassowaryLayout extends ViewGroup  {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (setupComplete) {
+        if (isSetupComplete()) {
             postSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
         } else {
             preSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -310,7 +346,7 @@ public class CassowaryLayout extends ViewGroup  {
     @Override
     protected void onLayout(boolean changed, int l, int t,
                             int r, int b) {
-        if (setupComplete) {
+        if (isSetupComplete()) {
             postSetupOnLayout(changed, l, t, r, b);
         }
 
@@ -453,9 +489,7 @@ public class CassowaryLayout extends ViewGroup  {
                 setupSolverAsync(constraints);
             } else {
                 doSetupSolver(constraints);
-                setupComplete = true;
             }
-
 
             if (constraints == null) {
                 throw new RuntimeException("missing cassowary:constraints attribute in XML");
@@ -471,6 +505,9 @@ public class CassowaryLayout extends ViewGroup  {
     }
 
     public Node getNodeById(int id) {
+        if (!isSetupComplete()) {
+            throw new RuntimeException("use a CassowaryLayoutSetupCallback to wait for setup to complete before calling getNodeById");
+        }
         Node node = cassowaryModel.getNodeByName(viewIdResolver.getViewNameById(id));
         return node;
     }
@@ -485,6 +522,10 @@ public class CassowaryLayout extends ViewGroup  {
             }
         }
         Log.d(logTag, message);
+    }
+
+    private boolean isSetupComplete() {
+        return cassowaryModel != null;
     }
 }
 

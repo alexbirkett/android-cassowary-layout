@@ -35,24 +35,30 @@ public class ParallaxScrollingActivity extends Activity {
         scrollView = (ScrollView)findViewById(R.id.scroll_view);
         cassowaryLayout = (CassowaryLayout)findViewById(R.id.cassowary_layout);
 
-        final Node containerNode = cassowaryLayout.getCassowaryModel().getContainerNode();
-
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-
+        cassowaryLayout.addSetupCallback(new CassowaryLayout.CassowaryLayoutSetupCallback() {
             @Override
-            public void onScrollChanged() {
+            public void onCassowaryLayoutSetupComplete(CassowaryLayout layout) {
+                final Node containerNode = cassowaryLayout.getCassowaryModel().getContainerNode();
 
-                int scrollY = scrollView.getScrollY();
-                containerNode.setVariableToValue(SCROLL_POSITION, getScrollPosition(scrollY));
-                containerNode.setVariableToValue(SCROLL_Y, scrollY);
-                cassowaryLayout.getCassowaryModel().solve();
-                cassowaryLayout.setChildPositionsFromCassowaryModel();
+                scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+
+                    @Override
+                    public void onScrollChanged() {
+
+                        int scrollY = scrollView.getScrollY();
+                        containerNode.setVariableToValue(SCROLL_POSITION, getScrollPosition(scrollY));
+                        containerNode.setVariableToValue(SCROLL_Y, scrollY);
+                        cassowaryLayout.getCassowaryModel().solve();
+                        cassowaryLayout.setChildPositionsFromCassowaryModel();
+                    }
+                });
+                containerNode.setVariableToValue(SCROLL_POSITION, 0);
+                containerNode.setVariableToValue(SCROLL_Y, 0);
+                containerNode.setVariableToValue(SCREEN_HEIGHT, screenHeight);
+                containerNode.setVariableToValue(SCREEN_WIDTH, screenWidth);
             }
         });
-        containerNode.setVariableToValue(SCROLL_POSITION, 0);
-        containerNode.setVariableToValue(SCROLL_Y, 0);
-        containerNode.setVariableToValue(SCREEN_HEIGHT, screenHeight);
-        containerNode.setVariableToValue(SCREEN_WIDTH, screenWidth);
+
     }
 
     private void setScreenHeightAndWidth() {
