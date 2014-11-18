@@ -335,7 +335,7 @@ public class CassowaryLayout extends ViewGroup  {
     public static class LayoutParams extends ViewGroup.LayoutParams {
 
         public LayoutParams() {
-            super(0, 0);
+            super(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         }
 
         public LayoutParams(Context c, AttributeSet attrs) {
