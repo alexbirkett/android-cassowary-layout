@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 
 import org.pybee.cassowary.Variable;
 
+import no.agens.cassowarylayout.util.MeasureSpecUtils;
 import no.agens.cassowarylayout.util.TimerUtil;
 
 public class CassowaryLayout extends ViewGroup  {
@@ -126,7 +127,7 @@ public class CassowaryLayout extends ViewGroup  {
         log("updateIntrinsicHeightConstraints took " +  TimerUtil.since(timeBeforeSolve));
     }
 
-    protected void measureHeightBasedOnWidth(int widthMeasureSpec, int heightMeasureSpec) {
+    protected void measureChildrenUsingNodes(int parentWidthMode, int parentHeightMode) {
         long timeBeforeSolve = System.currentTimeMillis();
 
         final int size = getChildCount();
@@ -135,74 +136,83 @@ public class CassowaryLayout extends ViewGroup  {
             final View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
 
-
                 Node node = getNodeById(child.getId());
 
-                if (node.hasIntrinsicHeight()) {
+                int nodeHeight = (int) node.getVariableValue(Node.HEIGHT);
+                int nodeWidth = (int) node.getVariableValue(Node.WIDTH);
 
-                    int width = (int) node.getWidth().value();
-                    log("measureHeightBasedOnWidth child " + viewIdResolver.getViewNameById(child.getId()) + " width " + width);
-
-                    int childHeightSpec = MeasureSpec.makeMeasureSpec(heightMeasureSpec, MeasureSpec.getMode(heightMeasureSpec));
-
-                    int childWidthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST);
-
-                    log("child " + viewIdResolver.getViewNameById(child.getId()) + " parent measured width " +  MeasureSpec.getSize(childWidthSpec) + " mode " + MeasureSpec.getMode(childWidthSpec) );
-
-                    measureChild(child, childWidthSpec, childHeightSpec);
-
+                int widthMode = parentWidthMode;
+                if (node.hasIntrinsicWidth()) {
+                    widthMode = MeasureSpec.UNSPECIFIED;
+                    nodeWidth = 0;
                 }
-             }
+
+                int heightMode = parentHeightMode;
+                if (node.hasIntrinsicHeight()) {
+                    heightMode = MeasureSpec.UNSPECIFIED;
+                    nodeHeight = 0;
+                }
+
+                // If the parent's width is unspecified, infer it from the container node
+                if (parentWidthMode == MeasureSpec.UNSPECIFIED) {
+                    widthMode = MeasureSpec.AT_MOST;
+                    nodeWidth = (int) cassowaryModel.getContainerNode().getWidth().value();
+                }
+
+
+                int childHeightSpec = MeasureSpec.makeMeasureSpec(nodeHeight, heightMode);
+                int childWidthSpec = MeasureSpec.makeMeasureSpec(nodeWidth, widthMode);
+
+                measureChild(child, childWidthSpec, childHeightSpec);
+                log("measureChildrenUsingNodes took " + TimerUtil.since(timeBeforeSolve));
+            }
         }
-        log("measureHeightBasedOnWidth took " +  TimerUtil.since(timeBeforeSolve));
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        log("onMesaure");
-
         long timeBeforeSolve = System.currentTimeMillis();
+
+        int width =  MeasureSpec.getSize(widthMeasureSpec);
+        int height =  MeasureSpec.getSize(heightMeasureSpec);
+
+        log("onMeasure width " +
+           MeasureSpecUtils.getModeAsString(widthMeasureSpec) + " " +
+                width + " height " +
+           MeasureSpecUtils.getModeAsString(heightMeasureSpec) + " " +
+                height);
 
 
         int resolvedWidth = -1;
         int resolvedHeight = -1;
 
-        int heightSpec = MeasureSpec.getMode(heightMeasureSpec);
-        if (heightSpec == MeasureSpec.EXACTLY) {
-            resolvedHeight = resolveSizeAndState(0, heightMeasureSpec, 0);
-            cassowaryModel.getContainerNode().setVariableToValue(Node.HEIGHT, resolvedHeight - getPaddingTop() - getPaddingBottom());
-        } else if (heightSpec == MeasureSpec.AT_MOST) {
-            int maxHeight =  MeasureSpec.getSize(heightMeasureSpec);
-            cassowaryModel.getContainerNode().setVariableToAtMost(Node.HEIGHT, maxHeight - getPaddingTop() - getPaddingBottom());
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        if (heightMode == MeasureSpec.AT_MOST) {
+            cassowaryModel.getContainerNode().setVariableToAtMost(Node.HEIGHT, height - getPaddingTop() - getPaddingBottom());
+        } else if (heightMode == MeasureSpec.EXACTLY) {
+            cassowaryModel.getContainerNode().setVariableToValue(Node.HEIGHT, height - getPaddingTop() - getPaddingBottom());
         }
-
-        int widthSpec = MeasureSpec.getMode(widthMeasureSpec);
-        if (widthSpec == MeasureSpec.EXACTLY) {
-            resolvedWidth = resolveSizeAndState(0, widthMeasureSpec, 0);
-            cassowaryModel.getContainerNode().setVariableToValue(Node.WIDTH, resolvedWidth - getPaddingLeft() - getPaddingRight());
-        } else if (widthSpec == MeasureSpec.AT_MOST) {
-            int maxWidth =  MeasureSpec.getSize(widthMeasureSpec);
-            cassowaryModel.getContainerNode().setVariableToAtMost(Node.WIDTH, maxWidth - getPaddingLeft() - getPaddingRight());
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        if (widthMode == MeasureSpec.AT_MOST) {
+            cassowaryModel.getContainerNode().setVariableToAtMost(Node.WIDTH, width - getPaddingLeft() - getPaddingRight());
+        } else {
+            cassowaryModel.getContainerNode().setVariableToValue(Node.WIDTH, width - getPaddingLeft() - getPaddingRight());
         }
-
-
-        measureChildren(widthMeasureSpec, heightMeasureSpec);
-
-        updateIntrinsicWidthConstraints();
 
         cassowaryModel.solve();
 
-        measureHeightBasedOnWidth(widthMeasureSpec, heightMeasureSpec);
+        measureChildrenUsingNodes(widthMode, heightMode);
 
+        updateIntrinsicWidthConstraints();
         updateIntrinsicHeightConstraints();
 
         cassowaryModel.solve();
 
-        if (widthSpec == MeasureSpec.AT_MOST || widthSpec == MeasureSpec.UNSPECIFIED) {
+        if (widthMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED) {
             resolvedWidth = (int) cassowaryModel.getContainerNode().getWidth().value() + getPaddingLeft() + getPaddingRight();
         }
 
-        if (heightSpec == MeasureSpec.AT_MOST || heightSpec == MeasureSpec.UNSPECIFIED) {
+        if (heightMode == MeasureSpec.AT_MOST || heightMode == MeasureSpec.UNSPECIFIED) {
             resolvedHeight = (int) cassowaryModel.getContainerNode().getHeight().value() + getPaddingTop() + getPaddingBottom();
         }
 
@@ -210,6 +220,8 @@ public class CassowaryLayout extends ViewGroup  {
 
         log("onMeasure took " + TimerUtil.since(timeBeforeSolve));
     }
+
+
 
     /**
      * Returns a set of layout parameters with a width of

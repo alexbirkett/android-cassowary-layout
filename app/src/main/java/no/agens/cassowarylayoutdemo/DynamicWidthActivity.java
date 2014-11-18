@@ -51,11 +51,16 @@ public class DynamicWidthActivity extends Activity {
 
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
-                        scrollView.requestDisallowInterceptTouchEvent(true);
+                        if (scrollView != null) {
+                            scrollView.requestDisallowInterceptTouchEvent(true);
+                        }
                         delta = X - draggerNode.getVariableValue(DRAGGER_POSITION);
                         break;
                     case MotionEvent.ACTION_UP:
-                        scrollView.requestDisallowInterceptTouchEvent(false);
+                        if (scrollView != null) {
+                            scrollView.requestDisallowInterceptTouchEvent(false);
+                        }
+
                         break;
                     case MotionEvent.ACTION_POINTER_DOWN:
                         break;
