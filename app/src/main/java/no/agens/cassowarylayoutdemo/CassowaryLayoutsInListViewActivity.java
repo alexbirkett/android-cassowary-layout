@@ -12,7 +12,7 @@ import android.widget.ListView;
 public class CassowaryLayoutsInListViewActivity extends Activity {
 
     private static final int ITEM_COUNT = 300;
-    private static final int ITEM_TYPE_COUNT = 2;
+    private static final int ITEM_TYPE_COUNT = 3;
     private static final String LOG_TAG = "CassowaryLayoutsInListViewActivity";
 
     private class Adapter extends BaseAdapter {
@@ -66,6 +66,8 @@ public class CassowaryLayoutsInListViewActivity extends Activity {
                     return R.layout.item_stairs;
                 case 1:
                     return R.layout.item_squares;
+                case 2:
+                    return R.layout.activity_chess_board;
                 default:
                     throw new RuntimeException("unknown id");
             }
