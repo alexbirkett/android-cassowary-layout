@@ -231,7 +231,7 @@ public class CassowaryLayout extends ViewGroup  {
      */
     @Override
     protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
-        return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        return new LayoutParams();
     }
 
     @Override
@@ -331,64 +331,17 @@ public class CassowaryLayout extends ViewGroup  {
         return false;
     }
 
-    /**
-     * Per-child layout information associated with AbsoluteLayout.
-     * See
-     * {@link android.R.styleable#AbsoluteLayout_Layout Absolute Layout Attributes}
-     * for a list of all child view attributes that this class supports.
-     */
+
     public static class LayoutParams extends ViewGroup.LayoutParams {
 
-        /**
-         * The horizontal, or X, location of the child within the view group.
-         */
-        //public int x;
-        /**
-         * The vertical, or Y, location of the child within the view group.
-         */
-        //public int y;
-
-        /**
-         * Creates a new set of layout parameters with the specified width,
-         * height and location.
-         *
-         * @param width the width, either {@link #MATCH_PARENT},
-        {@link #WRAP_CONTENT} or a fixed size in pixels
-         * @param height the height, either {@link #MATCH_PARENT},
-        {@link #WRAP_CONTENT} or a fixed size in pixels
-         * @param x the X location of the child
-         * @param y the Y location of the child
-         */
-        public LayoutParams(int width, int height) {
-            super(width, height);
-            //this.x = x;
-            //this.y = y;
+        public LayoutParams() {
+            super(0, 0);
         }
 
-        /**
-         * Creates a new set of layout parameters. The values are extracted from
-         * the supplied attributes set and context. The XML attributes mapped
-         * to this set of layout parameters are:
-         *
-         * <ul>
-         *   <li><code>layout_x</code>: the X location of the child</li>
-         *   <li><code>layout_y</code>: the Y location of the child</li>
-         *   <li>All the XML attributes from
-         *   {@link android.view.ViewGroup.LayoutParams}</li>
-         * </ul>
-         *
-         * @param c the application environment
-         * @param attrs the set of attributes from which to extract the layout
-         *              parameters values
-         */
         public LayoutParams(Context c, AttributeSet attrs) {
             super(c, attrs);
             TypedArray a = c.obtainStyledAttributes(attrs,
                     R.styleable.AbsoluteLayout_Layout);
-           /* x = a.getDimensionPixelOffset(
-                    R.styleable.AbsoluteLayout_Layout_layout_x, 0);
-            y = a.getDimensionPixelOffset(
-                    R.styleable.AbsoluteLayout_Layout_layout_y, 0);*/
             a.recycle();
         }
 
@@ -400,9 +353,6 @@ public class CassowaryLayout extends ViewGroup  {
         }
 
         public String debug(String output) {
-           /* return output + "Absolute.LayoutParams={width="
-                    + width + ", height=" + height
-                    + " x=" + x + " y=" + y + "}";*/
             return "";
         }
     }
