@@ -153,6 +153,12 @@ public class CassowaryLayout extends ViewGroup  {
                     nodeHeight = 0;
                 }
 
+                // If the parent's width is unspecified, infer it from the container node
+                if (parentWidthMode == MeasureSpec.UNSPECIFIED) {
+                    widthMode = MeasureSpec.AT_MOST;
+                    nodeWidth = (int) cassowaryModel.getContainerNode().getWidth().value();
+                }
+
 
                 int childHeightSpec = MeasureSpec.makeMeasureSpec(nodeHeight, heightMode);
                 int childWidthSpec = MeasureSpec.makeMeasureSpec(nodeWidth, widthMode);
