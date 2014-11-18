@@ -19,6 +19,7 @@ package no.agens.cassowarylayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,9 @@ import android.view.ViewGroup;
 
 
 import org.pybee.cassowary.Variable;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import no.agens.cassowarylayout.util.MeasureSpecUtils;
 import no.agens.cassowarylayout.util.TimerUtil;
@@ -38,28 +42,32 @@ public class CassowaryLayout extends ViewGroup  {
 
     private ViewIdResolver viewIdResolver;
 
+    private static ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(4);
+
+    public boolean setupComplete = false;
     public CassowaryLayout(Context context, ViewIdResolver viewIdResolver) {
         super(context);
-
         this.viewIdResolver = viewIdResolver;
         this.cassowaryModel = new CassowaryModel(context);
+        this.setupComplete = true;
     }
 
     public CassowaryLayout(Context context, ViewIdResolver viewIdResolver, CassowaryModel cassowaryModel) {
         this(context, viewIdResolver);
         this.cassowaryModel = cassowaryModel;
+        this.setupComplete = true;
     }
 
     public CassowaryLayout(Context context) {
         super(context);
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
         this.cassowaryModel = new CassowaryModel(context);
+        this.setupComplete = true;
     }
 
     public CassowaryLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
-        cassowaryModel = new CassowaryModel(context);
         readConstraintsFromXml(attrs);
     }
 
@@ -67,7 +75,6 @@ public class CassowaryLayout extends ViewGroup  {
                           int defStyle) {
         super(context, attrs, defStyle);
         this.viewIdResolver = new DefaultViewIdResolver(getContext());
-        this.cassowaryModel = new CassowaryModel(context);
         readConstraintsFromXml(attrs);
     }
 
@@ -76,6 +83,41 @@ public class CassowaryLayout extends ViewGroup  {
         return cassowaryModel;
     }
 
+
+    public void setupSolverAsync(final CharSequence[] constraints) {
+        final long timeBefore = System.currentTimeMillis();
+
+            final Handler handler = new Handler();
+            threadPoolExecutor.submit(new Runnable() {
+                @Override
+                public void run() {
+
+                    log("thread took " + TimerUtil.since(timeBefore) + " to start");
+
+                    final long setupStart = System.currentTimeMillis();
+
+                    doSetupSolver(constraints);
+                    setupComplete = true;
+
+                    log("creation took " + TimerUtil.since(setupStart));
+
+                    final long setupEnd = System.currentTimeMillis();
+                    handler.postAtFrontOfQueue(new Runnable() {
+                        @Override
+                        public void run() {
+                            log("post to main thread took " + TimerUtil.since(setupEnd));
+                            requestLayout();
+                        }
+                    });
+                }
+            });
+
+    }
+
+    private void doSetupSolver(CharSequence[] constraints) {
+        this.cassowaryModel = new CassowaryModel(getContext().getApplicationContext());
+        cassowaryModel.addConstraints(constraints);
+    }
 
     private void updateIntrinsicWidthConstraints() {
         long timeBeforeSolve = System.currentTimeMillis();
@@ -112,7 +154,7 @@ public class CassowaryLayout extends ViewGroup  {
                 if (node.hasIntrinsicHeight()) {
                     int childHeight = child.getMeasuredHeight();
                     Variable intrinsicHeight = node.getIntrinsicHeight();
-                    log("child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic height (measured)" + childHeight);
+                    log("child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic height (measured) " + childHeight);
                     if ((int)intrinsicHeight.value() != childHeight) {
                         long timeBeforeGetMeasuredHeight = System.currentTimeMillis();
 
@@ -125,6 +167,16 @@ public class CassowaryLayout extends ViewGroup  {
 
         }
         log("updateIntrinsicHeightConstraints took " +  TimerUtil.since(timeBeforeSolve));
+    }
+
+    private void setAllChildViewsTo(int visibility) {
+        final int size = getChildCount();
+
+        for (int i = 0; i < size; ++i) {
+            final View child = getChildAt(i);
+            child.setVisibility(visibility);
+        }
+
     }
 
     protected void measureChildrenUsingNodes(int parentWidthMode, int parentHeightMode) {
@@ -163,20 +215,29 @@ public class CassowaryLayout extends ViewGroup  {
                 int childHeightSpec = MeasureSpec.makeMeasureSpec(nodeHeight, heightMode);
                 int childWidthSpec = MeasureSpec.makeMeasureSpec(nodeWidth, widthMode);
 
+                log("child " + viewIdResolver.getViewNameById(child.getId()) + " width " + MeasureSpecUtils.getModeAsString(childWidthSpec) + " " + nodeWidth + " height " + MeasureSpecUtils.getModeAsString(childHeightSpec) + " " + nodeHeight);
                 measureChild(child, childWidthSpec, childHeightSpec);
-                log("measureChildrenUsingNodes took " + TimerUtil.since(timeBeforeSolve));
             }
         }
+        log("measureChildrenUsingNodes took " + TimerUtil.since(timeBeforeSolve));
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (setupComplete) {
+            postSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
+        } else {
+            preSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
+        }
+    }
+
+    protected void postSetupOnMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         long timeBeforeSolve = System.currentTimeMillis();
 
         int width =  MeasureSpec.getSize(widthMeasureSpec);
         int height =  MeasureSpec.getSize(heightMeasureSpec);
 
-        log("onMeasure width " +
+        log("postSetupOnMeasure width " +
            MeasureSpecUtils.getModeAsString(widthMeasureSpec) + " " +
                 width + " height " +
            MeasureSpecUtils.getModeAsString(heightMeasureSpec) + " " +
@@ -222,6 +283,18 @@ public class CassowaryLayout extends ViewGroup  {
     }
 
 
+    protected void preSetupOnMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width =  MeasureSpec.getSize(widthMeasureSpec);
+        int height =  MeasureSpec.getSize(heightMeasureSpec);
+
+        log("preSetupOnMeasure width " +
+                MeasureSpecUtils.getModeAsString(widthMeasureSpec) + " " +
+                width + " height " +
+                MeasureSpecUtils.getModeAsString(heightMeasureSpec) + " " +
+                height);
+
+        setMeasuredDimension(width, width * 16 / 9);
+    }
 
     /**
      * Returns a set of layout parameters with a width of
@@ -236,6 +309,14 @@ public class CassowaryLayout extends ViewGroup  {
 
     @Override
     protected void onLayout(boolean changed, int l, int t,
+                            int r, int b) {
+        if (setupComplete) {
+            postSetupOnLayout(changed, l, t, r, b);
+        }
+
+    }
+
+    protected void postSetupOnLayout(boolean changed, int l, int t,
                             int r, int b) {
 
         long timeBeforeSolve = System.currentTimeMillis();
@@ -357,7 +438,6 @@ public class CassowaryLayout extends ViewGroup  {
         }
     }
 
-
     private void readConstraintsFromXml(AttributeSet attrs) {
         TypedArray a = getContext().getTheme().obtainStyledAttributes(
                 attrs,
@@ -365,14 +445,24 @@ public class CassowaryLayout extends ViewGroup  {
                 0, 0);
 
         try {
-            CharSequence[] constraints = a.getTextArray(R.styleable.CassowaryLayout_constraints);
+            final CharSequence[] constraints = a.getTextArray(R.styleable.CassowaryLayout_constraints);
+
+            boolean asyncSetup = a.getBoolean(R.styleable.CassowaryLayout_asyncSetup, true);
+
+            if (asyncSetup) {
+                setupSolverAsync(constraints);
+            } else {
+                doSetupSolver(constraints);
+                setupComplete = true;
+            }
+
 
             if (constraints == null) {
                 throw new RuntimeException("missing cassowary:constraints attribute in XML");
             }
 
             long timebefore = System.currentTimeMillis();
-            cassowaryModel.addConstraints(constraints);
+
             log("addConstraints took " + TimerUtil.since(timebefore));
         } finally {
             a.recycle();

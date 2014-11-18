@@ -12,6 +12,7 @@
     android:background="@color/light_gray"
     tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
     cassowary:constraints="@array/dynamic_width"
+    cassowary:asyncSetup="false"
     android:padding="@dimen/default_padding">
 
     <TextView
