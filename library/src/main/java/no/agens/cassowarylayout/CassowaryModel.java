@@ -142,7 +142,7 @@ public class CassowaryModel {
     }
 
     public void solve() {
-        long timeBeforeSolve = System.currentTimeMillis();
+        long timeBeforeSolve = System.nanoTime();
 
         solver.solve();
 

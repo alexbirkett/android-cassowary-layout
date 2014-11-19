@@ -5,6 +5,6 @@ package no.agens.cassowarylayout.util;
  */
 public class TimerUtil {
     public static long since(long since) {
-        return System.currentTimeMillis() - since;
+        return (System.nanoTime() - since) / 1000000;
     }
 }

@@ -96,7 +96,7 @@ public abstract class Node {
     }
 
     public void setVariableToValue(String nameVariable, double value) {
-        long timeBefore = System.currentTimeMillis();
+        long timeBefore = System.nanoTime();
         Constraint constraint = constraints.get(nameVariable);
         constraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getVariable(nameVariable), constraint, value, solver);
         constraints.put(nameVariable, constraint);

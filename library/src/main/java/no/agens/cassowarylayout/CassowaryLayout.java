@@ -122,7 +122,7 @@ public class CassowaryLayout extends ViewGroup  {
 
 
     public void setupSolverAsync(final CharSequence[] constraints) {
-        final long timeBefore = System.currentTimeMillis();
+        final long timeBefore = System.nanoTime();
 
         setupThread = new Thread(new Runnable() {
             @Override
@@ -130,13 +130,13 @@ public class CassowaryLayout extends ViewGroup  {
 
                 log("thread took " + TimerUtil.since(timeBefore) + " to start");
 
-                final long setupStart = System.currentTimeMillis();
+                final long setupStart = System.nanoTime();
 
                 doSetupSolver(constraints);
 
                 log("creation took " + TimerUtil.since(setupStart));
 
-                final long setupEnd = System.currentTimeMillis();
+                final long setupEnd = System.nanoTime();
 
                 if (setupThread != null) {
                     handler.postAtFrontOfQueue(new Runnable() {
@@ -164,7 +164,7 @@ public class CassowaryLayout extends ViewGroup  {
     }
 
     private void updateIntrinsicWidthConstraints() {
-        long timeBeforeSolve = System.currentTimeMillis();
+        long timeBeforeSolve = System.nanoTime();
         int count = getChildCount();
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
@@ -186,7 +186,7 @@ public class CassowaryLayout extends ViewGroup  {
 
     private void updateIntrinsicHeightConstraints() {
 
-       long timeBeforeSolve = System.currentTimeMillis();
+       long timeBeforeSolve = System.nanoTime();
 
        int count = getChildCount();
         for (int i = 0; i < count; i++) {
@@ -200,7 +200,7 @@ public class CassowaryLayout extends ViewGroup  {
                     Variable intrinsicHeight = node.getIntrinsicHeight();
                     log("child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic height (measured) " + childHeight);
                     if ((int)intrinsicHeight.value() != childHeight) {
-                        long timeBeforeGetMeasuredHeight = System.currentTimeMillis();
+                        long timeBeforeGetMeasuredHeight = System.nanoTime();
 
                         node.setIntrinsicHeight(childHeight);
                         log("node.setIntrinsicHeight took " +  TimerUtil.since(timeBeforeGetMeasuredHeight));
@@ -224,7 +224,7 @@ public class CassowaryLayout extends ViewGroup  {
     }
 
     protected void measureChildrenUsingNodes(int parentWidthMode, int parentHeightMode) {
-        long timeBeforeSolve = System.currentTimeMillis();
+        long timeBeforeSolve = System.nanoTime();
 
         final int size = getChildCount();
 
@@ -276,7 +276,7 @@ public class CassowaryLayout extends ViewGroup  {
     }
 
     protected void postSetupOnMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        long timeBeforeSolve = System.currentTimeMillis();
+        long timeBeforeSolve = System.nanoTime();
 
         int width =  MeasureSpec.getSize(widthMeasureSpec);
         int height =  MeasureSpec.getSize(heightMeasureSpec);
@@ -402,7 +402,7 @@ public class CassowaryLayout extends ViewGroup  {
     protected void postSetupOnLayout(boolean changed, int l, int t,
                             int r, int b) {
 
-        long timeBeforeSolve = System.currentTimeMillis();
+        long timeBeforeSolve = System.nanoTime();
 
         cassowaryModel.solve();
 
@@ -453,7 +453,7 @@ public class CassowaryLayout extends ViewGroup  {
     }
 
     public void setChildPositionsFromCassowaryModel() {
-        long timeBeforeSolve = System.currentTimeMillis();
+        long timeBeforeSolve = System.nanoTime();
         int count = getChildCount();
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
@@ -544,9 +544,6 @@ public class CassowaryLayout extends ViewGroup  {
                 throw new RuntimeException("missing cassowary:constraints attribute in XML");
             }
 
-            long timebefore = System.currentTimeMillis();
-
-            log("addConstraints took " + TimerUtil.since(timebefore));
         } finally {
             a.recycle();
         }
