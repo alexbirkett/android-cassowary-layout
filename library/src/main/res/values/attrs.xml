@@ -9,6 +9,7 @@
     <declare-styleable name="CassowaryLayout">
         <attr name="constraints" format="reference" />
         <attr name="asyncSetup" format="boolean" />
+        <attr name="preSetupWidthHeightRatio" format="float" />
     </declare-styleable>
 
 </resources>

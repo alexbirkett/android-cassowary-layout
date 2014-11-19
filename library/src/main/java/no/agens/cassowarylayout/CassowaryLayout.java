@@ -30,8 +30,6 @@ import android.view.ViewGroup;
 import org.pybee.cassowary.Variable;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import no.agens.cassowarylayout.util.MeasureSpecUtils;
 import no.agens.cassowarylayout.util.TimerUtil;
@@ -40,13 +38,15 @@ public class CassowaryLayout extends ViewGroup  {
 
     private String logTag;
 
-    private CassowaryModel cassowaryModel;
+    private volatile CassowaryModel cassowaryModel;
 
     private ViewIdResolver viewIdResolver;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
-    private static ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(4);
+    private volatile Thread setupThread;
+
+    private float preSetupWidthHeightRatio = 1;
 
     public interface CassowaryLayoutSetupCallback {
         void onCassowaryLayoutSetupComplete(CassowaryLayout layout);
@@ -84,6 +84,10 @@ public class CassowaryLayout extends ViewGroup  {
         readConstraintsFromXml(attrs);
     }
 
+    @Override
+    public void onDetachedFromWindow() {
+        setupThread = null;
+    }
 
     public CassowaryModel getCassowaryModel() {
         return cassowaryModel;
@@ -120,31 +124,35 @@ public class CassowaryLayout extends ViewGroup  {
     public void setupSolverAsync(final CharSequence[] constraints) {
         final long timeBefore = System.currentTimeMillis();
 
+        setupThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-            threadPoolExecutor.submit(new Runnable() {
-                @Override
-                public void run() {
+                log("thread took " + TimerUtil.since(timeBefore) + " to start");
 
-                    log("thread took " + TimerUtil.since(timeBefore) + " to start");
+                final long setupStart = System.currentTimeMillis();
 
-                    final long setupStart = System.currentTimeMillis();
+                doSetupSolver(constraints);
 
-                    doSetupSolver(constraints);
+                log("creation took " + TimerUtil.since(setupStart));
 
-                    log("creation took " + TimerUtil.since(setupStart));
+                final long setupEnd = System.currentTimeMillis();
 
-                    final long setupEnd = System.currentTimeMillis();
+                if (setupThread != null) {
                     handler.postAtFrontOfQueue(new Runnable() {
                         @Override
                         public void run() {
                             log("post to main thread took " + TimerUtil.since(setupEnd));
+                            setupThread = null;
                             requestLayout();
                             callbackAfterSetup();
 
                         }
                     });
-                }
-            });
+                } // else setupThread was set to null by onDetachWindow
+            }
+        });
+        setupThread.start();
 
     }
 
@@ -329,7 +337,46 @@ public class CassowaryLayout extends ViewGroup  {
                 MeasureSpecUtils.getModeAsString(heightMeasureSpec) + " " +
                 height);
 
-        setMeasuredDimension(width, width * 16 / 9);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+
+        int widthBasedOnRatio = (int)(height * getPreSetupWidthHeightRatio());
+
+        int heightBasedOnRatio = (int)(width / getPreSetupWidthHeightRatio());
+
+        switch (widthMode) {
+            case MeasureSpec.AT_MOST:
+                if (heightMode == MeasureSpec.EXACTLY) {
+                    if (widthBasedOnRatio < width) {
+                        width = widthBasedOnRatio;
+                    }
+                }
+                break;
+            case MeasureSpec.EXACTLY:
+                // do nothing
+                break;
+            case MeasureSpec.UNSPECIFIED:
+                width = widthBasedOnRatio;
+                break;
+        }
+
+        switch (heightMode) {
+            case MeasureSpec.AT_MOST:
+                if (widthMode == MeasureSpec.EXACTLY) {
+                    if (heightBasedOnRatio < height) {
+                        height = heightBasedOnRatio;
+                    }
+                }
+                break;
+            case MeasureSpec.EXACTLY:
+                // do nothing
+                break;
+            case MeasureSpec.UNSPECIFIED:
+                height = heightBasedOnRatio;
+                break;
+        }
+
+        setMeasuredDimension(width, height);
     }
 
     /**
@@ -485,6 +532,8 @@ public class CassowaryLayout extends ViewGroup  {
 
             boolean asyncSetup = a.getBoolean(R.styleable.CassowaryLayout_asyncSetup, true);
 
+            preSetupWidthHeightRatio = a.getFloat(R.styleable.CassowaryLayout_preSetupWidthHeightRatio, preSetupWidthHeightRatio);
+
             if (asyncSetup) {
                 setupSolverAsync(constraints);
             } else {
@@ -526,6 +575,14 @@ public class CassowaryLayout extends ViewGroup  {
 
     private boolean isSetupComplete() {
         return cassowaryModel != null;
+    }
+
+    public float getPreSetupWidthHeightRatio() {
+        return preSetupWidthHeightRatio;
+    }
+
+    public void setPreSetupWidthHeightRatio(float preSetupWidthHeightRatio) {
+        this.preSetupWidthHeightRatio = preSetupWidthHeightRatio;
     }
 }
 
