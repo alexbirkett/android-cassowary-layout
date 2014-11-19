@@ -29,6 +29,7 @@
     <string name="cassowary_layouts_in_cassowary_layout">Cassowary Layouts in Cassowary Layout</string>
     <string name="chess_board">Chess board</string>
     <string name="cassowary_layouts_in_list_view">Cassowary Layouts In List View</string>
+    <string name="pre_setup_test_activity">Pre setup test activity</string>
     <string name="long_paragraph">This is a paragraph of text. This is a paragraph of text. This is a paragraph of text. This is a paragraph of text. This is a paragraph of text.</string>
     <string name="headline">This is a headline with seven words</string>
     <string name="text_in_cassowary_layout">Text in Cassowary Layout</string>
@@ -38,5 +39,14 @@
     <string name="title_activity_chess_board">ChessBoard</string>
     <string name="title_activity_cassowary_layouts_in_cassowary_layout">CassowaryLayoutsInCassowaryLayout</string>
     <string name="title_activity_cassowary_layouts_in_list_view">CassowaryLayoutsInListViewActivity</string>
+    <string name="title_activity_pre_setup_test">PreSetupTestActivity</string>
+    <string name="wrap_content">WRAP_CONTENT</string>
+    <string name="match_parent">MATCH_PARENT</string>
+    <string name="height">height</string>
+    <string name="width">width</string>
 
+    <string name="set_ratio">Set ratio</string>
+    <string name="enter_ratio">Enter ratio</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

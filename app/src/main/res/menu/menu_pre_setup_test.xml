@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="no.agens.cassowarylayoutdemo.PreSetupTestActivity">
+    <item android:id="@+id/set_ratio" android:title="@string/set_ratio"
+        android:orderInCategory="100" android:showAsAction="ifRoom" />
+</menu>

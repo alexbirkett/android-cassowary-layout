@@ -74,6 +74,10 @@
             android:name="no.agens.cassowarylayoutdemo.CassowaryLayoutsInListViewActivity"
             android:label="@string/title_activity_cassowary_layouts_in_list_view" >
         </activity>
+        <activity
+            android:name="no.agens.cassowarylayoutdemo.PreSetupTestActivity"
+            android:label="@string/title_activity_pre_setup_test" >
+        </activity>
     </application>
 
 </manifest>

@@ -125,6 +125,13 @@ public class ExampleMenuActivity extends Activity {
             }
         });
 
+        findViewById(R.id.pre_setup_test_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ExampleMenuActivity.this, PreSetupTestActivity.class));
+            }
+        });
+
     }
 
 }

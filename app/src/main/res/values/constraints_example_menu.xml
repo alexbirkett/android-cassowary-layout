@@ -85,8 +85,12 @@
         <item>cassowary_layouts_in_list_view.y == chess_board.y2 + 8dp</item>
         <item>cassowary_layouts_in_list_view.height == cassowary_layouts_in_list_view.intrinsicHeight</item>
 
+        <item>pre_setup_test_activity.x == 8dp</item>
+        <item>pre_setup_test_activity.x2 == container.width - 8dp</item>
+        <item>pre_setup_test_activity.y == cassowary_layouts_in_list_view.y2 + 8dp</item>
+        <item>pre_setup_test_activity.height == pre_setup_test_activity.intrinsicHeight</item>
 
-        <item>cassowary_layouts_in_list_view.y2 == container.height - 8dp</item>
+        <item>pre_setup_test_activity.y2 == container.height - 8dp</item>
     </string-array>
 
 </resources>
