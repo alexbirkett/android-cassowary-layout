@@ -18,35 +18,40 @@
 package no.agens.cassowarylayout;
 
 
+import android.test.AndroidTestCase;
+
 import junit.framework.TestCase;
 
-import org.klomp.cassowary.ClLinearExpression;
-import org.klomp.cassowary.ClVariable;
-import org.klomp.cassowary.clconstraint.ClConstraint;
+import org.pybee.cassowary.Constraint;
+import org.pybee.cassowary.Expression;
+import org.pybee.cassowary.SimplexSolver;
+import org.pybee.cassowary.Variable;
+
+import no.agens.cassowarylayout.util.DimensionParser;
 
 /**
  * Created by alex on 25/09/2014.
  */
-public class CassowaryConstraintParserTest extends TestCase {
+public class CassowaryConstraintParserTest extends AndroidTestCase {
 
 
 
     public void testExpression() {
 
 
-        final ClVariable blueX = new ClVariable();
-        final ClVariable blueY = new ClVariable();
-        final ClVariable blueHeight = new ClVariable();
-        final ClVariable blueWidth = new ClVariable();
+        final Variable blueX = new Variable();
+        final Variable blueY = new Variable();
+        final Variable blueHeight = new Variable();
+        final Variable blueWidth = new Variable();
 
-        final ClVariable greenX = new ClVariable();
-        final ClVariable greenY = new ClVariable();
-        final ClVariable greenHeight = new ClVariable();
-        final ClVariable greenWidth = new ClVariable();
+        final Variable greenX = new Variable();
+        final Variable greenY = new Variable();
+        final Variable greenHeight = new Variable();
+        final Variable greenWidth = new Variable();
 
         CassowaryVariableResolver variableResolver = new CassowaryVariableResolver() {
             @Override
-            public ClVariable resolveVariable(String variableName) {
+            public Variable resolveVariable(String variableName) {
                 if ("blue.x".equals(variableName)) {
                     return blueX;
                 } else if ("blue.y".equals(variableName)) {
@@ -59,22 +64,41 @@ public class CassowaryConstraintParserTest extends TestCase {
                     return greenX;
                 } else if ("green.y".equals(variableName)) {
                     return greenY;
-                } else if ("blue.height".equals(variableName)) {
+                } else if ("green.height".equals(variableName)) {
                     return greenHeight;
-                } else if ("blue.width".equals(variableName)) {
+                } else if ("green.width".equals(variableName)) {
                     return greenWidth;
                 }
                 return null;
             }
 
             @Override
-            public ClLinearExpression resolveConstant(String name) {
-                return null;
+            public Expression resolveConstant(String constantName) {
+                Expression expression = null;
+                Double value;
+
+                try {
+                    value = new Double(Double.parseDouble(constantName));
+                } catch (NumberFormatException e) {
+                    value = DimensionParser.getDimension(constantName, getContext());
+
+                }
+
+                if (value != null) {
+                    expression = new Expression(value);
+                }
+                return expression;
             }
         };
 
 
-        ClConstraint constraint = CassowaryConstraintParser.parseConstraint("green.y <= blue.y !required", variableResolver);
+        Constraint constraint = CassowaryConstraintParser.parseConstraint("green.width == 10", variableResolver);
+
+        SimplexSolver solver = new SimplexSolver();
+        solver.addConstraint(constraint);
+        solver.solve();
+
+        assertEquals(10, greenWidth.value());
 
 
     }
