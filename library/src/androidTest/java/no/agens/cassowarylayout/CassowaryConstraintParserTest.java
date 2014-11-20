@@ -35,6 +35,8 @@ import no.agens.cassowarylayout.util.DimensionParser;
 public class CassowaryConstraintParserTest extends AndroidTestCase {
 
 
+    private static double EPSILON = 1.0e-8;
+
 
     public void testExpression() {
 
@@ -49,7 +51,7 @@ public class CassowaryConstraintParserTest extends AndroidTestCase {
         final Variable greenHeight = new Variable();
         final Variable greenWidth = new Variable();
 
-        CassowaryVariableResolver variableResolver = new CassowaryVariableResolver() {
+        CassowaryConstraintParser.CassowaryVariableResolver variableResolver = new CassowaryConstraintParser.CassowaryVariableResolver() {
             @Override
             public Variable resolveVariable(String variableName) {
                 if ("blue.x".equals(variableName)) {
@@ -98,7 +100,7 @@ public class CassowaryConstraintParserTest extends AndroidTestCase {
         solver.addConstraint(constraint);
         solver.solve();
 
-        assertEquals(10, greenWidth.value());
+        assertEquals(10, greenWidth.value(), EPSILON);
 
 
     }
