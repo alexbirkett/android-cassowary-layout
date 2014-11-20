@@ -22,7 +22,8 @@ import junit.framework.TestCase;
 import java.util.Arrays;
 import java.util.List;
 
-import no.agens.cassowarylayout.CassowaryConstraintParser;
+import no.agens.cassowarylayout.ConstraintParser;
+import no.agens.cassowarylayout.ConstraintParser;
 
 
 /**
@@ -35,7 +36,7 @@ public class InfixToPostFixTest extends TestCase {
 
         String[] infix = {"3", "+", "4", "*", "2", "/", "(", "1", "-", "5", ")", "^", "2", "^", "3"};
 
-        List<String> postFix = CassowaryConstraintParser.infixToPostfix(Arrays.asList(infix));
+        List<String> postFix = ConstraintParser.infixToPostfix(Arrays.asList(infix));
 
         int index = 0;
 
@@ -58,7 +59,7 @@ public class InfixToPostFixTest extends TestCase {
 
         String[] infix = {"1", "+", "2", "*", "3" };
 
-        List<String> postFix = CassowaryConstraintParser.infixToPostfix(Arrays.asList(infix));
+        List<String> postFix = ConstraintParser.infixToPostfix(Arrays.asList(infix));
 
         int index = 0;
 
@@ -74,7 +75,7 @@ public class InfixToPostFixTest extends TestCase {
 
         String[] infix = {"(", "100", "+", "2", ")","*", "3" };
 
-        List<String> postFix = CassowaryConstraintParser.infixToPostfix(Arrays.asList(infix));
+        List<String> postFix = ConstraintParser.infixToPostfix(Arrays.asList(infix));
 
         int index = 0;
 
@@ -90,7 +91,7 @@ public class InfixToPostFixTest extends TestCase {
     public void testRosettaCodeTestCase() {
         String[] infix = {"3", "+", "4", "*", "2","/", "(", "1", "-", "5", ")", "^", "2", "^", "3" };
 
-        List<String> postFix = CassowaryConstraintParser.infixToPostfix(Arrays.asList(infix));
+        List<String> postFix = ConstraintParser.infixToPostfix(Arrays.asList(infix));
 
         int index = 0;
 

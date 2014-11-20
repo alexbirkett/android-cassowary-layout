@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 /**
  * Created by alex on 25/09/2014.
  */
-public class CassowaryConstraintParser {
+public class ConstraintParser {
 
     private static final Pattern pattern = Pattern.compile("\\s*(.*?)\\s*(<=|==|>=|[GL]?EQ)\\s*(.*?)\\s*(!(required|strong|medium|weak))?");
 

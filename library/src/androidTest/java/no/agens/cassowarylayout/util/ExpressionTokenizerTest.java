@@ -20,7 +20,8 @@ import junit.framework.TestCase;
 
 import java.util.List;
 
-import no.agens.cassowarylayout.CassowaryConstraintParser;
+import no.agens.cassowarylayout.ConstraintParser;
+import no.agens.cassowarylayout.ConstraintParser;
 
 /**
  * Created by alex on 25/09/2014.
@@ -28,7 +29,7 @@ import no.agens.cassowarylayout.CassowaryConstraintParser;
 public class ExpressionTokenizerTest extends TestCase {
 
     public void testTokenWithSpaces() {
-        List<String> tokens = CassowaryConstraintParser.tokenizeExpression("( blue.x + blue.w ) - (green.w * green.height) / 2");
+        List<String> tokens = ConstraintParser.tokenizeExpression("( blue.x + blue.w ) - (green.w * green.height) / 2");
         int i = 0;
         assertEquals("(", tokens.get(i++));
         assertEquals("blue.x", tokens.get(i++));
@@ -46,7 +47,7 @@ public class ExpressionTokenizerTest extends TestCase {
     }
 
     public void testTokenWithoutSpaces() {
-        List<String> tokens = CassowaryConstraintParser.tokenizeExpression("(blue.x+blue.w)-(green.w*green.height)/2");
+        List<String> tokens = ConstraintParser.tokenizeExpression("(blue.x+blue.w)-(green.w*green.height)/2");
         int i = 0;
         assertEquals("(", tokens.get(i++));
         assertEquals("blue.x", tokens.get(i++));

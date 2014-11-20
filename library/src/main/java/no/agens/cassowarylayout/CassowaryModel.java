@@ -34,7 +34,7 @@ public class CassowaryModel {
 
     private ContainerNode containerNode = new ContainerNode(solver);
 
-    private CassowaryConstraintParser.CassowaryVariableResolver cassowaryVariableResolver = new CassowaryConstraintParser.CassowaryVariableResolver() {
+    private ConstraintParser.CassowaryVariableResolver cassowaryVariableResolver = new ConstraintParser.CassowaryVariableResolver() {
         @Override
         public Variable resolveVariable(String variableName) {
             return CassowaryModel.this.resolveVariable(variableName);
@@ -113,7 +113,7 @@ public class CassowaryModel {
 
     public Constraint addConstraint(String constraintString) {
         Log.d(LOG_TAG, "adding constraint " + constraintString);
-        Constraint constraint = CassowaryConstraintParser.parseConstraint(constraintString, cassowaryVariableResolver);
+        Constraint constraint = ConstraintParser.parseConstraint(constraintString, cassowaryVariableResolver);
         addConstraint(constraint);
         return constraint;
     }
