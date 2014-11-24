@@ -268,7 +268,9 @@ public class CassowaryLayout extends ViewGroup  {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (isSetupComplete()) {
+        boolean isSetupComplete = isSetupComplete();
+        log("onMeasure setup complete " + isSetupComplete);
+        if (isSetupComplete) {
             postSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
         } else {
             preSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -571,7 +573,11 @@ public class CassowaryLayout extends ViewGroup  {
     }
 
     private boolean isSetupComplete() {
-        return cassowaryModel != null;
+
+        boolean isSetupComplete = cassowaryModel != null;
+        log("setup complete " + isSetupComplete);
+        return isSetupComplete;
+
     }
 
     public float getPreSetupWidthHeightRatio() {
