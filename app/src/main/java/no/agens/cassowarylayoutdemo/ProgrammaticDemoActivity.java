@@ -97,7 +97,7 @@ public class ProgrammaticDemoActivity extends Activity {
         cassowaryLayout.addView(red);
         cassowaryLayout.addView(green);
         cassowaryLayout.addView(blue);
-        cassowaryLayout.getCassowaryModel().addConstraints(CONSTRAINTS);
+        cassowaryLayout.setupSolverAsync(CONSTRAINTS);
         setContentView(cassowaryLayout);
     }
 
