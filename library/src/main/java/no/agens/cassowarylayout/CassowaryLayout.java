@@ -367,7 +367,7 @@ public class CassowaryLayout extends ViewGroup  {
         switch(state) {
             case UNINITIALIZED:
             case PARSING_CONSTRAINTS:
-                preSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
+                placeHolderMeasure(widthMeasureSpec, heightMeasureSpec);
                 if (measureSpecChanged) {
                     incrementOutstandingCallsOnParent();
                 }
@@ -380,7 +380,7 @@ public class CassowaryLayout extends ViewGroup  {
                     incrementOutstandingCallsOnParent();
                     asyncMeasure(widthMeasureSpec, heightMeasureSpec);
                 }
-                preSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
+                placeHolderMeasure(widthMeasureSpec, heightMeasureSpec);
                 break;
             case AWAITING_LAYOUT:
                 setMeasuredDimensionsFromCassowaryModel(widthMeasureSpec, heightMeasureSpec);
@@ -390,7 +390,7 @@ public class CassowaryLayout extends ViewGroup  {
                 if (nextMeasureAsync) {
                     state = State.PARSING_COMPLETE;
                     asyncMeasure(widthMeasureSpec, heightMeasureSpec);
-                    preSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
+                    placeHolderMeasure(widthMeasureSpec, heightMeasureSpec);
                     nextMeasureAsync = false;
                 } else {
                     onMeasureSync(widthMeasureSpec, heightMeasureSpec);
@@ -504,11 +504,11 @@ public class CassowaryLayout extends ViewGroup  {
     }
 
 
-    protected void preSetupOnMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    protected void placeHolderMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width =  MeasureSpec.getSize(widthMeasureSpec);
         int height =  MeasureSpec.getSize(heightMeasureSpec);
 
-        log("preSetupOnMeasure width " +
+        log("placeHolderMeasure width " +
                 MeasureSpecUtils.getModeAsString(widthMeasureSpec) + " " +
                 width + " height " +
                 MeasureSpecUtils.getModeAsString(heightMeasureSpec) + " " +
@@ -582,15 +582,15 @@ public class CassowaryLayout extends ViewGroup  {
                             int r, int b) {
         if (isSetupComplete()) {
             setAllChildViewsTo(View.VISIBLE);
-            postSetupOnLayout(changed, l, t, r, b);
+            layoutChildren(changed, l, t, r, b);
         } else {
             setAllChildViewsTo(View.INVISIBLE);
         }
 
     }
 
-    protected void postSetupOnLayout(boolean changed, int l, int t,
-                            int r, int b) {
+    protected void layoutChildren(boolean changed, int l, int t,
+                                  int r, int b) {
 
         long timeBeforeSolve = System.nanoTime();
 
