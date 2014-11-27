@@ -25,11 +25,13 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
-
-import org.pybee.cassowary.Variable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -50,6 +52,8 @@ public class CassowaryLayout extends ViewGroup  {
 
     private boolean nextMeasureAsync;
 
+    private int outstandingChildMeasureCalls = 0;
+
     private enum State {
         UNINITIALIZED,
         PARSING_CONSTRAINTS,
@@ -59,20 +63,10 @@ public class CassowaryLayout extends ViewGroup  {
         SETUP_COMPLETE
     }
 
-
-    private enum PendingConstraintsState {
-        IDLE,
-        WAITING,
-        APPLYING,
-    }
-
-    private volatile PendingConstraintsState pendingConstraintsState = PendingConstraintsState.IDLE;
-
     private volatile State state = State.UNINITIALIZED;
 
     private Integer widthMeasureSpec;
     private Integer heightMeasureSpec;
-
 
     public interface CassowaryLayoutSetupCallback {
         void onCassowaryLayoutSetupComplete(CassowaryLayout layout);
@@ -116,12 +110,6 @@ public class CassowaryLayout extends ViewGroup  {
         cassowaryModel = new CassowaryModel(getContext().getApplicationContext());
     }
 
-    @Override
-    public void onDetachedFromWindow() {
-        //executorService.shutdownNow();
-        //state = State.DETACHED;
-    }
-
     public CassowaryModel getCassowaryModel() {
         return cassowaryModel;
     }
@@ -153,79 +141,42 @@ public class CassowaryLayout extends ViewGroup  {
         }
     }
 
-    private void updateIntrinsicWidthConstraints() {
-        long timeBeforeSolve = System.nanoTime();
+    private HashMap<String, Integer> getIntrinsicHeights() {
+        HashMap<String, Integer> intrinsicHeights = new HashMap<String, Integer>();
+
         int count = getChildCount();
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
 
             if (child.getVisibility() != GONE) {
-                Node node = getNodeById(child.getId());
-                if (node.hasIntrinsicWidth()) {
-                    int childWidth = child.getMeasuredWidth();
-                    log("child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic width " + childWidth);
-                    if ((int)node.getIntrinsicWidth().value() != childWidth) {
-                        if (state == State.SETUP_COMPLETE) {
-                            node.setVariableToValue(ChildNode.INTRINSIC_WIDTH, childWidth);
-                        } else {
-                            // defer work if setup is not complete
-                            node.setVariableToValuePending(ChildNode.INTRINSIC_WIDTH, childWidth);
-                        }
-
-                    }
-
+                String viewName = viewIdResolver.getViewNameById(child.getId());
+                Node node = cassowaryModel.getNodeByName(viewName);
+                if (node.hasIntrinsicHeight()) {
+                    int childHeight = child.getMeasuredHeight();
+                    intrinsicHeights.put(viewName, childHeight);
                 }
             }
         }
-        log("updateIntrinsicWidthConstraints took " +  TimerUtil.since(timeBeforeSolve));
+        return intrinsicHeights;
     }
 
-    private void updateIntrinsicHeightConstraints() {
+    private HashMap<String, Integer> getIntrinsicWidths() {
+        HashMap<String, Integer> intrinsicWidths = new HashMap<String, Integer>();
 
-       long timeBeforeSolve = System.nanoTime();
-
-       int count = getChildCount();
+        int count = getChildCount();
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
 
             if (child.getVisibility() != GONE) {
-                Node node = getNodeById(child.getId());
-
-                if (node.hasIntrinsicHeight()) {
-                    int childHeight = child.getMeasuredHeight();
-                    Variable intrinsicHeight = node.getIntrinsicHeight();
-                    log("child " + viewIdResolver.getViewNameById(child.getId()) + " intrinsic height (measured) " + childHeight);
-                    if ((int)intrinsicHeight.value() != childHeight) {
-                        long timeBeforeGetMeasuredHeight = System.nanoTime();
-
-                        if (state == State.SETUP_COMPLETE) {
-                            node.setVariableToValue(ChildNode.INTRINSIC_HEIGHT, childHeight);
-                        } else {
-                            // defer work if setup is not complete
-                            node.setVariableToValuePending(ChildNode.INTRINSIC_HEIGHT, childHeight);
-                        }
-                        log("node.setIntrinsicHeight " + state + " took " +  TimerUtil.since(timeBeforeGetMeasuredHeight));
-                    }
+                String viewName = viewIdResolver.getViewNameById(child.getId());
+                Node node = cassowaryModel.getNodeByName(viewName);
+                if (node.hasIntrinsicWidth()) {
+                    int childWidth = child.getMeasuredWidth();
+                    intrinsicWidths.put(viewName, childWidth);
                 }
-
             }
-
         }
-        log("updateIntrinsicHeightConstraints in " + state + " took " +  TimerUtil.since(timeBeforeSolve));
-    }
-
-    private void setAllChildViewsTo(int visibility) {
-        final int size = getChildCount();
-
-        for (int i = 0; i < size; ++i) {
-            final View child = getChildAt(i);
-            child.setVisibility(visibility);
-        }
-
-    }
-
-    protected void measureChildrenUsingCassowaryModel() {
-        measureChildrenUsingNodes(widthMeasureSpec, heightMeasureSpec);
+        return intrinsicWidths;
     }
 
     protected void measureChildrenUsingNodes(int widthMeasureSpec, int heightMeasureSpec) {
@@ -280,7 +231,6 @@ public class CassowaryLayout extends ViewGroup  {
             this.widthMeasureSpec = widthMeasureSpec;
             changed = true;
         }
-
         if (this.heightMeasureSpec == null || this.heightMeasureSpec != heightMeasureSpec) {
             this.heightMeasureSpec = heightMeasureSpec;
             changed = true;
@@ -288,97 +238,116 @@ public class CassowaryLayout extends ViewGroup  {
         return changed;
     }
 
-    private void applyPendingConstraints(final Runnable callback) {
-
-        log("applyPendingConstraints");
-        if (pendingConstraintsState != PendingConstraintsState.WAITING) {
-
-            pendingConstraintsState = PendingConstraintsState.WAITING;
-
-            executorService.submit(new Runnable() {
-                @Override
-                public void run() {
-                    pendingConstraintsState = PendingConstraintsState.APPLYING;
-                    cassowaryModel.applyPendingConstraints();
-
-                    cassowaryModel.solve();
-                    // we're not detached
-                    // abandon callback if we've been set back to WAITING
-                    if (/*state != State.DETACHED && */pendingConstraintsState == PendingConstraintsState.APPLYING) {
-                        handler.postAtFrontOfQueue(callback);
-                    }
-                    pendingConstraintsState = PendingConstraintsState.IDLE;
-                }
-            });
-        }
-
-    }
-
-
     public void setupSolverAsync(final CharSequence[] constraints) {
-        final long timeBefore = System.nanoTime();
 
         state = State.PARSING_CONSTRAINTS;
 
         log("setupSolverAsync - submitting task");
-        executorService.submit(new Runnable() {
+
+        parseConstraintsOnBackgroundsThread(constraints, new Runnable() {
             @Override
             public void run() {
+                state = State.PARSING_COMPLETE;
+                if (isMeasureSpecSet()) {
+                    log("measureSpecSet calling asyncMeasure()");
+                    asyncMeasure(widthMeasureSpec, heightMeasureSpec);
+                }
+            }
+        });
+    }
 
-                log("thread took " + TimerUtil.since(timeBefore) + " to start");
+    private void setVariableToValue(String variableName, HashMap<String, Integer> nodesMap) {
+        Iterator<Map.Entry<String, Integer>> iterator = nodesMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Integer> entry = iterator.next();
+            Node node = cassowaryModel.getNodeByName(entry.getKey());
+            node.setVariableToValue(variableName, entry.getValue());
+        }
+    }
 
-                final long setupStart = System.nanoTime();
+    CassowaryLayout getRootCassowaryLayout() {
+        CassowaryLayout rootLayout = this;
+        ViewParent parent = this;
+        while ((parent = parent.getParent()) != null) {
+            if (parent instanceof CassowaryLayout) {
+                rootLayout = (CassowaryLayout) parent;
+            }
+        }
+        return rootLayout;
+    }
 
+    CassowaryLayout getParentCassowaryLayout() {
+        CassowaryLayout cassowaryParent = null;
+        ViewParent parent = this;
+        while ((parent = parent.getParent()) != null) {
+            if (parent instanceof CassowaryLayout) {
+                cassowaryParent = (CassowaryLayout) parent;
+                break;
+            }
+        }
+        return cassowaryParent;
+    }
 
-                cassowaryModel.addConstraints(constraints);
+    private void asyncMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
 
+        state = State.ASYNC_MEASURE;
 
-                log("adding constraints took " + TimerUtil.since(setupStart));
+        // on main thread
+        setMeasureSpecOnBackgroundThread(widthMeasureSpec, heightMeasureSpec, new Runnable() {
+            @Override
+            public void run() {
+                // back on main thread
 
-                final long setupEnd = System.nanoTime();
+                measureChildrenUsingNodes(widthMeasureSpec, heightMeasureSpec);
+                if (outstandingChildMeasureCalls == 0) {
 
-               // if (state != State.DETACHED) {
-                    handler.postAtFrontOfQueue(new Runnable() {
-                        @Override
-                        public void run() {
-                            log("state  PARSING_COMPLETE");
-                            state = State.PARSING_COMPLETE;
-                            if (isMeasureSpecSet()) {
-                                log("measureSpecSet calling asyncMeasure()");
-                                asyncMeasure();
-                            }
-                        }
-                    });
-              //  }
+                    setIntrinsicConstraints();
+                }
+
             }
         });
 
     }
 
+    private void notifyParentComplete() {
+        state = State.AWAITING_LAYOUT;
+        CassowaryLayout parent = getParentCassowaryLayout();
+        if (parent == null) {
+            // this object is the
+            requestLayout();
+        } else {
+            parent.handleChildComplete();
+        }
+    }
 
-    private void asyncMeasure() {
+    private void handleChildComplete() {
+        outstandingChildMeasureCalls--;
+        if (outstandingChildMeasureCalls == 0) {
+            measureChildrenUsingNodes(widthMeasureSpec, heightMeasureSpec);
+            setIntrinsicConstraints();
+        }
+    }
 
-        state = State.ASYNC_MEASURE;
+    private void incrementOutstandingCallsOnParent() {
+        CassowaryLayout parent = getParentCassowaryLayout();
+        if (parent != null) {
+            parent.outstandingChildMeasureCalls++;
+        }
+    }
 
-        applyPendingConstraints(new Runnable() {
-            @Override
-            public void run() {
-                measureChildrenUsingCassowaryModel();
-                updateIntrinsicWidthConstraints();
-                updateIntrinsicHeightConstraints();
-                applyPendingConstraints(new Runnable() {
+    private void setIntrinsicConstraints() {
+        setIntrinsicConstraintsOnBackgroundThread(getIntrinsicHeights(),
+                getIntrinsicWidths(), new Runnable() {
 
                     @Override
                     public void run() {
-                        state = State.AWAITING_LAYOUT;
-                        log("requesting layout");
-                        requestLayout();
+                        // outstandingChildMeasureCalls--;
+                        log("async measure complete outstanding calls " + outstandingChildMeasureCalls);
+
+                        notifyParentComplete();
                         callbackAfterSetup();
                     }
                 });
-            }
-        });
-
     }
 
     @Override
@@ -393,19 +362,24 @@ public class CassowaryLayout extends ViewGroup  {
                 MeasureSpecUtils.getModeAsString(heightMeasureSpec) + " " +
                 MeasureSpec.getSize(heightMeasureSpec) + " in state " + state + " nextMeasureAsync " + nextMeasureAsync);
 
-        boolean measureSpecChanged = saveMeasureSpec(widthMeasureSpec, heightMeasureSpec);
+       boolean measureSpecChanged = saveMeasureSpec(widthMeasureSpec, heightMeasureSpec);
 
         switch(state) {
-            case PARSING_CONSTRAINTS:
             case UNINITIALIZED:
-            case ASYNC_MEASURE:
-                if (measureSpecChanged) {
-                    setMeasureSpecOnCassowaryModel(widthMeasureSpec, heightMeasureSpec);
-                }
+            case PARSING_CONSTRAINTS:
                 preSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
+                if (measureSpecChanged) {
+                    incrementOutstandingCallsOnParent();
+                }
+                // wait for parsing to complete
                 break;
+            case ASYNC_MEASURE:
             case PARSING_COMPLETE:
-                asyncMeasure();
+                // kick off new asyncMeasure - (even if one is already in progress)
+                if (measureSpecChanged) {
+                    incrementOutstandingCallsOnParent();
+                    asyncMeasure(widthMeasureSpec, heightMeasureSpec);
+                }
                 preSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
                 break;
             case AWAITING_LAYOUT:
@@ -414,9 +388,8 @@ public class CassowaryLayout extends ViewGroup  {
                 break;
             case SETUP_COMPLETE:
                 if (nextMeasureAsync) {
-                    state = State.UNINITIALIZED;
-                    setMeasureSpecOnCassowaryModel(widthMeasureSpec, heightMeasureSpec);
-                    asyncMeasure();
+                    state = State.PARSING_COMPLETE;
+                    asyncMeasure(widthMeasureSpec, heightMeasureSpec);
                     preSetupOnMeasure(widthMeasureSpec, heightMeasureSpec);
                     nextMeasureAsync = false;
                 } else {
@@ -442,47 +415,73 @@ public class CassowaryLayout extends ViewGroup  {
         setMeasureSpecOnCassowaryModel(widthMeasureSpec, heightMeasureSpec);
         cassowaryModel.solve();
         measureChildrenUsingNodes(widthMeasureSpec, heightMeasureSpec);
-        updateIntrinsicWidthConstraints();
-        updateIntrinsicHeightConstraints();
+        setVariableToValue(ChildNode.INTRINSIC_HEIGHT, getIntrinsicHeights());
+        setVariableToValue(ChildNode.INTRINSIC_HEIGHT, getIntrinsicWidths());
         setMeasuredDimensionsFromCassowaryModel(widthMeasureSpec, heightMeasureSpec);
 
         log("onMeasure took " + TimerUtil.since(timeBeforeSolve));
     }
 
     private void setMeasureSpecOnCassowaryModel(int widthMeasureSpec, int heightMeasureSpec) {
-
         int widthWithoutPadding =  MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
         int heightWithoutPadding =  MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        setMeasureSpecOnCassowaryModel(heightMode, widthMode, heightWithoutPadding, widthWithoutPadding);
+    }
 
+    private void setMeasureSpecOnCassowaryModel(int heightMode, int widthMode, int heightWithoutPadding, int widthWithoutPadding) {
         if (heightMode == MeasureSpec.AT_MOST) {
-            if (state == State.SETUP_COMPLETE) {
-                cassowaryModel.getContainerNode().setVariableToAtMost(Node.HEIGHT, heightWithoutPadding);
-            } else {
-                cassowaryModel.getContainerNode().setVariableToAtMostPending(Node.HEIGHT, heightWithoutPadding);
-            }
+            cassowaryModel.getContainerNode().setVariableToAtMost(Node.HEIGHT, heightWithoutPadding);
         } else if (heightMode == MeasureSpec.EXACTLY) {
-            if (state == State.SETUP_COMPLETE) {
-                cassowaryModel.getContainerNode().setVariableToValue(Node.HEIGHT, heightWithoutPadding);
-            } else {
-                cassowaryModel.getContainerNode().setVariableToValuePending(Node.HEIGHT, heightWithoutPadding);
-            }
-        }
-        if (widthMode == MeasureSpec.AT_MOST) {
-            if (state == State.SETUP_COMPLETE) {
-                cassowaryModel.getContainerNode().setVariableToAtMost(Node.WIDTH, widthWithoutPadding );
-            } else {
-                cassowaryModel.getContainerNode().setVariableToAtMostPending(Node.WIDTH, widthWithoutPadding);
-            }
-        } else {
-            if (state == State.SETUP_COMPLETE) {
-                cassowaryModel.getContainerNode().setVariableToValue(Node.WIDTH, widthWithoutPadding);
-            } else {
-                cassowaryModel.getContainerNode().setVariableToValuePending(Node.WIDTH, widthWithoutPadding);
-            }
+            cassowaryModel.getContainerNode().setVariableToValue(Node.HEIGHT, heightWithoutPadding);
         }
 
+        if (widthMode == MeasureSpec.AT_MOST) {
+            cassowaryModel.getContainerNode().setVariableToAtMost(Node.WIDTH, widthWithoutPadding);
+        } else {
+            cassowaryModel.getContainerNode().setVariableToValue(Node.WIDTH, widthWithoutPadding);
+        }
+    }
+
+   private void setMeasureSpecOnBackgroundThread(final int widthMeasureSpec, final int heightMeasureSpec, final Runnable callback) {
+       final int widthWithoutPadding =  MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
+       final int heightWithoutPadding =  MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
+       final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+       final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                setMeasureSpecOnCassowaryModel(heightMode, widthMode, heightWithoutPadding, widthWithoutPadding);
+                cassowaryModel.solve();
+                handler.postAtFrontOfQueue(callback);
+            }
+        });
+    }
+
+    private void setIntrinsicConstraintsOnBackgroundThread(final HashMap<String, Integer> intrinsicHeights,
+                                                           final HashMap<String, Integer> intrinsicWidths,
+                                                           final Runnable callback) {
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                setVariableToValue(ChildNode.INTRINSIC_HEIGHT, intrinsicHeights);
+                setVariableToValue(ChildNode.INTRINSIC_WIDTH, intrinsicWidths);
+                cassowaryModel.solve();
+                handler.postAtFrontOfQueue(callback);
+            }
+        });
+    }
+
+    private void parseConstraintsOnBackgroundsThread(final CharSequence[] constraints, final Runnable callback) {
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                cassowaryModel.addConstraints(constraints);
+                handler.postAtFrontOfQueue(callback);
+            }
+        });
     }
 
     private void setMeasuredDimensionsFromCassowaryModel(int widthMeasureSpec, int heightMeasureSpec) {
@@ -557,13 +556,14 @@ public class CassowaryLayout extends ViewGroup  {
         setMeasuredDimension(width, height);
     }
 
-    private void setAllViewsTo(int visibility) {
-        int count = getChildCount();
+    private void setAllChildViewsTo(int visibility) {
+        final int size = getChildCount();
 
-        for (int i = 0; i < count; i++) {
-            View child = getChildAt(i);
+        for (int i = 0; i < size; ++i) {
+            final View child = getChildAt(i);
             child.setVisibility(visibility);
         }
+
     }
 
     /**
@@ -581,10 +581,10 @@ public class CassowaryLayout extends ViewGroup  {
     protected void onLayout(boolean changed, int l, int t,
                             int r, int b) {
         if (isSetupComplete()) {
-            setAllViewsTo(View.VISIBLE);
+            setAllChildViewsTo(View.VISIBLE);
             postSetupOnLayout(changed, l, t, r, b);
         } else {
-            setAllViewsTo(View.INVISIBLE);
+            setAllChildViewsTo(View.INVISIBLE);
         }
 
     }

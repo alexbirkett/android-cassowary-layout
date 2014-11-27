@@ -104,7 +104,7 @@ public class CassowaryModel {
 
     private void setupCassowary() {
         Log.d(LOG_TAG, "setupCassowary");
-        solver.setAutosolve(false);
+        solver.setAutosolve(true);
     }
 
     public void addConstraint(Constraint constraint) {
