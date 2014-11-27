@@ -21,7 +21,7 @@ public class PreSetupTestActivity extends LayoutParamsSwitcherActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // create a cassowary layout that is not setup i.e. it does not have a cassowary model
-        cassowaryLayout = new CassowaryLayout(this, null, null);
+        cassowaryLayout = new CassowaryLayout(this);
         cassowaryLayout.setBackgroundColor(getResources().getColor(R.color.red));
         setContentView(cassowaryLayout);
 

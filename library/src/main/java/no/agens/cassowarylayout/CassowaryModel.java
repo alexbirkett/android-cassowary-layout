@@ -148,5 +148,4 @@ public class CassowaryModel {
 
         Log.d(LOG_TAG, "solve took " + TimerUtil.since(timeBeforeSolve));
     }
-
 }
