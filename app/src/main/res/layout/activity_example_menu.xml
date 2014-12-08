@@ -118,5 +118,12 @@
             android:layout_height="wrap_content"
             android:text="@string/pre_setup_test_activity" />
 
+        <TextView
+            android:id="@+id/fixed_aspect_ratio_test_activity"
+            style="@style/button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fixed_aspect_ratio_test_activity" />
+
     </no.agens.cassowarylayout.CassowaryLayout>
 </ScrollView>

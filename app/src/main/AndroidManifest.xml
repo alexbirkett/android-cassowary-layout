@@ -78,6 +78,10 @@
             android:name="no.agens.cassowarylayoutdemo.PreSetupTestActivity"
             android:label="@string/title_activity_pre_setup_test" >
         </activity>
+        <activity
+            android:name="no.agens.cassowarylayoutdemo.FixedAspectRatioDemoActivity"
+            android:label="@string/title_activity_fixed_aspect_ratio_demo" >
+        </activity>
     </application>
 
 </manifest>

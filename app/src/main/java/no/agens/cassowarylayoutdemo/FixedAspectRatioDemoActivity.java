@@ -7,20 +7,17 @@ import android.view.MenuItem;
 import no.agens.cassowarylayout.CassowaryLayout;
 import no.agens.cassowarylayoutdemo.util.EditRatioDialog;
 
-public class PreSetupTestActivity extends LayoutParamsSwitcherActivity {
 
+public class FixedAspectRatioDemoActivity extends LayoutParamsSwitcherActivity {
 
     private CassowaryLayout cassowaryLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // create a cassowary layout that is not setup i.e. it does not have a cassowary model
-        cassowaryLayout = new CassowaryLayout(this);
-        cassowaryLayout.setBackgroundColor(getResources().getColor(R.color.red));
-        setContentView(cassowaryLayout);
-
+        setContentView(R.layout.activity_fixed_aspect_ratio_demo);
+        cassowaryLayout = (CassowaryLayout)findViewById(R.id.layout);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,4 +50,9 @@ public class PreSetupTestActivity extends LayoutParamsSwitcherActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
+
 }

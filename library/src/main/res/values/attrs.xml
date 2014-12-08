@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="AbsoluteLayout_Layout">
-        <attr name="layout_x" format="dimension" />
-        <attr name="layout_y" format="dimension" />
-    </declare-styleable>
-
     <declare-styleable name="CassowaryLayout">
         <attr name="constraints" format="reference" />
         <attr name="asyncSetup" format="boolean" />
-        <attr name="preSetupWidthHeightRatio" format="float" />
+        <attr name="aspectRatioFixed" format="boolean" />
+        <attr name="aspectRatioWidthFactor" format="float" />
+        <attr name="aspectRatioHeightFactor" format="float" />
     </declare-styleable>
 
 </resources>
