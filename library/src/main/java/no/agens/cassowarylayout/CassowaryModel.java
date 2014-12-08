@@ -47,7 +47,7 @@ public class CassowaryModel {
             Double value;
 
             try {
-                value = new Double(Double.parseDouble(constantName));
+                value = Double.parseDouble(constantName);
             } catch (NumberFormatException e) {
                 value = DimensionParser.getDimension(constantName, getContext());
 
