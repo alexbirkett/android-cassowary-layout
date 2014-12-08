@@ -1,21 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 20
-    buildToolsVersion "21"
+    compileSdkVersion 21
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         applicationId "no.agens.cassowarylayoutdemo"
         minSdkVersion 14
-        targetSdkVersion 20
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
-    }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
     }
 }
 

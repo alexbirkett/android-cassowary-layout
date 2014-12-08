@@ -7,21 +7,14 @@ repositories {
 }
 
 android {
-    compileSdkVersion 20
-    buildToolsVersion "21"
+    compileSdkVersion 21
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
-        applicationId "no.agens.cassowarylayout"
         minSdkVersion 14
-        targetSdkVersion 14
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
     }
 }
 
