@@ -1,0 +1,36 @@
+<no.agens.cassowarylayout.CassowaryLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cassowary="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
+    cassowary:constraints="@array/constraints_fixed_aspect_ratio_demo"
+    cassowary:aspectRatioWidthFactor="16"
+    cassowary:aspectRatioHeightFactor="9"
+    cassowary:aspectRatioFixed="true"
+
+
+    android:background="@color/light_gray">
+
+    <TextView
+        android:id="@+id/fixed_aspect_ratio_explanation_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fixed_aspect_ratio_explanation_text"/>
+
+    <TextView
+        android:id="@+id/cropped_content_explanation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cropped_content_explanation" />
+
+    <TextView
+        android:id="@+id/cropped_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cropped_text" />
+
+
+</no.agens.cassowarylayout.CassowaryLayout>

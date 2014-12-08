@@ -40,12 +40,14 @@ import no.agens.cassowarylayout.util.TimerUtil;
 public class CassowaryLayout extends ViewGroup  {
 
     private String logTag;
-
     private volatile CassowaryModel cassowaryModel;
-
     private ViewIdResolver viewIdResolver;
 
-    private float preSetupWidthHeightRatio = 1;
+    private boolean asyncSetup = true;
+
+    private boolean aspectRatioFixed = false;
+    private float aspectRatioWidthFactor = 1;
+    private float aspectRatioHeightFactor = 1;
 
     private enum State {
         UNINITIALIZED,
@@ -75,9 +77,6 @@ public class CassowaryLayout extends ViewGroup  {
 
         public LayoutParams(Context c, AttributeSet attrs) {
             super(c, attrs);
-            TypedArray a = c.obtainStyledAttributes(attrs,
-                    R.styleable.AbsoluteLayout_Layout);
-            a.recycle();
         }
 
         /**
@@ -145,18 +144,29 @@ public class CassowaryLayout extends ViewGroup  {
                 if (isMeasureSpecSet()) {
                     log("measureSpecSet requesting layout");
                     callbackAfterSetup();
-                    requestLayout();
+                    if (!aspectRatioFixed) {
+                        requestLayout();
+                    }
+
                 }
             }
         });
     }
 
-    public float getPreSetupWidthHeightRatio() {
-        return preSetupWidthHeightRatio;
+    public float getAspectRatioWidthFactor() {
+        return aspectRatioWidthFactor;
     }
 
-    public void setPreSetupWidthHeightRatio(float preSetupWidthHeightRatio) {
-        this.preSetupWidthHeightRatio = preSetupWidthHeightRatio;
+    public void setAspectRatioWidthFactor(float aspectRatioWidthFactor) {
+        this.aspectRatioWidthFactor = aspectRatioWidthFactor;
+    }
+
+    public float getAspectRatioHeightFactor() {
+        return aspectRatioHeightFactor;
+    }
+
+    public void setAspectRatioHeightFactor(float aspectRatioHeightFactor) {
+        this.aspectRatioHeightFactor = aspectRatioHeightFactor;
     }
 
     public void setChildPositionsFromCassowaryModel() {
@@ -195,11 +205,19 @@ public class CassowaryLayout extends ViewGroup  {
             case UNINITIALIZED:
             case PARSING_CONSTRAINTS:
                 saveMeasureSpec(widthMeasureSpec, heightMeasureSpec);
-                placeHolderMeasure(widthMeasureSpec, heightMeasureSpec);
+                setMeasuredDimensionsFromAspectRatio(widthMeasureSpec, heightMeasureSpec);
                 // wait for parsing to complete
                 break;
             case PARSING_COMPLETE:
-                cassowaryMeasure(widthMeasureSpec, heightMeasureSpec);
+                if (aspectRatioFixed) {
+                    setMeasuredDimensionsFromAspectRatio(widthMeasureSpec, heightMeasureSpec);
+                    // make new measure spec based on aspect ratio set above
+                    cassowaryMeasure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.getMode(widthMeasureSpec)),
+                                    MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.getMode(heightMeasureSpec)));
+                } else {
+                    cassowaryMeasure(widthMeasureSpec, heightMeasureSpec);
+                    setMeasuredDimensionsFromCassowaryModel(widthMeasureSpec, heightMeasureSpec);
+                }
                 break;
         }
 
@@ -367,21 +385,22 @@ public class CassowaryLayout extends ViewGroup  {
     private void cassowaryMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         long timeBeforeSolve = System.nanoTime();
 
+        setMeasureSpecOnCassowaryModel(widthMeasureSpec, heightMeasureSpec);
+
         log("cassowaryMeasure width " +
                 MeasureSpecUtils.getModeAsString(widthMeasureSpec) + " " +
                 MeasureSpec.getSize(widthMeasureSpec) + " height " +
                 MeasureSpecUtils.getModeAsString(heightMeasureSpec) + " " +
                 MeasureSpec.getSize(heightMeasureSpec));
 
-        setMeasureSpecOnCassowaryModel(widthMeasureSpec, heightMeasureSpec);
+
         cassowaryModel.solve();
         measureChildrenUsingNodes(widthMeasureSpec, heightMeasureSpec);
         setVariableToValue(ChildNode.INTRINSIC_HEIGHT, getIntrinsicHeights());
         setVariableToValue(ChildNode.INTRINSIC_WIDTH, getIntrinsicWidths());
         cassowaryModel.solve();
-        setMeasuredDimensionsFromCassowaryModel(widthMeasureSpec, heightMeasureSpec);
 
-        log("onMeasure took " + TimerUtil.since(timeBeforeSolve));
+        log("cassowaryMeasure took " + TimerUtil.since(timeBeforeSolve));
     }
 
     private void setMeasureSpecOnCassowaryModel(int widthMeasureSpec, int heightMeasureSpec) {
@@ -435,11 +454,15 @@ public class CassowaryLayout extends ViewGroup  {
         setMeasuredDimension(resolvedWidth, resolvedHeight);
     }
 
-    private void placeHolderMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    private double getAspectRatio() {
+        return getAspectRatioWidthFactor() / getAspectRatioHeightFactor();
+    }
+
+    private void setMeasuredDimensionsFromAspectRatio(int widthMeasureSpec, int heightMeasureSpec) {
         int width =  MeasureSpec.getSize(widthMeasureSpec);
         int height =  MeasureSpec.getSize(heightMeasureSpec);
 
-        log("placeHolderMeasure width " +
+        log("setMeasuredDimensionsFromAspectRatio width " +
                 MeasureSpecUtils.getModeAsString(widthMeasureSpec) + " " +
                 width + " height " +
                 MeasureSpecUtils.getModeAsString(heightMeasureSpec) + " " +
@@ -448,16 +471,16 @@ public class CassowaryLayout extends ViewGroup  {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        int widthBasedOnRatio = (int)(height * getPreSetupWidthHeightRatio());
+        double aspectRatio = getAspectRatio();
 
-        int heightBasedOnRatio = (int)(width / getPreSetupWidthHeightRatio());
+        int widthBasedOnRatio = (int)(height * aspectRatio);
+
+        int heightBasedOnRatio = (int)(width / aspectRatio);
 
         switch (widthMode) {
             case MeasureSpec.AT_MOST:
-                if (heightMode == MeasureSpec.EXACTLY) {
-                    if (widthBasedOnRatio < width) {
-                        width = widthBasedOnRatio;
-                    }
+                if (widthBasedOnRatio < width) {
+                    width = widthBasedOnRatio;
                 }
                 break;
             case MeasureSpec.EXACTLY:
@@ -470,10 +493,8 @@ public class CassowaryLayout extends ViewGroup  {
 
         switch (heightMode) {
             case MeasureSpec.AT_MOST:
-                if (widthMode == MeasureSpec.EXACTLY) {
-                    if (heightBasedOnRatio < height) {
-                        height = heightBasedOnRatio;
-                    }
+                if (heightBasedOnRatio < height) {
+                    height = heightBasedOnRatio;
                 }
                 break;
             case MeasureSpec.EXACTLY:
@@ -546,9 +567,10 @@ public class CassowaryLayout extends ViewGroup  {
         try {
             final CharSequence[] constraints = a.getTextArray(R.styleable.CassowaryLayout_constraints);
 
-            boolean asyncSetup = a.getBoolean(R.styleable.CassowaryLayout_asyncSetup, true);
-
-            preSetupWidthHeightRatio = a.getFloat(R.styleable.CassowaryLayout_preSetupWidthHeightRatio, preSetupWidthHeightRatio);
+            asyncSetup = a.getBoolean(R.styleable.CassowaryLayout_asyncSetup, asyncSetup);
+            aspectRatioFixed = a.getBoolean(R.styleable.CassowaryLayout_aspectRatioFixed, aspectRatioFixed);
+            aspectRatioWidthFactor = a.getFloat(R.styleable.CassowaryLayout_aspectRatioWidthFactor, aspectRatioWidthFactor);
+            aspectRatioHeightFactor = a.getFloat(R.styleable.CassowaryLayout_aspectRatioHeightFactor, aspectRatioHeightFactor);
 
             log("readConstraintsFromXml asyncSetup " + asyncSetup );
             if (asyncSetup) {
@@ -584,6 +606,14 @@ public class CassowaryLayout extends ViewGroup  {
 
     private boolean isMeasureSpecSet() {
         return widthMeasureSpec != null && heightMeasureSpec != null;
+    }
+
+    public boolean isAspectRatioFixed() {
+        return aspectRatioFixed;
+    }
+
+    public void setAspectRatioFixed(boolean aspectRatioFixed) {
+        this.aspectRatioFixed = aspectRatioFixed;
     }
 }
 

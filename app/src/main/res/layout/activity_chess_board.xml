@@ -8,7 +8,7 @@
     tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
     cassowary:constraints="@array/chess"
     android:padding="@dimen/default_padding"
-    cassowary:preSetupWidthHeightRatio="0.5">
+    cassowary:aspectRatioWidthFactor="0.5">
 
     <View
         android:id="@+id/a1"

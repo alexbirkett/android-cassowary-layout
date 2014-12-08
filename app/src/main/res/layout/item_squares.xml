@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
     cassowary:constraints="@array/constraints_item_squares"
-    cassowary:preSetupWidthHeightRatio="2"
+    cassowary:aspectRatioWidthFactor="2"
     android:padding="@dimen/default_padding">
 
     <View
