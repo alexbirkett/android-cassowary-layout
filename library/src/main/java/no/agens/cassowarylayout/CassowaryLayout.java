@@ -209,8 +209,8 @@ public class CassowaryLayout extends ViewGroup  {
                 if (aspectRatioFixed) {
                     setMeasuredDimensionsFromAspectRatio(widthMeasureSpec, heightMeasureSpec);
                     // make new measure spec based on aspect ratio set above
-                    cassowaryMeasure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.getMode(widthMeasureSpec)),
-                                    MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.getMode(heightMeasureSpec)));
+                    cassowaryMeasure(MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.EXACTLY),
+                                    MeasureSpec.makeMeasureSpec(getMeasuredHeight(),  MeasureSpec.EXACTLY));
                 } else {
                     cassowaryMeasure(widthMeasureSpec, heightMeasureSpec);
                     setMeasuredDimensionsFromCassowaryModel(widthMeasureSpec, heightMeasureSpec);
