@@ -144,10 +144,7 @@ public class CassowaryLayout extends ViewGroup  {
                 if (isMeasureSpecSet()) {
                     log("measureSpecSet requesting layout");
                     callbackAfterSetup();
-                    if (!aspectRatioFixed) {
-                        requestLayout();
-                    }
-
+                    requestLayout();
                 }
             }
         });
