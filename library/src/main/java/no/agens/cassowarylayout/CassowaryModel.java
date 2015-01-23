@@ -128,7 +128,12 @@ public class CassowaryModel {
 
     public void addConstraints(CharSequence[] constraints) {
         for (CharSequence constraint : constraints) {
-            addConstraint(constraint.toString());
+            try {
+                addConstraint(constraint.toString());
+            } catch (RuntimeException e) {
+                Log.e(LOG_TAG, "could not add constraint", e);
+            }
+
         }
     }
 
