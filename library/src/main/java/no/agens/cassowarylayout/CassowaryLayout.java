@@ -446,7 +446,14 @@ public class CassowaryLayout extends ViewGroup  {
         }
 
         if (heightMode == MeasureSpec.AT_MOST || heightMode == MeasureSpec.UNSPECIFIED) {
-            resolvedHeight = (int) cassowaryModel.getContainerNode().getHeight().value() + getPaddingTop() + getPaddingBottom();
+            String variableName = Node.HEIGHT;
+
+            if (cassowaryModel.getContainerNode().hasVariable(Node.CONTENT_HEIGHT)) {
+                variableName = Node.CONTENT_HEIGHT;
+            }
+            resolvedHeight = (int) cassowaryModel.getContainerNode().getVariableValue(variableName) + getPaddingTop() + getPaddingBottom();
+
+
         }
         setMeasuredDimension(resolvedWidth, resolvedHeight);
     }

@@ -50,6 +50,7 @@ public abstract class Node {
     public static final String CENTERY = "centerY";
     public static final String INTRINSIC_WIDTH = "intrinsicWidth";
     public static final String INTRINSIC_HEIGHT = "intrinsicHeight";
+    public static final String CONTENT_HEIGHT = "contentHeight";
 
     public Node(SimplexSolver solver) {
         this.solver = solver;
