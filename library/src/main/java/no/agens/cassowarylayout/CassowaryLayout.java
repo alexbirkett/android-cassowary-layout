@@ -238,9 +238,7 @@ public class CassowaryLayout extends ViewGroup  {
                             int r, int b) {
         if (state == State.PARSING_COMPLETE) {
             layoutChildren(changed, l, t, r, b);
-        } else {
         }
-
     }
 
     @Override
