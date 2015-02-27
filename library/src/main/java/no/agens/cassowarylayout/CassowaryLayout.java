@@ -521,10 +521,6 @@ public class CassowaryLayout extends ViewGroup  {
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
-
-                CassowaryLayout.LayoutParams lp =
-                        (CassowaryLayout.LayoutParams) child.getLayoutParams();
-
                 int childId = child.getId();
                 Node node = getNodeById(childId);
 
@@ -533,18 +529,20 @@ public class CassowaryLayout extends ViewGroup  {
 
                 int width = (int) node.getWidth().value();
                 int height = (int) node.getHeight().value();
-                log("child " + viewIdResolver.getViewNameById(child.getId())  + " x " + x + " y " + y + " width " + width + " height " + height);
+                
+                String childName = viewIdResolver.getViewNameById(child.getId());
+                log("child " + childName  + " x " + x + " y " + y + " width " + width + " height " + height);
 
                 if (node.hasIntrinsicHeight()) {
-                    log("child " + viewIdResolver.getViewNameById(child.getId())  + " intrinsic height " + node.getIntrinsicHeight().value());
+                    log("child " + childName  + " intrinsic height " + node.getIntrinsicHeight().value());
                 }
 
                 if (node.hasVariable(Node.CENTERX)) {
-                    log("child " + viewIdResolver.getViewNameById(child.getId())  + " centerX " + node.getVariable(Node.CENTERX).value());
+                    log("child " + childName  + " centerX " + node.getVariable(Node.CENTERX).value());
                 }
 
                 if (node.hasVariable(Node.CENTERY)) {
-                    log("child " + viewIdResolver.getViewNameById(child.getId())  + " centerY " + node.getVariable(Node.CENTERY).value());
+                    log("child " + childName + " centerY " + node.getVariable(Node.CENTERY).value());
                 }
 
                 child.layout(x, y, x + width ,y + height);
