@@ -15,7 +15,7 @@ You can reach me on twitter as [@alexbirkett](https://twitter.com/alexbirkett).
 ## Dependencies
 
 ###Cassowary
-This project currenly depends on [my cassowary fork](https://github.com/alexbirkett/cassowary-java-1).
+This project depends on [the pybee cassowary fork](https://github.com/pybee/cassowary-java).
 
 #Examples
 
