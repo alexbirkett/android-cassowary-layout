@@ -2,8 +2,9 @@ Cassowary Layout for Android
 ========================
 
 
-[![Demo video](http://img.youtube.com/vi/_FYroNxqFqo/0.jpg)](http://www.youtube.com/watch?v=_FYroNxqFqo)
+[![Demo video](http://share.gifyoutube.com/vQkB6M.gif)](http://www.youtube.com/watch?v=_FYroNxqFqo)
 
+[Watch video on YouTube](http://www.youtube.com/watch?v=_FYroNxqFqo)
 
 
 ## Contact
