@@ -1,10 +1,19 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 repositories {
     mavenLocal()
     mavenCentral()
 }
+
+// This is the library version used when deploying the artifact
+version = "0.0.1"
+group = "no.agens"
+
+
+def siteUrl = 'https://github.com/alexbirkett/android-cassowary-layout'      // Homepage URL of the library
+def gitUrl = 'https://github.com/alexbirkett/android-cassowary-layout.git'   // Git repository URL
 
 android {
     compileSdkVersion 21
@@ -14,26 +23,81 @@ android {
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName version
+    }
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    publications = ['mavenJava']
+    dryRun = false //Whether to run this as dry-run, without deploying
+    publish = true //If version should be auto published after an upload
+
+    pkg {
+        repo = "maven"
+        name = "cassowary-layout"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+        version {
+            name = project.version
+        }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "org.pybee:cassowary:0.0.1"
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            snapshotRepository(url: project.hasProperty('mavenSnapshotsUrl') ? mavenSnapshotsUrl : null) {
-                authentication(userName: project.hasProperty('mavenUsername') ? mavenUsername : null,
-                               password:  project.hasProperty('mavenPassword') ? mavenPassword : null)
-            }
-
-            pom.version = "1.0.0-SNAPSHOT"
-            pom.artifactId = "cassowary-layout"
-            pom.groupId = "no.agens"
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId 'cassowary-layout'
+            version version
+            artifact(sourcesJar)
+            artifact(javadocJar)
+            artifact("$buildDir/outputs/aar/library-release.aar")
         }
     }
 }
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}
+
+tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
