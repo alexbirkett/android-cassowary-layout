@@ -42,6 +42,7 @@ bintray {
         repo = "maven"
         name = "cassowary-layout"
         websiteUrl = siteUrl
+        desc = 'An Android Layout that uses the Cassowary constraints resolving algorithm. An alternative to the Android common layouts: LinearLayout and RelativeLayout.'
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
         publish = true
