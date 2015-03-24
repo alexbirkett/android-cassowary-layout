@@ -265,7 +265,6 @@ public class CassowaryLayout extends ViewGroup  {
     private void measureChildrenUsingNodes(int widthMeasureSpec, int heightMeasureSpec) {
         long timeBeforeSolve = System.nanoTime();
 
-        int parentHeightMode = MeasureSpec.getMode(heightMeasureSpec);
         int parentWidthMode = MeasureSpec.getMode(widthMeasureSpec);
 
         final int size = getChildCount();
@@ -279,16 +278,20 @@ public class CassowaryLayout extends ViewGroup  {
                 int nodeHeight = (int) node.getVariableValue(Node.HEIGHT);
                 int nodeWidth = (int) node.getVariableValue(Node.WIDTH);
 
-                int widthMode = parentWidthMode;
+                int widthMode;
                 if (node.hasIntrinsicWidth()) {
                     widthMode = MeasureSpec.UNSPECIFIED;
                     nodeWidth = 0;
+                } else {
+                    widthMode = MeasureSpec.EXACTLY;
                 }
 
-                int heightMode = parentHeightMode;
+                int heightMode;
                 if (node.hasIntrinsicHeight()) {
                     heightMode = MeasureSpec.UNSPECIFIED;
                     nodeHeight = 0;
+                } else {
+                    heightMode = MeasureSpec.EXACTLY;
                 }
 
                 // If the parent's width is unspecified, infer it from the container node
