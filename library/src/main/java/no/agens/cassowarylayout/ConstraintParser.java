@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
  */
 public class ConstraintParser {
 
-    private static final Pattern pattern = Pattern.compile("\\s*(.*?)\\s*(<=|==|>=|[GL]?EQ)\\s*(.*?)\\s*(!(required|strong|medium|weak))?");
+    private static final Pattern PATTERN = Pattern.compile("\\s*(.*?)\\s*(<=|==|>=|[GL]?EQ)\\s*(.*?)\\s*(!(required|strong|medium|weak))?");
 
     final static String OPS = "-+/*^";
 
@@ -43,7 +43,7 @@ public class ConstraintParser {
 
     public static Constraint parseConstraint(String constraintString, CassowaryVariableResolver variableResolver) {
 
-        Matcher matcher = pattern.matcher(constraintString);
+        Matcher matcher = PATTERN.matcher(constraintString);
         matcher.find();
         if (matcher.matches()) {
             Variable variable = variableResolver.resolveVariable(matcher.group(1));
