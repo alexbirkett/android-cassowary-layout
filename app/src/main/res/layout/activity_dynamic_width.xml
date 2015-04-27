@@ -2,7 +2,8 @@
     android:id="@+id/scroll_view"
     xmlns:cassowary="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/light_gray">
 
 <no.agens.cassowarylayout.CassowaryLayout
     android:id="@+id/layout"
@@ -40,7 +41,7 @@
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="21. August 2014"
+        android:text="@string/example_date"
         android:background="@color/dark_gray"/>
 
 
@@ -48,7 +49,7 @@
         android:id="@+id/new_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New"
+        android:text="@string/new_string"
         android:textColor="@color/darkred"/>
 
     <TextView
@@ -72,7 +73,6 @@
         android:textSize="14sp"
         android:singleLine="false"
         android:background="@color/dark_gray"
-        android:layout_toLeftOf="@+id/space"
         />
 
 
@@ -91,7 +91,6 @@
         android:textSize="14sp"
         android:singleLine="false"
         android:background="@color/dark_gray"
-        android:layout_toLeftOf="@+id/space"
         />
 
 

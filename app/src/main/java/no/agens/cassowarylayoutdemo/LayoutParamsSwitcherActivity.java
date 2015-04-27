@@ -1,5 +1,6 @@
 package no.agens.cassowarylayoutdemo;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,7 @@ public abstract class LayoutParamsSwitcherActivity extends Activity {
         this.contentView = contentView;
         LayoutInflater li = LayoutInflater.from(this);
 
+        @SuppressLint("InflateParams")
         ViewGroup layoutParamsSwitcher = (ViewGroup)li.inflate(R.layout.activity_layout_params_switcher, null);
         layoutParamsSwitcher.addView(contentView);
 

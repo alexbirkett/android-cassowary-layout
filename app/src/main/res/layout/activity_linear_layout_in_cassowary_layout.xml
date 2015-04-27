@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     cassowary:constraints="@array/linear_layout_in_cassowary_layout"
     tools:context="no.agens.cassowarylayoutdemo.XmlLayoutDemoActivity"
-    android:padding="@dimen/default_padding">
+    android:padding="@dimen/default_padding"
+    android:background="@color/light_gray">
 
     <TextView
         android:id="@+id/text_view_above_cassowary_layout"

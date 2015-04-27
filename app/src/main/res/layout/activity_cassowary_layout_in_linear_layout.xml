@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="no.agens.cassowarylayoutdemo.CassowaryLayoutInLinearLayoutActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/light_gray">
 
     <TextView
         android:text="@string/text_view_in_linear_layout"

@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layout_params_switcher_layout">
+    android:id="@+id/layout_params_switcher_layout"
+    android:background="@color/light_gray">
 
     <RadioGroup
         android:id="@+id/layout_width_radio_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="right">
+        android:layout_gravity="end">
 
         <TextView
             android:layout_width="wrap_content"
@@ -20,14 +21,14 @@
             android:id="@+id/width_wrap_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="WRAP_CONTENT"
+            android:text="@string/wrap_content"
             android:checked="true" />
 
         <RadioButton
             android:id="@+id/width_match_parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MATCH_PARENT" />
+            android:text="@string/match_parent" />
 
     </RadioGroup>
 
@@ -36,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="right">
+        android:layout_gravity="end">
 
         <TextView
             android:layout_width="wrap_content"
@@ -47,14 +48,14 @@
             android:id="@+id/height_wrap_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="WRAP_CONTENT"
+            android:text="@string/wrap_content"
             android:checked="true" />
 
         <RadioButton
             android:id="@+id/height_match_parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MATCH_PARENT" />
+            android:text="@string/match_parent" />
 
     </RadioGroup>
 

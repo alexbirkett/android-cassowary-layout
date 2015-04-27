@@ -13,7 +13,7 @@ public class CassowaryLayoutsInListViewActivity extends Activity {
 
     private static final int ITEM_COUNT = 300;
     private static final int ITEM_TYPE_COUNT = 3;
-    private static final String LOG_TAG = "CassowaryLayoutsInListViewActivity";
+    private static final String LOG_TAG = "LayoutsInListView";
 
     private class Adapter extends BaseAdapter {
 

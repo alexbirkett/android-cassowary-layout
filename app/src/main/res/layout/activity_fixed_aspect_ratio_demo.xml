@@ -10,8 +10,6 @@
     cassowary:aspectRatioWidthFactor="16"
     cassowary:aspectRatioHeightFactor="9"
     cassowary:aspectRatioFixed="true"
-
-
     android:background="@color/light_gray">
 
     <TextView

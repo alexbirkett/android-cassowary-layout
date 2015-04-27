@@ -22,7 +22,7 @@ public class FixedAspectRatioDemoActivity extends LayoutParamsSwitcherActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_pre_setup_test, menu);
+        getMenuInflater().inflate(R.menu.menu_fixed_aspect_ratio_demo, menu);
         return true;
     }
 

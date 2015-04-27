@@ -1,5 +1,6 @@
 package no.agens.cassowarylayoutdemo.util;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,6 +32,7 @@ public class EditRatioDialog {
         // quick and dirty dialog to set ratio
         LayoutInflater li = LayoutInflater.from(context);
 
+        @SuppressLint("InflateParams")
         ViewGroup dialogAspectRatioEdit = (ViewGroup)li.inflate(R.layout.dialog_aspect_ratio_edit, null);
         final EditText aspectRatioWidthFactorEditText = (EditText)  dialogAspectRatioEdit.findViewById(R.id.aspectRatioWidthFactor);
         final EditText aspectRatioHeightFactorEditText = (EditText)  dialogAspectRatioEdit.findViewById(R.id.aspectRatioHeightFactor);

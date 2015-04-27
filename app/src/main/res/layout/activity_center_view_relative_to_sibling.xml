@@ -13,14 +13,16 @@
         android:id="@+id/sun"
         android:src="@drawable/sun"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/the_sun"/>
 
     <ImageView
         android:id="@+id/earth"
         android:src="@drawable/earth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="centerInside"/>
+        android:scaleType="centerInside"
+        android:contentDescription="@string/the_earth"/>
 
 
 
