@@ -131,7 +131,7 @@ public class CassowaryModel {
             try {
                 addConstraint(constraint.toString());
             } catch (RuntimeException e) {
-                Log.e(LOG_TAG, "could not add constraint", e);
+                Log.e(LOG_TAG, "could not add constraint " + constraint.toString(), e);
             }
 
         }
