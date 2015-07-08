@@ -398,6 +398,21 @@ public class CassowaryLayout extends ViewGroup  {
         setVariableToValue(ChildNode.INTRINSIC_WIDTH, getIntrinsicWidths());
         cassowaryModel.solve();
 
+        //Here we update intrinsic height and width for container node, which means WrapContent.
+        int containerIntrinsicHeight = 0;
+        int containerIntrinsicWidth = 0;
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+            if (child.getVisibility() != GONE) {
+                String viewName = viewIdResolver.getViewNameById(child.getId());
+                Node node = cassowaryModel.getNodeByName(viewName);
+                containerIntrinsicHeight = Math.max((int)node.getBottom().value(), containerIntrinsicHeight);
+                containerIntrinsicWidth = Math.max((int)node.getRight().value(), containerIntrinsicWidth);
+            }
+        }
+        cassowaryModel.getContainerNode().setIntrinsicHeight(containerIntrinsicHeight);
+        cassowaryModel.getContainerNode().setIntrinsicWidth(containerIntrinsicWidth);
         log("cassowaryMeasure took " + TimerUtil.since(timeBeforeSolve));
     }
 
