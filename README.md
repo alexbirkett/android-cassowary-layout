@@ -19,7 +19,7 @@ Add the "Cassowary Layout for Android" and Cassowary dependencies to the `build.
 
     dependencies {
         // your other dependencies
-        compile 'no.agens:cassowary-layout:0.0.1@aar'
+        compile 'no.agens:cassowary-layout:0.0.2@aar'
         compile 'org.pybee:cassowary:0.0.1'
     }
 
