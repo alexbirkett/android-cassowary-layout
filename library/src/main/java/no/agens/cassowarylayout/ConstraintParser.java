@@ -57,6 +57,23 @@ public class ConstraintParser {
 
     }
 
+    //add weight support - Yong
+    public static Constraint parseConstraint(String constraintString, CassowaryVariableResolver variableResolver, double weight) {
+
+        Matcher matcher = PATTERN.matcher(constraintString);
+        matcher.find();
+        if (matcher.matches()) {
+            Variable variable = variableResolver.resolveVariable(matcher.group(1));
+            Constraint.Operator operator = parseOperator(matcher.group(2));
+            Expression expression = resolveExpression(matcher.group(3), variableResolver);
+            Strength strength = parseStrength(matcher.group(4));
+            return new Constraint(variable, operator, expression, strength, weight);
+        } else {
+            throw new RuntimeException("could not parse " +   constraintString);
+        }
+
+    }
+
     private static Constraint.Operator parseOperator(String operatorString) {
 
         Constraint.Operator operator = null;

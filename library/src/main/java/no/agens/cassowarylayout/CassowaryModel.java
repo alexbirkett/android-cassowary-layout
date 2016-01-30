@@ -34,7 +34,8 @@ public class CassowaryModel {
 
     private ContainerNode containerNode = new ContainerNode(solver);
 
-    private ConstraintParser.CassowaryVariableResolver cassowaryVariableResolver = new ConstraintParser.CassowaryVariableResolver() {
+    //changed this resolver to public, so later other components can create constraints with this same resolver - Yong
+    public ConstraintParser.CassowaryVariableResolver cassowaryVariableResolver = new ConstraintParser.CassowaryVariableResolver() {
         @Override
         public Variable resolveVariable(String variableName) {
             return CassowaryModel.this.resolveVariable(variableName);
