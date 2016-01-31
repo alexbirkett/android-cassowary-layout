@@ -39,7 +39,7 @@
 
 
         <item>image_four.centerY == container.centerY</item>
-        <item>image_four.right LEQ container.margin_right</item>
+        <item>image_four.right LEQ container.margin_right !weak</item>
         <item>image_four.left == container.scrollPosition * 300dp</item>
 
         <item>image_four.height == 40dp</item>

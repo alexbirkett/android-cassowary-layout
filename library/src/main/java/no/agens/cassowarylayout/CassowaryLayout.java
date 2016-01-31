@@ -36,6 +36,9 @@ import java.util.concurrent.Executors;
 
 import no.agens.cassowarylayout.util.MeasureSpecUtils;
 import no.agens.cassowarylayout.util.TimerUtil;
+import no.birkett.kiwi.DuplicateConstraintException;
+import no.birkett.kiwi.KiwiException;
+import no.birkett.kiwi.UnsatisfiableConstraintException;
 
 public class CassowaryLayout extends ViewGroup  {
 
@@ -141,9 +144,9 @@ public class CassowaryLayout extends ViewGroup  {
             @Override
             public void run() {
                 state = State.PARSING_COMPLETE;
+                callbackAfterSetup();
                 if (isMeasureSpecSet()) {
                     log("measureSpecSet requesting layout");
-                    callbackAfterSetup();
                     requestLayout();
                 }
             }
@@ -177,8 +180,8 @@ public class CassowaryLayout extends ViewGroup  {
 
                 Node node = getNodeById(childId);
 
-                int x = (int) node.getLeft().value() + getPaddingLeft();
-                int y = (int) node.getTop().value() + getPaddingTop();
+                int x = (int) node.getLeft().getValue() + getPaddingLeft();
+                int y = (int) node.getTop().getValue() + getPaddingTop();
 
                 child.setX(x);
                 child.setY(y);
@@ -297,7 +300,7 @@ public class CassowaryLayout extends ViewGroup  {
                 // If the parent's width is unspecified, infer it from the container node
                 if (parentWidthMode == MeasureSpec.UNSPECIFIED) {
                     widthMode = MeasureSpec.AT_MOST;
-                    nodeWidth = (int) cassowaryModel.getContainerNode().getWidth().value();
+                    nodeWidth = (int) cassowaryModel.getContainerNode().getWidth().getValue();
                 }
 
 
@@ -371,7 +374,7 @@ public class CassowaryLayout extends ViewGroup  {
         return intrinsicWidths;
     }
 
-    private void setVariableToValue(String variableName, HashMap<String, Integer> nodesMap) {
+    private void setVariableToValue(String variableName, HashMap<String, Integer> nodesMap) throws DuplicateConstraintException, UnsatisfiableConstraintException {
         Iterator<Map.Entry<String, Integer>> iterator = nodesMap.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Integer> entry = iterator.next();
@@ -394,8 +397,12 @@ public class CassowaryLayout extends ViewGroup  {
 
         cassowaryModel.solve();
         measureChildrenUsingNodes(widthMeasureSpec, heightMeasureSpec);
-        setVariableToValue(ChildNode.INTRINSIC_HEIGHT, getIntrinsicHeights());
-        setVariableToValue(ChildNode.INTRINSIC_WIDTH, getIntrinsicWidths());
+        try {
+            setVariableToValue(ChildNode.INTRINSIC_HEIGHT, getIntrinsicHeights());
+            setVariableToValue(ChildNode.INTRINSIC_WIDTH, getIntrinsicWidths());
+        } catch (KiwiException e) {
+            throw new RuntimeException("could not set child node's intrinsic length", e);
+        }
         cassowaryModel.solve();
 
         log("cassowaryMeasure took " + TimerUtil.since(timeBeforeSolve));
@@ -406,10 +413,14 @@ public class CassowaryLayout extends ViewGroup  {
         int heightWithoutPadding =  MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        setMeasureSpecOnCassowaryModel(heightMode, widthMode, heightWithoutPadding, widthWithoutPadding);
+        try {
+            setMeasureSpecOnCassowaryModel(heightMode, widthMode, heightWithoutPadding, widthWithoutPadding);
+        } catch (KiwiException e) {
+            throw new RuntimeException("could not set measure spec on model (width: " + widthWithoutPadding + " height: " + heightWithoutPadding + ")", e);
+        }
     }
 
-    private void setMeasureSpecOnCassowaryModel(int heightMode, int widthMode, int heightWithoutPadding, int widthWithoutPadding) {
+    private void setMeasureSpecOnCassowaryModel(int heightMode, int widthMode, int heightWithoutPadding, int widthWithoutPadding) throws KiwiException {
         if (heightMode == MeasureSpec.AT_MOST) {
             cassowaryModel.getContainerNode().setVariableToAtMost(Node.HEIGHT, heightWithoutPadding);
         } else if (heightMode == MeasureSpec.EXACTLY) {
@@ -443,11 +454,11 @@ public class CassowaryLayout extends ViewGroup  {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
 
         if (widthMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED) {
-            resolvedWidth = (int) cassowaryModel.getContainerNode().getWidth().value() + getPaddingLeft() + getPaddingRight();
+            resolvedWidth = (int) cassowaryModel.getContainerNode().getWidth().getValue() + getPaddingLeft() + getPaddingRight();
         }
 
         if (heightMode == MeasureSpec.AT_MOST || heightMode == MeasureSpec.UNSPECIFIED) {
-            resolvedHeight = (int) cassowaryModel.getContainerNode().getHeight().value() + getPaddingTop() + getPaddingBottom();
+            resolvedHeight = (int) cassowaryModel.getContainerNode().getHeight().getValue() + getPaddingTop() + getPaddingBottom();
         }
         setMeasuredDimension(resolvedWidth, resolvedHeight);
     }
@@ -514,10 +525,10 @@ public class CassowaryLayout extends ViewGroup  {
         cassowaryModel.solve();
 
         log(
-                       " container height " + cassowaryModel.getContainerNode().getHeight().value() +
-                       " container width " + cassowaryModel.getContainerNode().getWidth().value() +
-                       " container center x " + cassowaryModel.getContainerNode().getCenterX().value() +
-                       " container center y " + cassowaryModel.getContainerNode().getCenterY().value()
+                       " container height " + cassowaryModel.getContainerNode().getHeight().getValue() +
+                       " container width " + cassowaryModel.getContainerNode().getWidth().getValue() +
+                       " container center x " + cassowaryModel.getContainerNode().getCenterX().getValue() +
+                       " container center y " + cassowaryModel.getContainerNode().getCenterY().getValue()
                 );
         int count = getChildCount();
 
@@ -527,25 +538,25 @@ public class CassowaryLayout extends ViewGroup  {
                 int childId = child.getId();
                 Node node = getNodeById(childId);
 
-                int x = (int) node.getLeft().value() + getPaddingLeft();
-                int y = (int) node.getTop().value() + getPaddingTop();
+                int x = (int) node.getLeft().getValue() + getPaddingLeft();
+                int y = (int) node.getTop().getValue() + getPaddingTop();
 
-                int width = (int) node.getWidth().value();
-                int height = (int) node.getHeight().value();
+                int width = (int) node.getWidth().getValue();
+                int height = (int) node.getHeight().getValue();
                 
                 String childName = viewIdResolver.getViewNameById(child.getId());
                 log("child " + childName  + " x " + x + " y " + y + " width " + width + " height " + height);
 
                 if (node.hasIntrinsicHeight()) {
-                    log("child " + childName  + " intrinsic height " + node.getIntrinsicHeight().value());
+                    log("child " + childName  + " intrinsic height " + node.getIntrinsicHeight().getValue());
                 }
 
                 if (node.hasVariable(Node.CENTERX)) {
-                    log("child " + childName  + " centerX " + node.getVariable(Node.CENTERX).value());
+                    log("child " + childName  + " centerX " + node.getVariable(Node.CENTERX).getValue());
                 }
 
                 if (node.hasVariable(Node.CENTERY)) {
-                    log("child " + childName + " centerY " + node.getVariable(Node.CENTERY).value());
+                    log("child " + childName + " centerY " + node.getVariable(Node.CENTERY).getValue());
                 }
 
                 child.layout(x, y, x + width ,y + height);

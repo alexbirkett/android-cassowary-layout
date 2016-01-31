@@ -18,12 +18,14 @@ package no.agens.cassowarylayoutdemo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
 
 import no.agens.cassowarylayout.CassowaryLayout;
 import no.agens.cassowarylayout.Node;
+import no.birkett.kiwi.KiwiException;
 
 public class DynamicWidthActivity extends Activity {
 
@@ -33,6 +35,8 @@ public class DynamicWidthActivity extends Activity {
     private ScrollView scrollView;
 
     private static final String DRAGGER_POSITION = "draggerPosition";
+
+    private static final String LOG_TAG = "DynamicWidthActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +71,11 @@ public class DynamicWidthActivity extends Activity {
                     case MotionEvent.ACTION_POINTER_UP:
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        draggerNode.setVariableToValue(DRAGGER_POSITION, X - delta);
+                        try {
+                            draggerNode.setVariableToValue(DRAGGER_POSITION, X - delta);
+                        } catch (KiwiException e) {
+                            Log.e(LOG_TAG, "could not set dragger position ", e);
+                        }
                         layout.requestLayout();
                         break;
                 }

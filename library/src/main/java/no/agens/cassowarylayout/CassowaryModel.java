@@ -3,16 +3,19 @@ package no.agens.cassowarylayout;
 import android.content.Context;
 import android.util.Log;
 
-import org.pybee.cassowary.Constraint;
-import org.pybee.cassowary.ConstraintNotFound;
-import org.pybee.cassowary.Expression;
-import org.pybee.cassowary.SimplexSolver;
-import org.pybee.cassowary.Variable;
 
 import java.util.HashMap;
 
 import no.agens.cassowarylayout.util.DimensionParser;
 import no.agens.cassowarylayout.util.TimerUtil;
+import no.birkett.kiwi.Constraint;
+import no.birkett.kiwi.DuplicateConstraintException;
+import no.birkett.kiwi.Expression;
+import no.birkett.kiwi.NonlinearExpressionException;
+import no.birkett.kiwi.Solver;
+import no.birkett.kiwi.UnknownConstraintException;
+import no.birkett.kiwi.UnsatisfiableConstraintException;
+import no.birkett.kiwi.Variable;
 
 /**
  * Created by alex on 01/11/14.
@@ -30,7 +33,7 @@ public class CassowaryModel {
 
     private HashMap<String, ChildNode> nodes = new HashMap<String, ChildNode>();
 
-    private SimplexSolver solver = new SimplexSolver();
+    private Solver solver = new Solver();
 
     private ContainerNode containerNode = new ContainerNode(solver);
 
@@ -104,25 +107,21 @@ public class CassowaryModel {
 
     private void setupCassowary() {
         Log.d(LOG_TAG, "setupCassowary");
-        solver.setAutosolve(false);
     }
 
-    public void addConstraint(Constraint constraint) {
-        solver.addConstraint(constraint);
-    }
 
-    public Constraint addConstraint(String constraintString) {
+    public Constraint addConstraint(String constraintString) throws NonlinearExpressionException, DuplicateConstraintException, UnsatisfiableConstraintException {
         Log.d(LOG_TAG, "adding constraint " + constraintString);
         Constraint constraint = ConstraintParser.parseConstraint(constraintString, cassowaryVariableResolver);
-        addConstraint(constraint);
+        solver.addConstraint(constraint);
         return constraint;
     }
 
     public void removeConstraint(Constraint constraint) {
         try {
             solver.removeConstraint(constraint);
-        } catch (ConstraintNotFound constraintNotFound) {
-            constraintNotFound.printStackTrace();
+        } catch (UnknownConstraintException e) {
+            Log.e(LOG_TAG, "could not remove constraint  " + constraint.toString(), e);
         }
     }
 
@@ -130,8 +129,12 @@ public class CassowaryModel {
         for (CharSequence constraint : constraints) {
             try {
                 addConstraint(constraint.toString());
-            } catch (RuntimeException e) {
-                Log.e(LOG_TAG, "could not add constraint " + constraint.toString(), e);
+            } catch (NonlinearExpressionException e) {
+                Log.e(LOG_TAG, "could not add constraint (non linear) " + constraint.toString(), e);
+            } catch (UnsatisfiableConstraintException e) {
+                Log.e(LOG_TAG, "could not add constraint (unsatisfiable) " + constraint.toString(), e);
+            } catch (DuplicateConstraintException e) {
+                Log.e(LOG_TAG, "could not add constraint (duplicate) " + constraint.toString(), e);
             }
 
         }
@@ -149,7 +152,7 @@ public class CassowaryModel {
     public void solve() {
         long timeBeforeSolve = System.nanoTime();
 
-        solver.solve();
+        solver.updateVariables();
 
         Log.d(LOG_TAG, "solve took " + TimerUtil.since(timeBeforeSolve));
     }

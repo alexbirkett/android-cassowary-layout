@@ -53,7 +53,8 @@ bintray {
 }
 
 dependencies {
-    compile "org.pybee:cassowary:0.0.1"
+    //compile "org.pybee:cassowary:0.0.1"
+    compile project(':kiwijava')
 }
 
 publishing {

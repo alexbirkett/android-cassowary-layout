@@ -10,6 +10,7 @@ import android.widget.ScrollView;
 
 import no.agens.cassowarylayout.CassowaryLayout;
 import no.agens.cassowarylayout.Node;
+import no.birkett.kiwi.KiwiException;
 
 
 public class ParallaxScrollingActivity extends Activity {
@@ -45,17 +46,26 @@ public class ParallaxScrollingActivity extends Activity {
                     @Override
                     public void onScrollChanged() {
 
-                        int scrollY = scrollView.getScrollY();
-                        containerNode.setVariableToValue(SCROLL_POSITION, getScrollPosition(scrollY));
-                        containerNode.setVariableToValue(SCROLL_Y, scrollY);
-                        cassowaryLayout.getCassowaryModel().solve();
-                        cassowaryLayout.setChildPositionsFromCassowaryModel();
+                        try {
+                            int scrollY = scrollView.getScrollY();
+                            containerNode.setVariableToValue(SCROLL_POSITION, getScrollPosition(scrollY));
+                            containerNode.setVariableToValue(SCROLL_Y, scrollY);
+                            cassowaryLayout.getCassowaryModel().solve();
+                            cassowaryLayout.setChildPositionsFromCassowaryModel();
+                        } catch (KiwiException e) {
+                            Log.e(LOG_TAG, "can't set SCROLL_POSITION / SCROLL_Y", e);
+                        }
+
                     }
                 });
-                containerNode.setVariableToValue(SCROLL_POSITION, 0);
-                containerNode.setVariableToValue(SCROLL_Y, 0);
-                containerNode.setVariableToValue(SCREEN_HEIGHT, screenHeight);
-                containerNode.setVariableToValue(SCREEN_WIDTH, screenWidth);
+                try {
+                    containerNode.setVariableToValue(SCROLL_POSITION, 0);
+                    containerNode.setVariableToValue(SCROLL_Y, 0);
+                    containerNode.setVariableToValue(SCREEN_HEIGHT, screenHeight);
+                    containerNode.setVariableToValue(SCREEN_WIDTH, screenWidth);
+                } catch (KiwiException e) {
+                    Log.e(LOG_TAG, "can't set SCROLL_POSITION, SCROLL_Y, SCREEN_HEIGHT or SCREEN_WIDTH", e);
+                }
             }
         });
 

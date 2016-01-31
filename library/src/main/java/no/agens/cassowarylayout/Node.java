@@ -18,15 +18,17 @@ package no.agens.cassowarylayout;
 
 
 
-import org.pybee.cassowary.Constraint;
-import org.pybee.cassowary.SimplexSolver;
-import org.pybee.cassowary.Variable;
 import android.util.Log;
 
 import java.util.HashMap;
 
 import no.agens.cassowarylayout.util.CassowaryUtil;
 import no.agens.cassowarylayout.util.TimerUtil;
+import no.birkett.kiwi.Constraint;
+import no.birkett.kiwi.DuplicateConstraintException;
+import no.birkett.kiwi.Solver;
+import no.birkett.kiwi.UnsatisfiableConstraintException;
+import no.birkett.kiwi.Variable;
 
 /**
  * Created by alex on 25/09/2014.
@@ -35,10 +37,10 @@ public abstract class Node {
 
     private static final String LOG_TAG = "CassowaryNode";
 
-    protected SimplexSolver solver;
+    protected Solver solver;
 
-    protected HashMap<String, Variable> variables = new HashMap<String, Variable>();
-    protected HashMap<String, Constraint> constraints = new HashMap<String, Constraint>();
+    protected HashMap<String, Variable> variables = new HashMap<>();
+    protected HashMap<String, Constraint> constraints = new HashMap<>();
 
     public static final String LEFT = "left";
     public static final String RIGHT = "right";
@@ -51,7 +53,7 @@ public abstract class Node {
     public static final String INTRINSIC_WIDTH = "intrinsicWidth";
     public static final String INTRINSIC_HEIGHT = "intrinsicHeight";
 
-    public Node(SimplexSolver solver) {
+    public Node(Solver solver) {
         this.solver = solver;
     }
 
@@ -87,15 +89,15 @@ public abstract class Node {
         return getVariable(CENTERY);
     }
 
-    public void setIntrinsicWidth(int intrinsicWidth) {
+    public void setIntrinsicWidth(int intrinsicWidth) throws DuplicateConstraintException, UnsatisfiableConstraintException {
         setVariableToValue(INTRINSIC_WIDTH, intrinsicWidth);
     }
 
-    public void setIntrinsicHeight(int intrinsicHeight) {
+    public void setIntrinsicHeight(int intrinsicHeight) throws DuplicateConstraintException, UnsatisfiableConstraintException {
         setVariableToValue(INTRINSIC_HEIGHT, intrinsicHeight);
     }
 
-    public void setVariableToValue(String nameVariable, double value) {
+    public void setVariableToValue(String nameVariable, double value) throws DuplicateConstraintException, UnsatisfiableConstraintException {
         long timeBefore = System.nanoTime();
         Constraint constraint = constraints.get(nameVariable);
         constraint = CassowaryUtil.createOrUpdateLinearEquationConstraint(getVariable(nameVariable), constraint, value, solver);
@@ -104,9 +106,11 @@ public abstract class Node {
     }
 
 
-    public void setVariableToAtMost(String nameVariable, double value) {
+    public void setVariableToAtMost(String nameVariable, double value) throws DuplicateConstraintException, UnsatisfiableConstraintException {
         Constraint constraint = constraints.get(nameVariable);
-        constraint =  CassowaryUtil.createOrUpdateLeqInequalityConstraint(getVariable(nameVariable), constraint, value, solver);
+
+        constraint = CassowaryUtil.createOrUpdateLeqInequalityConstraint(getVariable(nameVariable), constraint, value, solver);
+
         constraints.put(nameVariable, constraint);
     }
 
@@ -131,8 +135,14 @@ public abstract class Node {
         Variable variable = variables.get(name);
 
         if (variable == null) {
-            variable = new Variable();
-            createImplicitConstraints(name, variable);
+            variable = new Variable(name);
+            try {
+                createImplicitConstraints(name, variable);
+            } catch (DuplicateConstraintException e) {
+               // throw new RuntimeException(e);
+            } catch (UnsatisfiableConstraintException e) {
+              //  throw new RuntimeException(e);
+            }
             variables.put(name, variable);
         }
         return variable;
@@ -143,7 +153,7 @@ public abstract class Node {
         return variables.containsKey(name);
     }
 
-    protected abstract void createImplicitConstraints(String variableName, Variable variable);
+    protected abstract void createImplicitConstraints(String variableName, Variable variable) throws DuplicateConstraintException, UnsatisfiableConstraintException;
 
     private String getCanonicalName(String name) {
         String canonicalName = name;
@@ -160,6 +170,6 @@ public abstract class Node {
     }
 
     public double getVariableValue(String variableName) {
-        return getVariable(variableName).value();
+        return getVariable(variableName).getValue();
     }
 }

@@ -1,1 +1,3 @@
 include ':app', ':library'
+include ':kiwijava'
+project(':kiwijava').projectDir = new File(settingsDir, '../../java/kiwi-java')

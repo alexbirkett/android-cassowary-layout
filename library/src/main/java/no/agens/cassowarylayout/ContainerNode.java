@@ -13,33 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package no.agens.cassowarylayout;
 
-
-import org.pybee.cassowary.Constraint;
-import org.pybee.cassowary.Expression;
-import org.pybee.cassowary.SimplexSolver;
-import org.pybee.cassowary.Strength;
-import org.pybee.cassowary.Variable;
+import no.birkett.kiwi.DuplicateConstraintException;
+import no.birkett.kiwi.Solver;
+import no.birkett.kiwi.Symbolics;
+import no.birkett.kiwi.UnsatisfiableConstraintException;
+import no.birkett.kiwi.Variable;
 
 /**
  * Created by alex on 10/10/2014.
  */
 public class ContainerNode extends Node {
 
-    public ContainerNode(SimplexSolver solver) {
+    public ContainerNode(Solver solver) {
         super(solver);
     }
 
     @Override
-    protected void createImplicitConstraints(String variableName, Variable variable) {
+    protected void createImplicitConstraints(String variableName, Variable variable) throws DuplicateConstraintException, UnsatisfiableConstraintException {
 
         if (CENTERX.equals(variableName)) {
-            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getWidth()).divide(2), Strength.REQUIRED));
+            solver.addConstraint(Symbolics.equals(variable, Symbolics.divide(getWidth(), 2)));
         } else if (CENTERY.equals(variableName)) {
-            solver.addConstraint(new Constraint(variable, Constraint.Operator.EQ, new Expression(getHeight()).divide(2), Strength.REQUIRED));
+            solver.addConstraint(Symbolics.equals(variable, Symbolics.divide(getHeight(), 2)));
         }
     }
 

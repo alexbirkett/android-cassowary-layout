@@ -15,16 +15,20 @@ package no.agens.cassowarylayout;/*
  */
 
 
-import org.pybee.cassowary.Constraint;
-import org.pybee.cassowary.Expression;
-import org.pybee.cassowary.Strength;
-import org.pybee.cassowary.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import no.birkett.kiwi.Constraint;
+import no.birkett.kiwi.Expression;
+import no.birkett.kiwi.NonlinearExpressionException;
+import no.birkett.kiwi.Strength;
+import no.birkett.kiwi.Symbolics;
+import no.birkett.kiwi.Term;
+import no.birkett.kiwi.Variable;
 
 /**
  * Created by alex on 25/09/2014.
@@ -41,38 +45,37 @@ public class ConstraintParser {
         Expression resolveConstant(String name);
     }
 
-    public static Constraint parseConstraint(String constraintString, CassowaryVariableResolver variableResolver) {
+    public static Constraint parseConstraint(String constraintString, CassowaryVariableResolver variableResolver) throws NonlinearExpressionException {
 
         Matcher matcher = PATTERN.matcher(constraintString);
         matcher.find();
         if (matcher.matches()) {
             Variable variable = variableResolver.resolveVariable(matcher.group(1));
-            Constraint.Operator operator = parseOperator(matcher.group(2));
             Expression expression = resolveExpression(matcher.group(3), variableResolver);
-            Strength strength = parseStrength(matcher.group(4));
-            return new Constraint(variable, operator, expression, strength);
+            double strength = parseStrength(matcher.group(4));
+
+            String operator = matcher.group(2);
+            switch (operator) {
+                case "EQ":
+                case "==":
+                    return Symbolics.equals(expression, variable).setStrength(strength);
+                case "GEQ":
+                case ">=":
+                    return Symbolics.greaterThanOrEqualTo(expression, variable).setStrength(strength);
+                case "LEQ":
+                case "<=":
+                    return Symbolics.lessThanOrEqualTo(expression, variable).setStrength(strength);
+            }
         } else {
             throw new RuntimeException("could not parse " +   constraintString);
         }
+        throw new RuntimeException("could not parse " +   constraintString);
 
     }
 
-    private static Constraint.Operator parseOperator(String operatorString) {
+    private static double parseStrength(String strengthString) {
 
-        Constraint.Operator operator = null;
-        if ("EQ".equals(operatorString) || "==".equals(operatorString)) {
-            operator = Constraint.Operator.EQ;
-        } else if ("GEQ".equals(operatorString) || ">=".equals(operatorString)) {
-            operator = Constraint.Operator.GEQ;
-        } else if ("LEQ".equals(operatorString) || "<=".equals(operatorString)) {
-            operator = Constraint.Operator.LEQ;
-        }
-        return operator;
-    }
-
-    private static Strength parseStrength(String strengthString) {
-
-        Strength strength =  Strength.REQUIRED;
+        double strength =  Strength.REQUIRED;
         if ("!required".equals(strengthString)) {
             strength = Strength.REQUIRED;
         } else if ("!strong".equals(strengthString)) {
@@ -85,33 +88,36 @@ public class ConstraintParser {
         return strength;
     }
 
-    public static Expression resolveExpression(String expressionString, CassowaryVariableResolver variableResolver) {
+    public static Expression resolveExpression(String expressionString, CassowaryVariableResolver variableResolver) throws NonlinearExpressionException {
 
         List<String> postFixExpression = infixToPostfix(tokenizeExpression(expressionString));
 
-        Stack<Expression> linearExpressionsStack = new Stack<Expression>();
+        Stack<Expression> expressionStack = new Stack<Expression>();
 
         for (String expression : postFixExpression) {
             if ("+".equals(expression)) {
-                linearExpressionsStack.push(linearExpressionsStack.pop().plus(linearExpressionsStack.pop()));
+                expressionStack.push(Symbolics.add(expressionStack.pop(), (expressionStack.pop())));
             } else if ("-".equals(expression)) {
-                linearExpressionsStack.push(linearExpressionsStack.pop().subtractFrom(linearExpressionsStack.pop()));
+                Expression a = expressionStack.pop();
+                Expression b = expressionStack.pop();
+
+                expressionStack.push(Symbolics.subtract(b, a));
             } else if ("/".equals(expression)) {
-                Expression denominator = linearExpressionsStack.pop();
-                Expression numerator = linearExpressionsStack.pop();
-                linearExpressionsStack.push(numerator.divide(denominator));
+                Expression denominator = expressionStack.pop();
+                Expression numerator = expressionStack.pop();
+                expressionStack.push(Symbolics.divide(numerator, denominator));
             } else if ("*".equals(expression)) {
-                linearExpressionsStack.push(linearExpressionsStack.pop().times(linearExpressionsStack.pop()));
+                expressionStack.push(Symbolics.multiply(expressionStack.pop(), (expressionStack.pop())));
             } else {
                 Expression linearExpression =  variableResolver.resolveConstant(expression);
                 if (linearExpression == null) {
-                    linearExpression = new Expression(variableResolver.resolveVariable(expression));
+                    linearExpression = new Expression(new Term(variableResolver.resolveVariable(expression)));
                 }
-                linearExpressionsStack.push(linearExpression);
+                expressionStack.push(linearExpression);
             }
         }
 
-        return linearExpressionsStack.pop();
+        return expressionStack.pop();
     }
 
     public static List<String> infixToPostfix(List<String> tokenList) {
